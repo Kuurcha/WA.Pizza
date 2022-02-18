@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Kurcha\\source\\repos\\TestProject\\TestProject\\TestProject.csproj": {}
+    "C:\\Users\\Kurcha\\Source\\Repos\\Kuurcha\\WA.Pizza.API\\TestProject\\TestProject.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Kurcha\\source\\repos\\TestProject\\TestProject\\TestProject.csproj": {
+    "C:\\Users\\Kurcha\\Source\\Repos\\Kuurcha\\WA.Pizza.API\\TestProject\\TestProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Kurcha\\source\\repos\\TestProject\\TestProject\\TestProject.csproj",
+        "projectUniqueName": "C:\\Users\\Kurcha\\Source\\Repos\\Kuurcha\\WA.Pizza.API\\TestProject\\TestProject.csproj",
         "projectName": "TestProject",
-        "projectPath": "C:\\Users\\Kurcha\\source\\repos\\TestProject\\TestProject\\TestProject.csproj",
+        "projectPath": "C:\\Users\\Kurcha\\Source\\Repos\\Kuurcha\\WA.Pizza.API\\TestProject\\TestProject.csproj",
         "packagesPath": "C:\\Users\\Kurcha\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Kurcha\\source\\repos\\TestProject\\TestProject\\obj\\",
+        "outputPath": "C:\\Users\\Kurcha\\Source\\Repos\\Kuurcha\\WA.Pizza.API\\TestProject\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Programming\\IDE\\SharedC#\\NuGetPackages"

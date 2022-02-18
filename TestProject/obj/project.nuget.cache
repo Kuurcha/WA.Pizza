@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "XJipqA/QWBRZkJASXz472aVoKj024SvIGZ/+JQMy6h4LGr4CmBeJ+2CI6Uhjvkl8eX0sqAE9cqNl32Txzn3fKw==",
+  "dgSpecHash": "+bKNouPtlu7DaBUmyYfVyTSvOyFj/N5eiQ4hY5OiNAFAP3P8cqP9PZCfrVRP2MMPDJHTKjinvAHeXJ3oRCQw0A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Kurcha\\source\\repos\\TestProject\\TestProject\\TestProject.csproj",
+  "projectFilePath": "C:\\Users\\Kurcha\\Source\\Repos\\Kuurcha\\WA.Pizza.API\\TestProject\\TestProject.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
