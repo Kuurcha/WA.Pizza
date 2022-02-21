@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Kurcha\\Source\\Repos\\Kuurcha\\WA.Pizza.API\\TestProject\\TestProject.csproj",
+      "projectUniqueName": "E:\\Work\\WA.Pizza.API\\TestProject\\TestProject.csproj",
       "projectName": "TestProject",
-      "projectPath": "C:\\Users\\Kurcha\\Source\\Repos\\Kuurcha\\WA.Pizza.API\\TestProject\\TestProject.csproj",
+      "projectPath": "E:\\Work\\WA.Pizza.API\\TestProject\\TestProject.csproj",
       "packagesPath": "C:\\Users\\Kurcha\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Kurcha\\Source\\Repos\\Kuurcha\\WA.Pizza.API\\TestProject\\obj\\",
+      "outputPath": "E:\\Work\\WA.Pizza.API\\TestProject\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Programming\\IDE\\SharedC#\\NuGetPackages"
