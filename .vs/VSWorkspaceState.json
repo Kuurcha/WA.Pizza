@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\TestProject",
-    "\\TestProject\\Pages"
+    "\\TestProject\\Pages",
+    "\\TestProject\\Pages\\Shared"
   ],
-  "SelectedNode": "\\TestProject\\Pages\\_ViewImports.cshtml",
+  "SelectedNode": "\\TestProject\\Program.cs",
   "PreviewInSolutionExplorer": false
 }
