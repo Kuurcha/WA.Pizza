@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "WA.PIzza.API/1.0.0": {
+        "runtime": {
+          "WA.PIzza.API.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "WA.PIzza.API/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
