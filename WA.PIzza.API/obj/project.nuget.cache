@@ -1,8 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "qaSc8JrDlqdEq7OvEZWNg1AM7ZKeJvzkKz8lmr0URidmfPA8hM+v0W2Bq5B0xGZ5I7Ve08AkalAVPDmXJWkomw==",
+  "dgSpecHash": "jVYr6r3LmALN1MXvRIrpc+4RIarLWWHwiJyFq5B4geImDneQIGcXhYKrIwen0GDUAakGOBnh3OCpmIEoYlkerQ==",
   "success": true,
-  "projectFilePath": "E:\\Work\\WA.Pizza.API\\WA.PIzza.API\\WA.PIzza.API.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "E:\\Work\\WA.Pizza\\WA.Pizza.API\\WA.Pizza.API.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Kurcha\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "C:\\Users\\Kurcha\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\Kurcha\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
+    "C:\\Users\\Kurcha\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
+    "C:\\Users\\Kurcha\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
+    "C:\\Users\\Kurcha\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.2.3\\swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512"
+  ],
   "logs": []
 }

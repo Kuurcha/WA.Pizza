@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Work\\WA.Pizza.API\\WA.PIzza.API\\WA.PIzza.API.csproj": {}
+    "E:\\Work\\WA.Pizza\\WA.Pizza.API\\WA.Pizza.API.csproj": {}
   },
   "projects": {
-    "E:\\Work\\WA.Pizza.API\\WA.PIzza.API\\WA.PIzza.API.csproj": {
+    "E:\\Work\\WA.Pizza\\WA.Pizza.API\\WA.Pizza.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Work\\WA.Pizza.API\\WA.PIzza.API\\WA.PIzza.API.csproj",
-        "projectName": "WA.PIzza.API",
-        "projectPath": "E:\\Work\\WA.Pizza.API\\WA.PIzza.API\\WA.PIzza.API.csproj",
+        "projectUniqueName": "E:\\Work\\WA.Pizza\\WA.Pizza.API\\WA.Pizza.API.csproj",
+        "projectName": "WA.Pizza.API",
+        "projectPath": "E:\\Work\\WA.Pizza\\WA.Pizza.API\\WA.Pizza.API.csproj",
         "packagesPath": "C:\\Users\\Kurcha\\.nuget\\packages\\",
-        "outputPath": "E:\\Work\\WA.Pizza.API\\WA.PIzza.API\\obj\\",
+        "outputPath": "E:\\Work\\WA.Pizza\\WA.Pizza.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Programming\\IDE\\SharedC#\\NuGetPackages"
@@ -43,6 +43,12 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.2.3, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
