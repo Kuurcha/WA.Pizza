@@ -1,8 +1,14 @@
 {
   "ExpandedNodes": [
     "",
-    "\\WA.Pizza.Web"
+    "\\WA.Pizza.API",
+    "\\WA.Pizza.Core",
+    "\\WA.Pizza.Core\\Poco Entities (Model)",
+    "\\WA.Pizza.Core\\Poco Entities (Model)\\ApplicationUser",
+    "\\WA.Pizza.Core\\Poco Entities (Model)\\Basket",
+    "\\WA.Pizza.Core\\Poco Entities (Model)\\Order",
+    "\\WA.Pizza.Infrastructure"
   ],
-  "SelectedNode": "\\WA.Pizza.Web.sln",
+  "SelectedNode": "\\WA.Pizza.Core\\Program.cs",
   "PreviewInSolutionExplorer": false
 }
