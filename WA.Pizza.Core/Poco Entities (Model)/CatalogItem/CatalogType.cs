@@ -1,6 +1,10 @@
-﻿namespace WA.Pizza.Core.Poco_Entities__Model_.CatalogItem
+﻿namespace WA.Pizza.Core.CatalogType
 {
-    public class CatalogType
+    public enum CatalogType
     {
+        Pizza,
+        Drinks,
+        Snacks,
+        Sweets
     }
 }

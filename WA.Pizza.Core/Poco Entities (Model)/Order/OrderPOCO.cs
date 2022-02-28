@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using WA.Pizza
-enum OrderStatus
+
+public enum OrderStatus
 {
     Canceled,
     Cooking,
@@ -16,7 +16,7 @@ public class Order
 
 	public DateTime CreationDate { get; set; }
 
-	public OrderStatus Status { get; set; } 
+    public OrderStatus Status { get; set; }
 
-	public ApplicationUser ApplicationUser { get; set; }
+    public ApplicationUser ApplicationUser { get; set; }
 }
