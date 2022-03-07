@@ -1,4 +1,4 @@
-using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
 public enum OrderStatus
@@ -10,13 +10,14 @@ public enum OrderStatus
 }
 public class Order
 {
-	public int id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Key]
+    public Guid Id { get; set; }
 	[Required]
-	public string[] Description { get; set; }
-
-	public DateTime CreationDate { get; set; }
-
+	public string Description { get; set; }
+    [Required]
+    public DateTime CreationDate { get; set; }
+    [Required]
     public OrderStatus Status { get; set; }
 
-    public ApplicationUser ApplicationUser { get; set; }
 }

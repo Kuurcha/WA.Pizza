@@ -6,4 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WA.Pizza.API\WA.Pizza.API.csproj" />
+    <ProjectReference Include="..\WA.Pizza.Core\WA.Pizza.Core.csproj" />
+    <ProjectReference Include="..\WA.Pizza.Infrastructure\WA.Pizza.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

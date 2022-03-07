@@ -1,0 +1,17 @@
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\bin\Debug\net6.0\appsettings.Development.json
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\bin\Debug\net6.0\appsettings.json
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\bin\Debug\net6.0\WA.Pizza.Infrastructure.deps.json
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\bin\Debug\net6.0\WA.Pizza.Infrastructure.dll
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\bin\Debug\net6.0\WA.Pizza.Infrastructure.pdb
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\obj\Debug\net6.0\WA.Pizza.Infrastructure.csproj.AssemblyReference.cache
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\obj\Debug\net6.0\WA.Pizza.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\obj\Debug\net6.0\WA.Pizza.Infrastructure.AssemblyInfoInputs.cache
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\obj\Debug\net6.0\WA.Pizza.Infrastructure.AssemblyInfo.cs
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\obj\Debug\net6.0\WA.Pizza.Infrastructure.csproj.CoreCompileInputs.cache
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\obj\Debug\net6.0\staticwebassets.build.json
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\obj\Debug\net6.0\staticwebassets.development.json
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\obj\Debug\net6.0\scopedcss\bundle\WA.Pizza.Infrastructure.styles.css
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\obj\Debug\net6.0\WA.Pizza.Infrastructure.dll
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\obj\Debug\net6.0\refint\WA.Pizza.Infrastructure.dll
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\obj\Debug\net6.0\WA.Pizza.Infrastructure.pdb
+E:\Work\WA.Pizza\WA.Pizza.Infrastructure\obj\Debug\net6.0\ref\WA.Pizza.Infrastructure.dll
