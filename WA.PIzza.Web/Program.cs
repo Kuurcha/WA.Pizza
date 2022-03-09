@@ -21,7 +21,7 @@ using (ApplicationContext db = new ApplicationContext())
     basketItem1.CatalogType = WA.Pizza.Core.CatalogType.CatalogType.Pizza;
     db.BasketItem.Add(basketItem1);
     db.SaveChanges();
-
+    
 }
 var builder = WebApplication.CreateBuilder(args);
 
