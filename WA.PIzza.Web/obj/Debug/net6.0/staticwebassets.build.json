@@ -1,45 +1,11 @@
 {
   "Version": 1,
-  "Hash": "Uya8C+FhQa83MrHVBdq6zjfBsQ/283/613M1smlaNUw=",
+  "Hash": "KodLmpPoWa48J5MkQL6Agy9B00xy+NIUlbG96u+GFbo=",
   "Source": "WA.PIzza.Web",
   "BasePath": "_content/WA.PIzza.Web",
   "Mode": "Default",
   "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [
-    {
-      "Identity": "E:\\Work\\WA.Pizza\\WA.Pizza.API\\WA.Pizza.API.csproj",
-      "Version": 2,
-      "Source": "WA.Pizza.API",
-      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
-      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
-      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier",
-      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
-      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
-      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier"
-    },
-    {
-      "Identity": "E:\\Work\\WA.Pizza\\WA.Pizza.Core\\WA.Pizza.Core.csproj",
-      "Version": 2,
-      "Source": "WA.Pizza.Core",
-      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
-      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
-      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier",
-      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
-      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
-      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier"
-    },
-    {
-      "Identity": "E:\\Work\\WA.Pizza\\WA.Pizza.Infrastructure\\WA.Pizza.Infrastructure.csproj",
-      "Version": 2,
-      "Source": "WA.Pizza.Infrastructure",
-      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
-      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
-      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier",
-      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
-      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
-      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier"
-    }
-  ],
+  "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [
     {
       "Name": "WA.PIzza.Web\\wwwroot",

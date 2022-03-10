@@ -1,28 +1,6 @@
 
-ApplicationContext applicationContext = new ApplicationContext();
+HostBuilder.CreateHostBuilder(args).Build().Run();
 
-using (ApplicationContext db = new ApplicationContext())
-{
-    Basket basket1  = new Basket();
-    basket1.LastModified = DateTime.Now;
-
-    Basket basket2 = new Basket();
-    basket2.LastModified = DateTime.Now.AddDays(-1);
-
-    db.Basket.Add(basket1);
-    db.Basket.Add(basket2);
-    db.SaveChanges();
-     
-    BasketItem basketItem1 = new BasketItem();
-    basketItem1.Quantity = 1;
-    basketItem1.CatalogItemName = "TestCatalog";
-    basketItem1.basketId = basket1.Id;
-    basketItem1.basket = basket1;
-    basketItem1.CatalogType = WA.Pizza.Core.CatalogType.CatalogType.Pizza;
-    db.BasketItem.Add(basketItem1);
-    db.SaveChanges();
-    
-}
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
