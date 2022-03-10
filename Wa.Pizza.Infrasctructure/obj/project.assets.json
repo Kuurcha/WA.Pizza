@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Work\\WA.Pizza\\Wa.Pizza.Core\\Wa.Pizza.Core.csproj",
-      "projectName": "Wa.Pizza.Core",
-      "projectPath": "E:\\Work\\WA.Pizza\\Wa.Pizza.Core\\Wa.Pizza.Core.csproj",
+      "projectUniqueName": "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\Wa.Pizza.Infrasctructure.csproj",
+      "projectName": "Wa.Pizza.Infrasctructure",
+      "projectPath": "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\Wa.Pizza.Infrasctructure.csproj",
       "packagesPath": "C:\\Users\\Kurcha\\.nuget\\packages\\",
-      "outputPath": "E:\\Work\\WA.Pizza\\Wa.Pizza.Core\\obj\\",
+      "outputPath": "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Programming\\IDE\\SharedC#\\NuGetPackages"

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Work\\WA.Pizza\\WA.Pizza.Core\\WA.Pizza.Core.csproj": {}
+    "E:\\Work\\WA.Pizza\\Wa.Pizza.Core\\Wa.Pizza.Core.csproj": {}
   },
   "projects": {
-    "E:\\Work\\WA.Pizza\\WA.Pizza.Core\\WA.Pizza.Core.csproj": {
+    "E:\\Work\\WA.Pizza\\Wa.Pizza.Core\\Wa.Pizza.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Work\\WA.Pizza\\WA.Pizza.Core\\WA.Pizza.Core.csproj",
-        "projectName": "WA.Pizza.Core",
-        "projectPath": "E:\\Work\\WA.Pizza\\WA.Pizza.Core\\WA.Pizza.Core.csproj",
+        "projectUniqueName": "E:\\Work\\WA.Pizza\\Wa.Pizza.Core\\Wa.Pizza.Core.csproj",
+        "projectName": "Wa.Pizza.Core",
+        "projectPath": "E:\\Work\\WA.Pizza\\Wa.Pizza.Core\\Wa.Pizza.Core.csproj",
         "packagesPath": "C:\\Users\\Kurcha\\.nuget\\packages\\",
-        "outputPath": "E:\\Work\\WA.Pizza\\WA.Pizza.Core\\obj\\",
+        "outputPath": "E:\\Work\\WA.Pizza\\Wa.Pizza.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Programming\\IDE\\SharedC#\\NuGetPackages"
@@ -43,20 +43,6 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "dependencies": {
-            "EntityFramework": {
-              "target": "Package",
-              "version": "[6.4.4, )"
-            },
-            "Microsoft.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[6.0.2, )"
-            },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
-              "target": "Package",
-              "version": "[6.0.2, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",
@@ -68,9 +54,6 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }

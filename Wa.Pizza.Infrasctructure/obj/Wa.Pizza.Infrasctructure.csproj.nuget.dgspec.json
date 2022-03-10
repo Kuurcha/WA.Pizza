@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Work\\WA.Pizza\\WA.PIzza.Web\\WA.PIzza.Web.csproj": {}
+    "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\Wa.Pizza.Infrasctructure.csproj": {}
   },
   "projects": {
-    "E:\\Work\\WA.Pizza\\WA.PIzza.Web\\WA.PIzza.Web.csproj": {
+    "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\Wa.Pizza.Infrasctructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Work\\WA.Pizza\\WA.PIzza.Web\\WA.PIzza.Web.csproj",
-        "projectName": "WA.PIzza.Web",
-        "projectPath": "E:\\Work\\WA.Pizza\\WA.PIzza.Web\\WA.PIzza.Web.csproj",
+        "projectUniqueName": "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\Wa.Pizza.Infrasctructure.csproj",
+        "projectName": "Wa.Pizza.Infrasctructure",
+        "projectPath": "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\Wa.Pizza.Infrasctructure.csproj",
         "packagesPath": "C:\\Users\\Kurcha\\.nuget\\packages\\",
-        "outputPath": "E:\\Work\\WA.Pizza\\WA.PIzza.Web\\obj\\",
+        "outputPath": "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Programming\\IDE\\SharedC#\\NuGetPackages"
@@ -54,9 +54,6 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
