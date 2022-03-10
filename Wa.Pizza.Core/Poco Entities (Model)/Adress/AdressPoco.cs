@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+[Table(nameof(Adress))]
 public class Adress
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -7,11 +8,9 @@ public class Adress
     public Guid Id { get; set; }
 
     [Required]
-    public string? AdressString { get; set; }
+    public string AdressString { get; set; }
 
-    public Guid ApplicationUserId { get; set; }
-
-    ApplicationUser ApplicationUser { get; set; }
+    
 
 
 }

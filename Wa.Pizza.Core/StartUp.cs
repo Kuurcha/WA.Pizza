@@ -11,7 +11,7 @@ public class Startup
     public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
-    }
+    }   
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
     }

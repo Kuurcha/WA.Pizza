@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Wa.Pizza.Core.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220310185558_UpldatedModelsFix")]
+    partial class UpldatedModelsFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,6 +33,9 @@ namespace Wa.Pizza.Core.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("ApplicationUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.ToTable("Adress");
@@ -42,13 +47,19 @@ namespace Wa.Pizza.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("adressID")
+                    b.Property<Guid?>("BasketId")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("OrderID")
                         .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("adressID");
+                    b.HasIndex("BasketId");
+
+                    b.HasIndex("OrderID");
 
                     b.ToTable("ApplicationUser");
                 });
@@ -59,24 +70,11 @@ namespace Wa.Pizza.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ApplicationUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BasketItem")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("LastModified")
+                    b.Property<DateTime?>("LastModified")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("basketItemId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId")
-                        .IsUnique();
-
-                    b.HasIndex("basketItemId");
 
                     b.ToTable("Basket");
                 });
@@ -85,9 +83,6 @@ namespace Wa.Pizza.Core.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CatalogItemId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CatalogItemName")
@@ -104,18 +99,24 @@ namespace Wa.Pizza.Core.Migrations
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18,4)");
 
+                    b.Property<Guid>("basketId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CatalogItemId")
-                        .IsUnique();
+                    b.HasIndex("basketId");
 
                     b.ToTable("BasketItem");
                 });
 
             modelBuilder.Entity("CatalogItem", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BasketItemId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CatalogType")
@@ -136,7 +137,18 @@ namespace Wa.Pizza.Core.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("ShopOrderItemId")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("orderItemid")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("BasketItemId");
+
+                    b.HasIndex("orderItemid");
 
                     b.ToTable("CatalogItem");
                 });
@@ -147,38 +159,26 @@ namespace Wa.Pizza.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ApplicationUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreationDate")
+                    b.Property<DateTime?>("CreationDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("OrderItemId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("OrderItemId");
 
                     b.ToTable("Order");
                 });
 
             modelBuilder.Entity("OrderItem", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid?>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CatalogItemId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CatalogItemName")
@@ -189,105 +189,68 @@ namespace Wa.Pizza.Core.Migrations
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,4)");
 
+                    b.Property<Guid?>("OrderId")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18,4)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("CatalogItemId")
-                        .IsUnique();
+                    b.HasKey("id");
 
                     b.ToTable("OrderItem");
                 });
 
             modelBuilder.Entity("ApplicationUser", b =>
                 {
-                    b.HasOne("Adress", "adress")
+                    b.HasOne("Basket", "basket")
                         .WithMany()
-                        .HasForeignKey("adressID")
+                        .HasForeignKey("BasketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("adress");
-                });
-
-            modelBuilder.Entity("Basket", b =>
-                {
-                    b.HasOne("ApplicationUser", null)
-                        .WithOne("basket")
-                        .HasForeignKey("Basket", "ApplicationUserId")
+                    b.HasOne("Order", "order")
+                        .WithMany()
+                        .HasForeignKey("OrderID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BasketItem", "basketItem")
-                        .WithMany()
-                        .HasForeignKey("basketItemId");
+                    b.Navigation("basket");
 
-                    b.Navigation("basketItem");
+                    b.Navigation("order");
                 });
 
             modelBuilder.Entity("BasketItem", b =>
                 {
-                    b.HasOne("CatalogItem", "catalogItem")
-                        .WithOne("basketItem")
-                        .HasForeignKey("BasketItem", "CatalogItemId")
+                    b.HasOne("Basket", "basket")
+                        .WithMany()
+                        .HasForeignKey("basketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("catalogItem");
-                });
-
-            modelBuilder.Entity("Order", b =>
-                {
-                    b.HasOne("ApplicationUser", "applicationUser")
-                        .WithMany("Orders")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("OrderItem", "orderItem")
-                        .WithMany("Orders")
-                        .HasForeignKey("OrderItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("applicationUser");
-
-                    b.Navigation("orderItem");
-                });
-
-            modelBuilder.Entity("OrderItem", b =>
-                {
-                    b.HasOne("CatalogItem", "catalogItem")
-                        .WithOne("orderItem")
-                        .HasForeignKey("OrderItem", "CatalogItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("catalogItem");
-                });
-
-            modelBuilder.Entity("ApplicationUser", b =>
-                {
-                    b.Navigation("Orders");
-
-                    b.Navigation("basket")
-                        .IsRequired();
+                    b.Navigation("basket");
                 });
 
             modelBuilder.Entity("CatalogItem", b =>
                 {
-                    b.Navigation("basketItem")
+                    b.HasOne("BasketItem", "basketItem")
+                        .WithMany()
+                        .HasForeignKey("BasketItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("orderItem")
+                    b.HasOne("OrderItem", "orderItem")
+                        .WithMany()
+                        .HasForeignKey("orderItemid")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("OrderItem", b =>
-                {
-                    b.Navigation("Orders");
+                    b.Navigation("basketItem");
+
+                    b.Navigation("orderItem");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,6 +8,7 @@ public enum OrderStatus
     Delivering,
     Delivered,
 }
+[Table(nameof(Order))]
 public class Order
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,5 +20,11 @@ public class Order
     public DateTime CreationDate { get; set; }
     [Required]
     public OrderStatus Status { get; set; }
+    public Guid? ApplicationUserId { get; set; }
+    public ApplicationUser? applicationUser { get; set; }
+    [Required]
+    public Guid OrderItemId { get; set; }
+    [Required]
+    public OrderItem orderItem { get; set; }
 
 }
