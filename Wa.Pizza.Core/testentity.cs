@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿/*using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 [Table(nameof(TestEntity))]
@@ -10,3 +10,4 @@ public class TestEntity
     [Required]
     public string? Data { get; set; }
 }
+*/
