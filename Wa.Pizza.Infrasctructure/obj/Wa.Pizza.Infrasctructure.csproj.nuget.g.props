@@ -13,4 +13,7 @@
     <SourceRoot Include="C:\Users\Kurcha\.nuget\packages\" />
     <SourceRoot Include="D:\Programming\IDE\SharedC#\NuGetPackages\" />
   </ItemGroup>
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgMicrosoft_EntityFrameworkCore_Tools Condition=" '$(PkgMicrosoft_EntityFrameworkCore_Tools)' == '' ">C:\Users\Kurcha\.nuget\packages\microsoft.entityframeworkcore.tools\6.0.3</PkgMicrosoft_EntityFrameworkCore_Tools>
+  </PropertyGroup>
 </Project>

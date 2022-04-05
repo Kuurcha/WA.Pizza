@@ -5,27 +5,32 @@ using System.ComponentModel.DataAnnotations;
 [Table(nameof(OrderItem))]
 public class OrderItem
 {
-	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+	
 	[Key]
-	public Guid Id { get; set; }
+	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+	public int Id { get; set; }
+	//GUID заменить на инт
 	[Required]
 	[StringLength(30)]
 	public string CatalogItemName { get; set; }
 	[Column(TypeName = "decimal(18,4)")]
 	public decimal UnitPrice { get; set; }
-
+	//fluent
 	[Column(TypeName = "decimal(18,4)")]
 	public decimal Discount { get; set; }
 	public int Quantity { get; set; }
 
 	[Required]
-	public Guid CatalogItemId { get; set; }
+	public int CatalogItemId { get; set; }
 
 	[Required]
-	public CatalogItem catalogItem { get; set; }
+	public CatalogItem CatalogItem { get; set; }
 
 	[Required]
+	public int OrderId { get; set; }
 
-	public ICollection<Order> Orders { get; set; }
+	[Required]
+	public Order Order { get; set; }
+
 }
 

@@ -5,14 +5,16 @@ using System.ComponentModel.DataAnnotations;
 [Table(nameof(CatalogItem))]
 public class CatalogItem
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    
     [Key]
-    public Guid Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
     [Required]
     [StringLength(254)]
     public string Name { get; set; }
     [Required]
-    public string Description { get; set; }
+    [StringLength(2000)]
+    public string? Description { get; set; }
 
     [Column(TypeName = "decimal(18,4)")]
     public decimal Price { get; set; }
@@ -22,7 +24,9 @@ public class CatalogItem
     public CatalogType? CatalogType { get; set; }
 
     [Required]
-    public OrderItem orderItem { get; set; }
+
+    public ICollection<BasketItem>? BasketItems { get; set; }
+
     [Required]
-    public BasketItem basketItem { get; set; }
+    public ICollection<OrderItem>? OrderItems { get; set; }
 }

@@ -107,7 +107,11 @@
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "E:\\Work\\WA.Pizza\\Wa.Pizza.Core\\Wa.Pizza.Core.csproj": {
+                "projectPath": "E:\\Work\\WA.Pizza\\Wa.Pizza.Core\\Wa.Pizza.Core.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -130,6 +134,9 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }

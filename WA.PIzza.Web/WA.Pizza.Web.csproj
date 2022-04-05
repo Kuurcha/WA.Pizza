@@ -6,6 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Wa.Pizza.Core\Wa.Pizza.Core.csproj" />
     <ProjectReference Include="..\Wa.Pizza.Infrasctructure\Wa.Pizza.Infrasctructure.csproj" />

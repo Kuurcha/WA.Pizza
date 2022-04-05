@@ -1,30 +1,24 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-public enum OrderStatus
-{
-    Canceled,
-    Cooking,
-    Delivering,
-    Delivered,
-}
 [Table(nameof(Order))]
 public class Order
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    
     [Key]
-    public Guid Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
 	[Required]
-	public string Description { get; set; }
+    [StringLength(2000)]
+    public string Description { get; set; }
     [Required]
     public DateTime CreationDate { get; set; }
     [Required]
     public OrderStatus Status { get; set; }
-    public Guid? ApplicationUserId { get; set; }
-    public ApplicationUser? applicationUser { get; set; }
+    public int? ApplicationUserId { get; set; }
+    public ApplicationUser? ApplicationUser { get; set; }
     [Required]
-    public Guid OrderItemId { get; set; }
-    [Required]
-    public OrderItem orderItem { get; set; }
+    public ICollection<OrderItem> OrderItems { get; set; }
+
 
 }

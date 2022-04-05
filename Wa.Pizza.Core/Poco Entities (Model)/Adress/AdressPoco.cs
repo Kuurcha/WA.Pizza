@@ -3,13 +3,17 @@ using System.ComponentModel.DataAnnotations;
 [Table(nameof(Adress))]
 public class Adress
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    
     [Key]
-    public Guid Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
 
     [Required]
+    [StringLength(254)]
     public string AdressString { get; set; }
 
+    [Required]
+    public ApplicationUser ApplicationUser{ get; set; }
     
 
 

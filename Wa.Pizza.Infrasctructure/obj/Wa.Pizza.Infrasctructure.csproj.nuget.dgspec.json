@@ -4,14 +4,14 @@
     "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\Wa.Pizza.Infrasctructure.csproj": {}
   },
   "projects": {
-    "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\Wa.Pizza.Infrasctructure.csproj": {
+    "E:\\Work\\WA.Pizza\\Wa.Pizza.Core\\Wa.Pizza.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\Wa.Pizza.Infrasctructure.csproj",
-        "projectName": "Wa.Pizza.Infrasctructure",
-        "projectPath": "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\Wa.Pizza.Infrasctructure.csproj",
+        "projectUniqueName": "E:\\Work\\WA.Pizza\\Wa.Pizza.Core\\Wa.Pizza.Core.csproj",
+        "projectName": "Wa.Pizza.Core",
+        "projectPath": "E:\\Work\\WA.Pizza\\Wa.Pizza.Core\\Wa.Pizza.Core.csproj",
         "packagesPath": "C:\\Users\\Kurcha\\.nuget\\packages\\",
-        "outputPath": "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\obj\\",
+        "outputPath": "E:\\Work\\WA.Pizza\\Wa.Pizza.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Programming\\IDE\\SharedC#\\NuGetPackages"
@@ -43,6 +43,21 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[6.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[6.0.3, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -54,6 +69,74 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\Wa.Pizza.Infrasctructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\Wa.Pizza.Infrasctructure.csproj",
+        "projectName": "Wa.Pizza.Infrasctructure",
+        "projectPath": "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\Wa.Pizza.Infrasctructure.csproj",
+        "packagesPath": "C:\\Users\\Kurcha\\.nuget\\packages\\",
+        "outputPath": "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "D:\\Programming\\IDE\\SharedC#\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Kurcha\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "E:\\Work\\WA.Pizza\\Wa.Pizza.Core\\Wa.Pizza.Core.csproj": {
+                "projectPath": "E:\\Work\\WA.Pizza\\Wa.Pizza.Core\\Wa.Pizza.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }

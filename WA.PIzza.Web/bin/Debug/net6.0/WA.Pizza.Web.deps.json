@@ -443,6 +443,9 @@
         }
       },
       "Wa.Pizza.Infrasctructure/1.0.0": {
+        "dependencies": {
+          "Wa.Pizza.Core": "1.0.0"
+        },
         "runtime": {
           "Wa.Pizza.Infrasctructure.dll": {}
         }

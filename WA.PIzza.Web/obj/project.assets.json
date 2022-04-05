@@ -653,12 +653,18 @@
       "Wa.Pizza.Infrasctructure/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "Wa.Pizza.Core": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/Wa.Pizza.Infrasctructure.dll": {}
         },
         "runtime": {
           "bin/placeholder/Wa.Pizza.Infrasctructure.dll": {}
-        }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       }
     }
   },

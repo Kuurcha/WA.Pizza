@@ -1,11 +1,23 @@
 {
   "Version": 1,
-  "Hash": "KodLmpPoWa48J5MkQL6Agy9B00xy+NIUlbG96u+GFbo=",
+  "Hash": "M5bZAERuBZ1nPnqDBXywS9QC+iR7XgdfBcD2IANSaQE=",
   "Source": "WA.PIzza.Web",
   "BasePath": "_content/WA.PIzza.Web",
   "Mode": "Default",
   "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "E:\\Work\\WA.Pizza\\Wa.Pizza.Infrasctructure\\Wa.Pizza.Infrasctructure.csproj",
+      "Version": 2,
+      "Source": "Wa.Pizza.Infrasctructure",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier"
+    }
+  ],
   "DiscoveryPatterns": [
     {
       "Name": "WA.PIzza.Web\\wwwroot",

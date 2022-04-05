@@ -29,7 +29,8 @@ namespace Wa.Pizza.Core.Migrations
 
                     b.Property<string>("AdressString")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(254)
+                        .HasColumnType("nvarchar(254)");
 
                     b.HasKey("Id");
 
@@ -123,7 +124,8 @@ namespace Wa.Pizza.Core.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -155,10 +157,8 @@ namespace Wa.Pizza.Core.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("OrderItemId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -166,8 +166,6 @@ namespace Wa.Pizza.Core.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("OrderItemId");
 
                     b.ToTable("Order");
                 });
@@ -189,6 +187,9 @@ namespace Wa.Pizza.Core.Migrations
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,4)");
 
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -199,6 +200,8 @@ namespace Wa.Pizza.Core.Migrations
 
                     b.HasIndex("CatalogItemId")
                         .IsUnique();
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("OrderItem");
                 });
@@ -246,15 +249,7 @@ namespace Wa.Pizza.Core.Migrations
                         .WithMany("Orders")
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("OrderItem", "orderItem")
-                        .WithMany("Orders")
-                        .HasForeignKey("OrderItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("applicationUser");
-
-                    b.Navigation("orderItem");
                 });
 
             modelBuilder.Entity("OrderItem", b =>
@@ -265,7 +260,15 @@ namespace Wa.Pizza.Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Order", "order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("catalogItem");
+
+                    b.Navigation("order");
                 });
 
             modelBuilder.Entity("ApplicationUser", b =>
@@ -285,9 +288,9 @@ namespace Wa.Pizza.Core.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderItem", b =>
+            modelBuilder.Entity("Order", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }

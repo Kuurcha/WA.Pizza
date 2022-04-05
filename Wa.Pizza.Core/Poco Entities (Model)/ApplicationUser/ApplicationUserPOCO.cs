@@ -5,16 +5,16 @@ using System.ComponentModel.DataAnnotations;
 [Table(nameof(ApplicationUser))]
 public class ApplicationUser
 {
-	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 	[Key]
-	public Guid Id { get; set; }
+	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+	public int Id { get; set; }
 	[Required]
-	public Guid? adressID { get; set; }
+	public int? AdressID { get; set; }
 	[Required]
-	public Adress adress { get; set; }
+	public Adress Adress { get; set; }
 
 	[Required]
-	public Basket basket { get; set; }
+	public Basket Basket { get; set; }
 
 	public ICollection<Order>? Orders { get; set; }
 
