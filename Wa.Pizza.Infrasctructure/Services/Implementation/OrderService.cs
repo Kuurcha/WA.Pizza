@@ -24,7 +24,7 @@ namespace Wa.Pizza.Infrasctructure.Services
             return _context.ShopOrder.First(x => x.Id == guid);
         }
 
-        public async Task<ActionResult<IEnumerable<Order>>> GetDbSet()
+        public async Task<ActionResult<IEnumerable<Order>>> GetAllOrders()
         {
             return await _context.ShopOrder.ToListAsync();
         }

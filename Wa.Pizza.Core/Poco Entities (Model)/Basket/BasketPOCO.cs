@@ -10,9 +10,9 @@ public class Basket
 	[Required]
 	public DateTime LastModified { get; set; }
 	[Required]
-	public int ApplicationUserId { get; set; }
+	public int? ApplicationUserId { get; set; }
 	[Required]
-	public ApplicationUser ApplicationUser { get; set; }
+	public ApplicationUser? ApplicationUser { get; set; }
 
 	[Required]
 	public ICollection<BasketItem>? BasketItems { get; set; }

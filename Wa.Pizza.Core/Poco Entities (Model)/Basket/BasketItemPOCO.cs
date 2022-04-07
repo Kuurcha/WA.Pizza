@@ -21,6 +21,9 @@ public class BasketItem
 	public CatalogType CatalogType { get; set; }
 
 	[Required]
+	public int BasketId { get; set; }
+
+	[Required]
 	public Basket Basket { get; set; }
 
 	[Required]	

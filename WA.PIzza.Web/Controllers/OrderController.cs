@@ -19,8 +19,7 @@ namespace WA.PIzza.Web.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> Get()
         {
-            Order order = new Order { };
-            return await _orderService.GetDbSet();
+            return await _orderService.GetAllOrders();
         }
 
     }
