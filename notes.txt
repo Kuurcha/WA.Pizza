@@ -1,9 +1,0 @@
-В слое Core Конкретные модели и абстрактные модели
-
-//Data db context и Entity Framework
-
-//Service - сервисы по взаимодействию с бд
-
-//Abstractions - все необходимые интерфейсы
-
-//Shared kernel нету. 
