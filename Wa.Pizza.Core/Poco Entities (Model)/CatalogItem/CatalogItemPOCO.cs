@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 [Table(nameof(CatalogItem))]
 public class CatalogItem
 {
-    
+
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
