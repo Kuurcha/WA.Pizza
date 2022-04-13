@@ -1,56 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Wa.Pizza.Infrasctructure.Data.Services;
 using Wa.Pizza.Infrasctructure.Services;
 
-namespace WA.PIzza.Web.Controllers
+namespace WA.PIzza.Web.Services
 {
-    [Route ("api/[controller]")]
+    [Route ("api/[Service]")]
     [ApiController]
-    public class OrderController: ControllerBase
+    public class ControllerService : ControllerBase
     {
-        private readonly OrderService _orderService;
+        private readonly CatalogItemDataService _catalogItemDataService;
 
-        public OrderController(OrderService orderService)
-        {   
-            _orderService = orderService;
+        public ControllerService(CatalogItemDataService catalogItemDataService)
+        {
+            _catalogItemDataService = catalogItemDataService;
             //Эндпоинты, http, GET
             //ctor
         }
 
+        /// <summary>
+        /// Get catalog item list
+        /// </summary>
+        /// <returns>list of catalogItems</returns>
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> Get()
+        public async Task<ActionResult<IEnumerable<CatalogItem>>> Get()
         {
-            return new ObjectResult(await _orderService.GetAllOrders());
+            return new ObjectResult(await _catalogItemDataService.getCatalogAsync());
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> Get(int id)
-        {
-            Order order = await _orderService.GetByIdAsync(id);
-            if (order == null)
-                return NotFound();
-            return new ObjectResult(order);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Order>> Post(Order order)
-        {
-            if (order == null)
-                return BadRequest();       
-            
-            await _orderService.AddOrder(order);
-            return Accepted(order);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Order>> Delete(int id)
-        {
-            Order order = await _orderService.GetByIdAsync(id);
-            await _orderService.removeById(id);
-            
-            return Ok(order);
-        }
-    
-
+      
 
 
     }

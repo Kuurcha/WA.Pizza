@@ -456,4 +456,4 @@ $RECYCLE.BIN/
 !.vscode/launch.json
 !.vscode/extensions.json
 /notes.txt
-/Wa.Pizza.Infrasctructure/Data/Services
+/WA.PIzza.Web/Controllers/CatalogItemController.cs
