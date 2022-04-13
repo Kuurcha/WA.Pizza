@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WA.PIzza.Web</name>
+    </assembly>
+    <members>
+        <member name="M:WA.PIzza.Web.Controllers.OrderController.Get">
+            <summary>
+            Returns all orders
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WA.PIzza.Web.Controllers.OrderController.Get(System.Int32)">
+            <summary>
+            Returns specific order
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WA.PIzza.Web.Controllers.OrderController.Post(Order)">
+            <summary>
+            Adds a specific order
+            </summary>
+            <param name="order"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WA.PIzza.Web.Controllers.OrderController.Delete(System.Int32)">
+            <summary>
+            Deletes a specific Order.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
