@@ -7,7 +7,8 @@ namespace Wa.Pizza.Infrasctructure.Services
     public class OrderDataService : IEntityService<Order>
     {
         private readonly ApplicationDbContext _context;
-    
+        
+        
         public OrderDataService(ApplicationDbContext ctx)
         {
             _context = ctx;
@@ -26,9 +27,9 @@ namespace Wa.Pizza.Infrasctructure.Services
             return await _context.ShopOrder.ToListAsync();
         }
 
-        public Order getOrderByApplicationUser(ApplicationUser applicationUser)
+        public async Task<List<Order>> GetOrderByApplicationUserIdAsync(int applicationUserId)
         {
-            return _context.ShopOrder.First(x => x.ApplicationUser == applicationUser);
+            return await _context.ShopOrder.Where(x => x.ApplicationUserId == applicationUserId).ToListAsync();
         }
 
         public List<Order> GetOrderItems()

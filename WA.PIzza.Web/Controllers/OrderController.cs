@@ -4,31 +4,60 @@ using Wa.Pizza.Infrasctructure.Services;
 
 namespace WA.PIzza.Web.Services
 {
-    [Route ("api/[Service]")]
+    [Route ("api/[controller]")]
     [ApiController]
-    public class ControllerService : ControllerBase
+    public class OrderController : ControllerBase
     {
-        private readonly CatalogItemDataService _catalogItemDataService;
+        private readonly OrderDataService _orderDataService;
 
-        public ControllerService(CatalogItemDataService catalogItemDataService)
+        public OrderController(OrderDataService orderDataService)
         {
-            _catalogItemDataService = catalogItemDataService;
+            _orderDataService = orderDataService;
             //Эндпоинты, http, GET
             //ctor
         }
-
         /// <summary>
-        /// Get catalog item list
+        /// Returns lists of order of specific user by specified id
         /// </summary>
-        /// <returns>list of catalogItems</returns>
-
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CatalogItem>>> Get()
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrderByUserId(int userId)
         {
-            return new ObjectResult(await _catalogItemDataService.getCatalogAsync());
+            IEnumerable<Order> orders = await _orderDataService.GetOrderByApplicationUserIdAsync(userId);
+            if (orders == null)
+                return NotFound();
+            return new ObjectResult(orders);
         }
+        /// <summary>
+        /// Returns specific order by specific id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Order>> GetById(int id)
+        {
+            Order order = await _orderDataService.GetByIdAsync(id);
+            if (order == null)
+                return NotFound();
+            return new ObjectResult(order);
+        }
+        /// <summary>
+        /// Posts order 
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<Order>> Post(Order order)
+        {
 
-      
+            if (order == null)
+                return BadRequest();
+
+            await _orderDataService.AddOrder(order);
+
+            return Accepted(order);
+        }
 
 
     }

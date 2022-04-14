@@ -18,7 +18,7 @@ public class BasketItem
 	[Required]
 	public int Quantity { get; set; }
 	[Required]
-	public CatalogType CatalogType { get; set; }
+	public CatalogType? CatalogType { get; set; }
 
 	[Required]
 	public int BasketId { get; set; }

@@ -19,15 +19,16 @@ namespace Wa.Pizza.Infrasctructure.Services
             return _context.SaveChangesAsync();
         }
 
-        public async Task<ActionResult<IEnumerable<OrderItem>>> GetAllOrderItems()
+        public async Task<ActionResult<IEnumerable<OrderItem>>> GetOrderItemsByUserId(int userId)
         {
-            return await _context.ShopOrderItem.ToListAsync();
+            return await _context.ShopOrderItem.Where(oi => oi.Order.ApplicationUserId == userId).ToListAsync();
         }
 
-        public List<Order> GetOrderItems()
+        public async Task<ActionResult<IEnumerable<OrderItem>>> GetOrderItemsByOrderId(int orderId)
         {
-            return _context.ShopOrder.Where(o => o.OrderItems.Any(oi => oi.OrderId == o.Id)).ToList();
+            return await _context.ShopOrderItem.Where(o => o.OrderId == orderId).ToListAsync();
         }
+
 
         public int UpdateOrderId(int orderItemId, int orderId)
         {

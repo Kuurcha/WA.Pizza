@@ -12,7 +12,10 @@ namespace Wa.Pizza.Infrasctructure.Services
         {
             _context = ctx;
         }
-
+        public OrderItem BasketItemToOrderItem(BasketItem basketItem, int orderId, int discount )
+        {
+            return new OrderItem { CatalogItemId = basketItem.CatalogItemId, OrderId = orderId, Quantity = basketItem.Quantity, UnitPrice = basketItem.UnitPrice, Discount = discount, CatalogItemName = basketItem.CatalogItemName };
+        }
         public Task<int> AddOrderItem(OrderItem orderItem)
         {
             _context.ShopOrderItem.Add(orderItem);

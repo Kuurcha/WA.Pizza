@@ -15,13 +15,29 @@ namespace WA.PIzza.Web.Controllers
             //Эндпоинты, http, GET
             //ctor
         }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderItem>>> Get()
+        /// <summary>
+        /// Returns order items for specific user 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("byOrder")]
+        public async Task<ActionResult<IEnumerable<OrderItem>>> GetByOrderId(int orderId)
         {
-            return await _orderItemService.GetAllOrderItems();
+            return await _orderItemService.GetOrderItemsByOrderId(orderId);
         }
-
+        /// <summary>
+        /// Returns order items for specific user 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("byUser")]
+        public async Task<ActionResult<IEnumerable<OrderItem>>> GetByUserId(int userId)
+        {
+            return await _orderItemService.GetOrderItemsByUserId(userId);
+        }
+        /// <summary>
+        /// Returns specific order item by it's id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderItem>> Get(int id)
         {
@@ -31,7 +47,11 @@ namespace WA.PIzza.Web.Controllers
             return new ObjectResult(orderItem);
         }
 
-
+        /// <summary>
+        /// Posts order item
+        /// </summary>
+        /// <param name="orderItem"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<OrderItem>> Post(OrderItem orderItem)
         {

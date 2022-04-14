@@ -8,7 +8,7 @@ using Wa.Pizza.Infrasctructure.Services.Interfaces;
 
 namespace Wa.Pizza.Infrasctructure.Data.Services
 {
-    internal class BasketItemDataService : IEntityService<BasketItem>
+    public class BasketItemDataService : IEntityService<BasketItem>
     {
         private readonly ApplicationDbContext _context;
 
@@ -17,7 +17,10 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             _context = ctx;
         }
 
-
+        public BasketItem catalogItemToBasketItem(CatalogItem catalogItem, int basketId, int quantity)
+        {
+            return new BasketItem { BasketId = basketId, CatalogItemId = catalogItem.Id, CatalogType = catalogItem.CatalogType, Quantity = quantity, UnitPrice = catalogItem.Price, CatalogItemName = catalogItem.Name };
+        }
 
         public async Task<BasketItem> GetByIdAsync(int guid) => await _context.BasketItem.FirstOrDefaultAsync(x => x.Id == guid);
 
@@ -28,20 +31,35 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
            return await _context.BasketItem.Where(o => o.BasketId == basketId).ToListAsync();
         } 
 
-        public Task<int> AddOrder(BasketItem basketItem)
+        private async Task<int> UpdateDateBasket(int basketId)
+        {
+            Basket basket = await _context.Basket.FirstOrDefaultAsync(x => x.Id == basketId);
+
+            basket.LastModified = DateTime.UtcNow;
+
+            _context.Basket.Update(basket);
+
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> AddBasketItem(BasketItem basketItem)
         {
             _context.BasketItem.Add(basketItem);
-            return _context.SaveChangesAsync();
+            await UpdateDateBasket(basketItem.Id);    
+
+
+            return await _context.SaveChangesAsync();
         }
         public async Task<int> UpdateBasketItem(BasketItem basketItem)
         {
             _context.BasketItem.Update(basketItem);
+            await UpdateDateBasket(basketItem.Id);
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> DeleteByIdAsync(int id) {
-            BasketItem basketItem = _context.BasketItem.FirstOrDefault(x => x.Id == id);
+        public async Task<int> DeleteAsync(BasketItem basketItem) {
             _context.BasketItem.Remove(basketItem);
+            await UpdateDateBasket(basketItem.Id);
             return await _context.SaveChangesAsync();
         }
 

@@ -10,7 +10,7 @@ using Wa.Pizza.Infrasctructure.Services.Interfaces;
 
 namespace Wa.Pizza.Infrasctructure.Data.Services
 {
-    internal class BasketDataService : IEntityService<Basket>
+    public class BasketDataService : IEntityService<Basket>
     {
         private readonly ApplicationDbContext _context;
 
@@ -18,6 +18,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         {
             _context = ctx;
         }
+
 
         public async Task<Basket> GetByIdAsync(int guid) => await _context.Basket.FirstOrDefaultAsync(x => x.Id == guid);
 
