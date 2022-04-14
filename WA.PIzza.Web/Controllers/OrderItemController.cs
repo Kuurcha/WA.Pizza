@@ -7,9 +7,9 @@ namespace WA.PIzza.Web.Controllers
     [ApiController]
     public class OrderItemController: ControllerBase
     {
-        private readonly OrderItemService _orderItemService;
+        private readonly OrderItemDataService _orderItemService;
 
-        public OrderItemController(OrderItemService orderItemService)
+        public OrderItemController(OrderItemDataService orderItemService)
         {
             _orderItemService = orderItemService;
             //Эндпоинты, http, GET

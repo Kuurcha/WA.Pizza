@@ -4,13 +4,16 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <DocumentationFile>E:\Work\WA.Pizza\WA.PIzza.Web\bin\Debug\net6.0\WA.PIzza.Web.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <Optimize>False</Optimize>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
+  
     <ProjectReference Include="..\Wa.Pizza.Core\Wa.Pizza.Core.csproj" />
     <ProjectReference Include="..\Wa.Pizza.Infrasctructure\Wa.Pizza.Infrasctructure.csproj" />
   </ItemGroup>
