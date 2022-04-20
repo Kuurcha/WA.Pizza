@@ -1,0 +1,23 @@
+В слое Core Конкретные модели и абстрактные модели
+
+//Data db context и Entity Framework
+
+//Service - сервисы по взаимодействию с бд
+
+//Abstractions - все необходимые интерфейсы
+
+//Shared kernel нету. 
+
+09.04.2022
+//Просто модели
+//Business flow логика
+//OrderDataService - переименовать
+//CatalogDataService => BasketDataService => OrderDataService - реализовать 
+//Получение всего каталога => Создание и редактирование корзины => Создание корзины и просмотр ее состояния
+//[Feture-3] Implement main costumer flow
+//для теста
+
+14.04.2022
+//DTO, туда же конверторы CatalogItem => BasketItem => OrderItem, избавить от всей не нужной информации
+//DTO - request/response (Add BasketItemRequest - Объект по добавлению айтемов внутрь баскета). С помощью набора полей создать/получить (в данном случае BasketItem)
+//Mapster - https://github.com/MapsterMapper/Mapster/wiki/Basic-usages. Маппинг происходит (project to type) на уровне бд.
