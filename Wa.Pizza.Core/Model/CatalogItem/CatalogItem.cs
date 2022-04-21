@@ -1,4 +1,4 @@
-﻿using WA.Pizza.Core.CatalogType;
+﻿ using WA.Pizza.Core.CatalogType;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
@@ -23,10 +23,10 @@ public class CatalogItem
     [Required]
     public CatalogType? CatalogType { get; set; }
 
-    [Required]
+    
 
     public ICollection<BasketItem>? BasketItems { get; set; }
 
-    [Required]
+    
     public ICollection<OrderItem>? OrderItems { get; set; }
 }

@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Mapster;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Wa.Pizza.Infrasctructure.DTO.Order;
 using Wa.Pizza.Infrasctructure.Services.Interfaces;
 
 namespace Wa.Pizza.Infrasctructure.Services
 {
-    public class OrderItemDataService : IEntityService<OrderItem>
+    public class OrderItemDataService : IEntityService<OrderItemDTO>
     {
         private readonly ApplicationDbContext _context;
     
@@ -13,20 +15,30 @@ namespace Wa.Pizza.Infrasctructure.Services
             _context = ctx;
         }
 
-        public Task<int> AddOrderItem(OrderItem orderItem)
+        public async Task<int> AddOrderItem(OrderItemDTO orderItemDTO, int orderId )
         {
+            OrderItem orderItem = await orderItemDTO
+                                        .BuildAdapter()
+                                        .AdaptToTypeAsync<OrderItem>();
+            orderItem.OrderId = orderId;
             _context.ShopOrderItem.Add(orderItem);
-            return _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
 
-        public async Task<ActionResult<IEnumerable<OrderItem>>> GetOrderItemsByUserId(int userId)
+        public async Task<IEnumerable<OrderItemDTO>> GetOrderItemsByUserId(int userId)
         {
-            return await _context.ShopOrderItem.Where(oi => oi.Order.ApplicationUserId == userId).ToListAsync();
+            IEnumerable<OrderItem> orderItems =  await _context.ShopOrderItem.Where(oi => oi.Order.ApplicationUserId == userId).ToListAsync();
+            return await orderItems
+                            .BuildAdapter()
+                            .AdaptToTypeAsync<List<OrderItemDTO>>();
         }
 
-        public async Task<ActionResult<IEnumerable<OrderItem>>> GetOrderItemsByOrderId(int orderId)
+        public async Task<IEnumerable<OrderItemDTO>> GetOrderItemsByOrderId(int orderId)
         {
-            return await _context.ShopOrderItem.Where(o => o.OrderId == orderId).ToListAsync();
+            IEnumerable<OrderItem> orderItems = await _context.ShopOrderItem.Where(o => o.OrderId == orderId).ToListAsync();
+            return await orderItems
+                            .BuildAdapter()
+                            .AdaptToTypeAsync<List<OrderItemDTO>>();
         }
 
 
@@ -39,24 +51,32 @@ namespace Wa.Pizza.Infrasctructure.Services
 
         }
 
-        public async Task<OrderItem> GetByIdAsync(int guid) => await _context.ShopOrderItem.FirstOrDefaultAsync(x => x.Id == guid);
+        public async Task<OrderItemDTO> GetByIdAsync(int guid)
+        {
+            OrderItem orderItem = await _context.ShopOrderItem.FirstOrDefaultAsync(x => x.Id == guid);
+            return await orderItem
+                            .BuildAdapter()
+                            .AdaptToTypeAsync<OrderItemDTO>();
+        }
         public OrderItem BasketItemToOrderItem(BasketItem basketItem, int orderId, int discount )
         {
             return new OrderItem { CatalogItemId = basketItem.CatalogItemId, OrderId = orderId, Quantity = basketItem.Quantity, UnitPrice = basketItem.UnitPrice, Discount = discount, CatalogItemName = basketItem.CatalogItemName };
         }
 
-        public async Task<ActionResult<IEnumerable<OrderItem>>> GetAllOrderItems()
+        public async Task<ActionResult<IEnumerable<OrderItemDTO>>> GetAllOrderItems()
         {
-            return await _context.ShopOrderItem.ToListAsync();
+            IEnumerable<OrderItem> orderItems = await _context.ShopOrderItem.ToListAsync();
+            return await orderItems
+                            .BuildAdapter()
+                            .AdaptToTypeAsync<List<OrderItemDTO>>();
         }
 
-        public List<Order> GetOrderItems()
+        public async Task<int> UpdateOrderItem(UpdateOrderItemDTO orderItemDTO)
         {
-            return _context.ShopOrder.Where(o => o.OrderItems.Any(oi => oi.OrderId == o.Id)).ToList();
-        }
-
-        public async Task<int> UpdateOrderItem(OrderItem orderItem)
-        {
+            OrderItem orderItem = await orderItemDTO
+                            .BuildAdapter()
+                            .AdaptToTypeAsync<OrderItem>();
+            orderItem.CatalogItemName = (await _context.CatalogItem.FirstOrDefaultAsync(ci => ci.Id == orderItem.CatalogItemId)).Name;
             _context.ShopOrderItem.Update(orderItem);
             return await _context.SaveChangesAsync();
         }

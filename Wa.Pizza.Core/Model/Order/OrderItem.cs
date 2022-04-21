@@ -23,13 +23,11 @@ public class OrderItem
 	[Required]
 	public int CatalogItemId { get; set; }
 
-	[Required]
 	public CatalogItem CatalogItem { get; set; }
 
 	[Required]
 	public int OrderId { get; set; }
 
-	[Required]
 	public Order Order { get; set; }
 
 }

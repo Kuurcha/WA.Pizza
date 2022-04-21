@@ -32,8 +32,8 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Order>()
-    .HasMany(o => o.OrderItems)
-    .WithOne(oi => oi.Order);
+            .HasMany(o => o.OrderItems)
+            .WithOne(oi => oi.Order);
         modelBuilder.Entity<Order>()
             .HasOne(o => o.ApplicationUser)
             .WithMany(a => a.Orders)

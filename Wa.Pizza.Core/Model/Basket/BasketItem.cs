@@ -23,13 +23,14 @@ public class BasketItem
 	[Required]
 	public int BasketId { get; set; }
 
-	[Required]
+	//Явно написать .include basket
+	
 	public Basket Basket { get; set; }
 
 	[Required]	
 	public int CatalogItemId { get; set; }
 
-	[Required]
+	
 	public CatalogItem CatalogItem { get; set; }
 
 

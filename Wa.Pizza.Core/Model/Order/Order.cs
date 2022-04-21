@@ -17,7 +17,7 @@ public class Order
     public OrderStatus Status { get; set; }
     public int? ApplicationUserId { get; set; }
     public ApplicationUser? ApplicationUser { get; set; }
-    [Required]
+    
     public ICollection<OrderItem> OrderItems { get; set; }
 
 

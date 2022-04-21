@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Mapster;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Wa.Pizza.Infrasctructure.DTO.Order;
 using Wa.Pizza.Infrasctructure.Services.Interfaces;
 
 namespace Wa.Pizza.Infrasctructure.Services
 {
-    public class OrderDataService : IEntityService<Order>
+    public class OrderDataService : IEntityService<GetOrderDTO>
     {
         private readonly ApplicationDbContext _context;
         
@@ -14,27 +16,47 @@ namespace Wa.Pizza.Infrasctructure.Services
             _context = ctx;
         }
 
-        public Task<int> AddOrder(Order order)
+        public async Task<int> AddOrder(SetOrderDTO orderDto, int applicationUserId)
         {
+            Order order = await orderDto
+                            .BuildAdapter()
+                            .AdaptToTypeAsync<Order>();
+            order.ApplicationUserId = applicationUserId;
             _context.ShopOrder.Add(order);
-            return _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
 
-        public async Task<Order> GetByIdAsync(int guid) => await _context.ShopOrder.FirstOrDefaultAsync(x => x.Id == guid);
-
-        public async Task <IEnumerable<Order>> GetAllOrders()
+        public async Task<GetOrderDTO> GetByIdAsync(int guid)
         {
-            return await _context.ShopOrder.ToListAsync();
+           Order order =  await _context.ShopOrder.FirstOrDefaultAsync(x => x.Id == guid);
+           return await order
+                            .BuildAdapter()
+                            .AdaptToTypeAsync<GetOrderDTO>();
+        } 
+
+        public async Task <IEnumerable<GetOrderDTO>> GetAllOrders()
+        {
+            IEnumerable<Order> orders = await _context.ShopOrder.ToListAsync();
+            IEnumerable<GetOrderDTO> result = await orders
+                                                .BuildAdapter()
+                                                .AdaptToTypeAsync<List<GetOrderDTO>>();
+            return result;
         }
 
-        public async Task<List<Order>> GetOrderByApplicationUserIdAsync(int applicationUserId)
+        public async Task<List<GetOrderDTO>> GetOrderByApplicationUserIdAsync(int applicationUserId)
         {
-            return await _context.ShopOrder.Where(x => x.ApplicationUserId == applicationUserId).ToListAsync();
+            IEnumerable<Order> orders = await _context.ShopOrder.Where(x => x.ApplicationUserId == applicationUserId).ToListAsync();
+            return await orders
+                            .BuildAdapter()
+                            .AdaptToTypeAsync<List<GetOrderDTO>>();
         }
 
-        public List<Order> GetOrderItems()
+        public async Task<List<GetOrderDTO>> GetOrderItemsAsync()
         {
-            return _context.ShopOrder.Where(o => o.OrderItems.Any(oi => oi.OrderId == o.Id)).ToList();
+            IEnumerable<Order> orders = await _context.ShopOrder.Where(o => o.OrderItems.Any(oi => oi.OrderId == o.Id)).ToListAsync();
+            return await orders
+                            .BuildAdapter()
+                            .AdaptToTypeAsync<List<GetOrderDTO>>();
         }
 
         public int UpdateStatus(int orderID, OrderStatus orderStatus)

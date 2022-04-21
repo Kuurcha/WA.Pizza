@@ -14,10 +14,10 @@ public class Adress
     [Required]
     public int ApplicationUserId { get; set; }
 
-    [Required]
-    public ApplicationUser? ApplicationUser { get; set; }
+     
+    public ApplicationUser ApplicationUser { get; set; }
     
-
+    
 
 }
 

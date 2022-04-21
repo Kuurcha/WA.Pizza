@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Wa.Pizza.Infrasctructure.Services.Interfaces;
-
+using Mapster;
 namespace Wa.Pizza.Infrasctructure.Data.Services
 {
     public class BasketItemDataService : IEntityService<BasketItem>
@@ -22,13 +22,28 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             return new BasketItem { BasketId = basketId, CatalogItemId = catalogItem.Id, CatalogType = catalogItem.CatalogType, Quantity = quantity, UnitPrice = catalogItem.Price, CatalogItemName = catalogItem.Name };
         }
 
-        public async Task<BasketItem> GetByIdAsync(int guid) => await _context.BasketItem.FirstOrDefaultAsync(x => x.Id == guid);
-
-        public async Task<BasketItem> GetBytByBasketId(int basketId) => await _context.BasketItem.FirstOrDefaultAsync(x => x.Id == basketId);
-
-        public async Task<List<BasketItem>> GetListByBasketId(int basketId)
+        public async Task<BasketItemDTO> GetByIdAsync(int guid)
         {
-           return await _context.BasketItem.Where(o => o.BasketId == basketId).ToListAsync();
+            BasketItem basketItem = await _context.BasketItem.FirstOrDefaultAsync(x => x.Id == guid);
+            return await basketItem
+                   .BuildAdapter()
+                   .AdaptToTypeAsync<BasketItemDTO>();
+        }  
+
+        public async Task<BasketItemDTO> GetBytByBasketId(int basketId)
+        {
+            BasketItem basketItem = await _context.BasketItem.FirstOrDefaultAsync(x => x.Id == basketId);
+            return await basketItem
+                   .BuildAdapter()
+                   .AdaptToTypeAsync<BasketItemDTO>();
+        } 
+
+        public async Task<List<BasketItemDTO>> GetListByBasketId(int basketId)
+        {
+            List<BasketItem> basketItems = await _context.BasketItem.Where(o => o.BasketId == basketId).ToListAsync();
+            return await basketItems
+                   .BuildAdapter()
+                   .AdaptToTypeAsync<List<BasketItemDTO>>();
         } 
 
         private async Task<int> UpdateDateBasket(int basketId)
@@ -42,22 +57,32 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> AddBasketItem(BasketItem basketItem)
+        public async Task<int> AddBasketItem(BasketItemDTO basketItemDTO, int basketId)
         {
+            BasketItem basketItem = await basketItemDTO
+                                          .BuildAdapter()
+                                          .AdaptToTypeAsync<BasketItem>();
+            
+            basketItem.BasketId = basketId;
             _context.BasketItem.Add(basketItem);
             await UpdateDateBasket(basketItem.Id);    
 
 
             return await _context.SaveChangesAsync();
         }
-        public async Task<int> UpdateBasketItem(BasketItem basketItem)
+        public async Task<int> UpdateBasketItem(BasketItemDTO basketItemDTO, int basketId)
         {
+            BasketItem basketItem = await basketItemDTO
+                              .BuildAdapter()
+                              .AdaptToTypeAsync<BasketItem>();
+            basketItem.BasketId = basketId;
             _context.BasketItem.Update(basketItem);
             await UpdateDateBasket(basketItem.Id);
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> DeleteAsync(BasketItem basketItem) {
+        public async Task<int> DeleteAsync(int basketItemId) {
+            BasketItem  basketItem = await _context.BasketItem.FirstOrDefaultAsync(x => x.Id == basketItemId);
             _context.BasketItem.Remove(basketItem);
             await UpdateDateBasket(basketItem.Id);
             return await _context.SaveChangesAsync();

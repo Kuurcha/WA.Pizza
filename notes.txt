@@ -20,4 +20,6 @@
 14.04.2022
 //DTO, туда же конверторы CatalogItem => BasketItem => OrderItem, избавить от всей не нужной информации
 //DTO - request/response (Add BasketItemRequest - Объект по добавлению айтемов внутрь баскета). С помощью набора полей создать/получить (в данном случае BasketItem)
-//Mapster - https://github.com/MapsterMapper/Mapster/wiki/Basic-usages. Маппинг происходит (project to type) на уровне бд.
+//Mapster - https://github.com/MapsterMapper/Mapster/wiki/Basic-usages. Маппинг происходит (project to type) на уровне бд.	
+
+//Коллекцию на другой эндпоинт

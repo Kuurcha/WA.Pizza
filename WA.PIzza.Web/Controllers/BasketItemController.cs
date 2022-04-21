@@ -27,11 +27,12 @@ namespace WA.PIzza.Web.Controllers
         /// Return specific basket item value
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns></returns> 
         [HttpGet("{id}")]
         public async Task<ActionResult<BasketItem>> GetById(int id)
         {
-            BasketItem basketItem = await _basketItemDataService.GetByIdAsync(id);
+            //Убрать 
+            BasketItem basketItem = await _basketItemDataService.GetByIdAsync(id, _basketItemDataService.Get_context());
             if (basketItem == null)
                 return NotFound();
             return new ObjectResult(basketItem);
@@ -59,13 +60,14 @@ namespace WA.PIzza.Web.Controllers
         [HttpDelete]
         public async Task<ActionResult<BasketItem>> Delete(int basketItemId)
         {
-            BasketItem basketItem = await _basketItemDataService.GetByIdAsync(basketItemId);
+            BasketItem basketItem = await _basketItemDataService.GetByIdAsync(basketItemId, _basketItemDataService.Get_context());
             if (basketItem == null)
                 return BadRequest();
 
             await _basketItemDataService.DeleteAsync(basketItem);
 
-            return Accepted(basketItem);
+            //У Delete не accepted
+            return NoContent();
         }
 
         /// <summary>
