@@ -8,7 +8,6 @@
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public DateTime LastModified { get; set; }
-        public ICollection<GetAndConvertBasketItemDTO>? BasketItems { get; set; }
 
     }
 }

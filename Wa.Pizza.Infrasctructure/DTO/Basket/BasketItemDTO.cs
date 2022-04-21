@@ -2,7 +2,7 @@
 
 namespace Wa.Pizza.Infrasctructure.DTO.Basket
 {
-    public class GetBasketItemDTO
+    public class BasketItemDTO
     {
 		public string CatalogItemName { get; set; }
 		public decimal UnitPrice { get; set; }

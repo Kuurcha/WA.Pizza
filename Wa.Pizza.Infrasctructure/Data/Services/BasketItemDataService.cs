@@ -6,9 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Wa.Pizza.Infrasctructure.Services.Interfaces;
 using Mapster;
+using Wa.Pizza.Infrasctructure.DTO.Basket;
+
 namespace Wa.Pizza.Infrasctructure.Data.Services
 {
-    public class BasketItemDataService : IEntityService<BasketItem>
+    public class BasketItemDataService : IEntityService<BasketItemDTO>
     {
         private readonly ApplicationDbContext _context;
 
@@ -30,7 +32,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
                    .AdaptToTypeAsync<BasketItemDTO>();
         }  
 
-        public async Task<BasketItemDTO> GetBytByBasketId(int basketId)
+        public async Task<BasketItemDTO> GetByBasketId(int basketId)
         {
             BasketItem basketItem = await _context.BasketItem.FirstOrDefaultAsync(x => x.Id == basketId);
             return await basketItem
@@ -65,26 +67,29 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             
             basketItem.BasketId = basketId;
             _context.BasketItem.Add(basketItem);
-            await UpdateDateBasket(basketItem.Id);    
+            await UpdateDateBasket(basketItem.BasketId);    
 
 
             return await _context.SaveChangesAsync();
         }
-        public async Task<int> UpdateBasketItem(BasketItemDTO basketItemDTO, int basketId)
+        public async Task<int> UpdateBasketItem(BasketItemDTO basketItemDTO, int basketItemId)
         {
+            ///Переделать?
+            BasketItem originalBasketItem = await _context.BasketItem.FirstOrDefaultAsync(x => x.Id == basketItemId);
+          
             BasketItem basketItem = await basketItemDTO
                               .BuildAdapter()
                               .AdaptToTypeAsync<BasketItem>();
-            basketItem.BasketId = basketId;
-            _context.BasketItem.Update(basketItem);
-            await UpdateDateBasket(basketItem.Id);
+            originalBasketItem.Adapt(basketItem);
+           _context.BasketItem.Update(originalBasketItem);
+            await UpdateDateBasket(originalBasketItem.BasketId);
             return await _context.SaveChangesAsync();
         }
 
         public async Task<int> DeleteAsync(int basketItemId) {
             BasketItem  basketItem = await _context.BasketItem.FirstOrDefaultAsync(x => x.Id == basketItemId);
             _context.BasketItem.Remove(basketItem);
-            await UpdateDateBasket(basketItem.Id);
+            await UpdateDateBasket(basketItem.BasketId);
             return await _context.SaveChangesAsync();
         }
 

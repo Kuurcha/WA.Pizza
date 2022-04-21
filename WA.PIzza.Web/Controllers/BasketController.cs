@@ -26,11 +26,9 @@ namespace WA.PIzza.Web.Controllers
         public async Task<ActionResult<BasketDTO>> Get(int userId)
         {
 
-            Basket basket = await _basketDataService.GetByIdAsync(userId, _basketDataService.Get_context());
+            BasketDTO basket = await _basketDataService.GetByIdAsync(userId);
             if (basket == null)
                 return NotFound();
-            BasketDTO basketDTO = await basket.BuildAdapter()
-                           .AdaptToTypeAsync<BasketDTO>();
             return new ObjectResult(basket);
         }
         /// <summary>
@@ -39,20 +37,13 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="basket"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Basket>> Post(BasketDTO basketDTO, int userId)
+        public async Task<ActionResult> Post(BasketDTO basketDTO, int userId)
         {
 
             if (basketDTO == null)
                 return BadRequest();
-            Basket basket = null;
-/*            using (HttpClient client = new HttpClient())
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create();
-                var httpRequest = new HttpRequestMessage("GET", "https://localhost/api/");
-                return await client.SendAsync(httpRequest);
-            }*/
-            await _basketDataService.AddBasket(basket);
-            return new ObjectResult(basket);
+            await _basketDataService.AddBasket(basketDTO, userId);  
+            return new ObjectResult(basketDTO);
         }
     }
 }

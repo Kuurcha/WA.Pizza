@@ -25,9 +25,8 @@ namespace WA.PIzza.Web.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetCatalogItemDTO>>> Get()
         {
-            IEnumerable <CatalogItem> catalogItems = await  _catalogItemDataService.getCatalogAsync();
-            return new ObjectResult(await catalogItems.BuildAdapter()
-                            .AdaptToTypeAsync <IEnumerable<GetCatalogItemDTO>>());
+            IEnumerable <GetCatalogItemDTO> catalogItems = await  _catalogItemDataService.getCatalogAsync();
+            return new ObjectResult(catalogItems);
         }
         /// <summary>
         /// Allows to get specific catalogue item
@@ -36,12 +35,11 @@ namespace WA.PIzza.Web.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetCatalogItemDTO>> Get(int id)
         {
-            CatalogItem catalogItem = await _catalogItemDataService.GetByIdAsync(id, _catalogItemDataService.Get_context());
+            GetCatalogItemDTO catalogItem = await _catalogItemDataService.GetByIdAsync(id);
             if (catalogItem == null)
                 return NotFound();
 
-            return new ObjectResult(await catalogItem.BuildAdapter()
-                            .AdaptToTypeAsync<GetCatalogItemDTO>());
+            return new ObjectResult(catalogItem);
         }
 
     

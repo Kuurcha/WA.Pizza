@@ -13,6 +13,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\AdressController.cs" />
+    <Compile Remove="Controllers\ApplicationUserController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
   
     <ProjectReference Include="..\Wa.Pizza.Core\Wa.Pizza.Core.csproj" />
     <ProjectReference Include="..\Wa.Pizza.Infrasctructure\Wa.Pizza.Infrasctructure.csproj" />

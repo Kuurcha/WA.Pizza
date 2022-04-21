@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Wa.Pizza.Infrasctructure.Data.Services;
+using Wa.Pizza.Infrasctructure.DTO.Basket;
 
 namespace WA.PIzza.Web.Controllers
 {
@@ -19,7 +20,7 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="basketId"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BasketItem>>> GetListByBasketId(int basketId)
+        public async Task<ActionResult<IEnumerable<BasketItemDTO>>> GetListByBasketId(int basketId)
         {
             return await _basketItemDataService.GetListByBasketId(basketId);
         }
@@ -29,10 +30,10 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="id"></param>
         /// <returns></returns> 
         [HttpGet("{id}")]
-        public async Task<ActionResult<BasketItem>> GetById(int id)
+        public async Task<ActionResult<BasketItemDTO>> GetById(int id)
         {
             //Убрать 
-            BasketItem basketItem = await _basketItemDataService.GetByIdAsync(id, _basketItemDataService.Get_context());
+            BasketItemDTO basketItem = await _basketItemDataService.GetByIdAsync(id);
             if (basketItem == null)
                 return NotFound();
             return new ObjectResult(basketItem);
@@ -43,14 +44,14 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="basketItem"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<BasketItem>> Post(BasketItem basketItem)
+        public async Task<ActionResult> Post(BasketItemDTO basketItemDTO, int basketId)
         {
-            if (basketItem == null)
+            if (basketItemDTO == null)
                 return BadRequest();
 
-            await _basketItemDataService.AddBasketItem(basketItem);
+            await _basketItemDataService.AddBasketItem(basketItemDTO, basketId);
 
-            return Accepted(basketItem);
+            return Accepted();
         }
         /// <summary>
         /// Deletes basketItem based on basketItemId
@@ -58,13 +59,13 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="basketItemId"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ActionResult<BasketItem>> Delete(int basketItemId)
+        public async Task<ActionResult> Delete(int basketItemId)
         {
-            BasketItem basketItem = await _basketItemDataService.GetByIdAsync(basketItemId, _basketItemDataService.Get_context());
+            BasketItemDTO basketItem = await _basketItemDataService.GetByIdAsync(basketItemId);
             if (basketItem == null)
                 return BadRequest();
 
-            await _basketItemDataService.DeleteAsync(basketItem);
+            await _basketItemDataService.DeleteAsync(basketItemId);
 
             //У Delete не accepted
             return NoContent();
@@ -76,14 +77,14 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="basketItem"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<ActionResult<BasketItem>> Put(BasketItem basketItem)
+        public async Task<ActionResult> Put(BasketItemDTO basketItemDTO, int basketItemId)
         {
-            if (basketItem == null)
+            if (basketItemDTO == null)
                 return BadRequest();
 
-            await _basketItemDataService.UpdateBasketItem(basketItem);
+            await _basketItemDataService.UpdateBasketItem(basketItemDTO, basketItemId);
 
-            return Accepted(basketItem);
+            return Accepted();
         }
 
     }

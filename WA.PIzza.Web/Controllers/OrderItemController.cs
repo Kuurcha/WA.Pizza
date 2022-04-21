@@ -26,9 +26,8 @@ namespace WA.PIzza.Web.Controllers
         [HttpGet("byOrder")]
         public async Task<ActionResult<IEnumerable<OrderItemDTO>>> GetByOrderId(int orderId)
         {
-            IEnumerable<OrderItem> orderItems = await _orderItemService.GetOrderItemsByOrderId(orderId);
-            return new ObjectResult(await orderItems.BuildAdapter()
-                            .AdaptToTypeAsync<IEnumerable<OrderItemDTO>>());
+            IEnumerable<OrderItemDTO> orderItems = await _orderItemService.GetOrderItemsByOrderId(orderId);
+            return new ObjectResult(orderItems);
         }
         /// <summary>
         /// Returns order items for specific user 
@@ -37,9 +36,8 @@ namespace WA.PIzza.Web.Controllers
         [HttpGet("byUser")]
         public async Task<ActionResult<IEnumerable<OrderItemDTO>>> GetByUserId(int userId)
         {
-            IEnumerable<OrderItem> orderItems = await _orderItemService.GetOrderItemsByUserId(userId); 
-            return new ObjectResult(await orderItems.BuildAdapter()
-                            .AdaptToTypeAsync<IEnumerable<OrderItemDTO>>());
+            IEnumerable<OrderItemDTO> orderItems = await _orderItemService.GetOrderItemsByUserId(userId); 
+            return new ObjectResult(orderItems);
         }
         /// <summary>
         /// Returns specific order item by it's id
@@ -49,11 +47,9 @@ namespace WA.PIzza.Web.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderItemDTO>> Get(int id)
         {
-            OrderItem orderItem = await _orderItemService.GetByIdAsync(id, _orderItemService.Get_context());
-            if (orderItem == null)
+            OrderItemDTO orderItemDTO = await _orderItemService.GetByIdAsync(id);
+            if (orderItemDTO == null)
                 return NotFound();
-            OrderItemDTO orderItemDTO = await orderItem.BuildAdapter()
-                            .AdaptToTypeAsync<OrderItemDTO>();
             return new ObjectResult(orderItemDTO);
         }
 
@@ -63,15 +59,12 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="orderItem"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<OrderItem>> Post(OrderItemDTO orderItemDTO)
+        public async Task<ActionResult> Post(OrderItemDTO orderItemDTO, int orderId)
         {
             if (orderItemDTO == null)
-                return BadRequest();       
-            OrderItem orderItem = await orderItemDTO.BuildAdapter()
-                            .AdaptToTypeAsync<OrderItem>();
-
-            await _orderItemService.AddOrderItem(orderItem);
-            return Accepted(orderItem);
+                return BadRequest();      
+            await _orderItemService.AddOrderItem(orderItemDTO, orderId);
+            return Accepted();
         }
 
     }
