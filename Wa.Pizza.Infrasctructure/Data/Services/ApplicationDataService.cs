@@ -19,15 +19,8 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         {
             _context = ctx;
         }
+        public Task<ApplicationUserDTO> GetById(int guid) => _context.ApplicationUser.Where(x => x.Id == guid).ProjectToType<ApplicationUserDTO>().FirstAsync();
 
-
-        public async Task<ApplicationUserDTO> GetByIdAsync(int guid)
-        {
-            ApplicationUser applicationUser = await _context.ApplicationUser.FirstOrDefaultAsync(x => x.Id == guid);
-            return await applicationUser
-                        .BuildAdapter()
-                        .AdaptToTypeAsync<ApplicationUserDTO>();
-        }
         
 
     }

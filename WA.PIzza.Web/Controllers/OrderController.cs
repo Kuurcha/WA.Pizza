@@ -26,7 +26,7 @@ namespace WA.PIzza.Web.Services
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetOrderDTO>>> GetOrderByUserId(int userId)
         {
-            IEnumerable<GetOrderDTO> orders = await _orderDataService.GetOrderByApplicationUserIdAsync(userId);
+            IEnumerable<GetOrderDTO> orders = await _orderDataService.GetOrderByApplicationUserId(userId);
             if (orders == null)
                 return NotFound();
             return new ObjectResult(orders);
@@ -39,7 +39,7 @@ namespace WA.PIzza.Web.Services
         [HttpGet("{id}")]
         public async Task<ActionResult<GetOrderDTO>> GetById(int id)
         {
-            GetOrderDTO order = await _orderDataService.GetByIdAsync(id);
+            GetOrderDTO order = await _orderDataService.GetById(id);
          
             if (order == null)
                 return NotFound();

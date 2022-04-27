@@ -21,14 +21,8 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         {
             return _context;
         }
-
-        public async Task<AdressDTO> GetByIdAsync(int guid)
-        {
-            Adress adress = (await _context.Adress.FirstOrDefaultAsync(x => x.Id == guid));
-            return await adress
-                        .BuildAdapter()
-                        .AdaptToTypeAsync<AdressDTO>();
-        }
+        public Task<AdressDTO> GetById(int guid) => _context.Adress.Where(x => x.Id == guid).ProjectToType<AdressDTO>().FirstAsync();
+        
 
     }
 }

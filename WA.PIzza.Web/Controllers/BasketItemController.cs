@@ -33,7 +33,7 @@ namespace WA.PIzza.Web.Controllers
         public async Task<ActionResult<BasketItemDTO>> GetById(int id)
         {
             //Убрать 
-            BasketItemDTO basketItem = await _basketItemDataService.GetByIdAsync(id);
+            BasketItemDTO basketItem = await _basketItemDataService.GetById(id);
             if (basketItem == null)
                 return NotFound();
             return new ObjectResult(basketItem);
@@ -61,13 +61,12 @@ namespace WA.PIzza.Web.Controllers
         [HttpDelete]
         public async Task<ActionResult> Delete(int basketItemId)
         {
-            BasketItemDTO basketItem = await _basketItemDataService.GetByIdAsync(basketItemId);
+            BasketItemDTO basketItem = await _basketItemDataService.GetById(basketItemId);
             if (basketItem == null)
                 return BadRequest();
 
-            await _basketItemDataService.DeleteAsync(basketItemId);
+            await _basketItemDataService.Delete(basketItemId);
 
-            //У Delete не accepted
             return NoContent();
         }
 

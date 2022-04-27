@@ -4,6 +4,7 @@ namespace Wa.Pizza.Infrasctructure.DTO.Basket
 {
     public class BasketItemDTO
     {
+		public int Id { get; set; }
 		public string CatalogItemName { get; set; }
 		public decimal UnitPrice { get; set; }
 		public int Quantity { get; set; }
