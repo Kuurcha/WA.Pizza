@@ -26,7 +26,7 @@ namespace WA.PIzza.Web.Controllers
         public async Task<ActionResult<BasketDTO>> Get(int userId)
         {
 
-            BasketDTO basket = await _basketDataService.GetByIdAsync(userId);
+            BasketDTO basket = await _basketDataService.GetById(userId);
             if (basket == null)
                 return NotFound();
             return new ObjectResult(basket);

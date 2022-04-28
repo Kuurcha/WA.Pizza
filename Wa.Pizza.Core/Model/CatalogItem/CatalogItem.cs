@@ -21,12 +21,10 @@ public class CatalogItem
 
     public int Quantity { get; set; }
     [Required]
-    public CatalogType? CatalogType { get; set; }
+    public CatalogType? CatalogType { get; set; }    
 
-    
-
+    //OrderItem 
     public ICollection<BasketItem>? BasketItems { get; set; }
 
-    
     public ICollection<OrderItem>? OrderItems { get; set; }
 }

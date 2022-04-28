@@ -23,3 +23,22 @@
 //Mapster - https://github.com/MapsterMapper/Mapster/wiki/Basic-usages. Маппинг происходит (project to type) на уровне бд.	
 
 //Коллекцию на другой эндпоинт
+22.04.2022
+
+BasketItem - независим
+Избавиться от навигационных свойств
+Зачем нужны навигационные свойства? (Необязательны)
+Параллельные и асинхронное выполнение?
+Добавление в контекст
+
+await - машина состояний
+
+28.04.20222
+BasketItemDataService - удалить
+BasketDataService - должен содержать AddItem, UpdateItem, DeleteItem, ClearBasket, BindBuyerToBasket
+
+AddItemBasketRequest - Контроллер. 
+Запросить CatalogItem, найти попытаться найти BasketItem
+
+Request - прием модели
+Response - ответ

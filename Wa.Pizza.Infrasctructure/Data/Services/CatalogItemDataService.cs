@@ -19,20 +19,13 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         {
             _context = ctx;
         }
-        public async Task<GetCatalogItemDTO> GetByIdAsync(int guid)
+        public Task<GetCatalogItemDTO> GetById(int guid)
         {
-            CatalogItem catalogItem = await _context.CatalogItem.FirstOrDefaultAsync(x => x.Id == guid);
-            return await catalogItem
-                            .BuildAdapter()
-                            .AdaptToTypeAsync<GetCatalogItemDTO>();
-
-
+            return _context.CatalogItem.Where(x => x.Id == guid).ProjectToType <GetCatalogItemDTO>().FirstAsync();
         }
-        public async Task<List<GetCatalogItemDTO>> getCatalogAsync() { 
-            List<CatalogItem>  catalogItems = await _context.CatalogItem.ToListAsync();
-            return await catalogItems
-                            .BuildAdapter()
-                            .AdaptToTypeAsync<List<GetCatalogItemDTO>>();
+        public Task<List<GetCatalogItemDTO>> getCatalogAsync()
+        {
+            return _context.CatalogItem.ProjectToType<GetCatalogItemDTO>().ToListAsync();
         }
 
 

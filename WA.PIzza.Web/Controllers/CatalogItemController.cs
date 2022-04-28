@@ -35,7 +35,7 @@ namespace WA.PIzza.Web.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetCatalogItemDTO>> Get(int id)
         {
-            GetCatalogItemDTO catalogItem = await _catalogItemDataService.GetByIdAsync(id);
+            GetCatalogItemDTO catalogItem = await _catalogItemDataService.GetById(id);
             if (catalogItem == null)
                 return NotFound();
 

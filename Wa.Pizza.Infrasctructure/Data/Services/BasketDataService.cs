@@ -22,27 +22,18 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         }
 
 
-        public async Task<BasketDTO> GetByIdAsync(int guid)
+        public Task<BasketDTO> GetById(int guid)
         {
-            Basket basket = await _context.Basket.FirstOrDefaultAsync(x => x.Id == guid);
-            return await basket
-                   .BuildAdapter()
-                   .AdaptToTypeAsync<BasketDTO>();
-        } 
-
-        public async Task<BasketDTO> GetByApplicationUserId(int applicationUserId)
+            return _context.Basket.Where(x => x.Id == guid).ProjectToType<BasketDTO>().FirstAsync();
+        }
+        public Task<BasketDTO> GetByApplicationUserId(int applicationUserId)
         {
-            Basket basket = await _context.Basket.FirstOrDefaultAsync(x => x.ApplicationUserId == applicationUserId);
-            return await basket
-                        .BuildAdapter()
-                        .AdaptToTypeAsync<BasketDTO>();
-        }  
+            return _context.Basket.Where(x => x.ApplicationUserId == applicationUserId).ProjectToType<BasketDTO>().FirstAsync();
+        }
 
         public async Task<int> AddBasket(BasketDTO basketDTO, int applicationUserId)
         {
-            Basket basket = await basketDTO
-                            .BuildAdapter()
-                            .AdaptToTypeAsync<Basket>();
+            Basket basket = basketDTO.Adapt<Basket>();
             basket.ApplicationUserId = applicationUserId;
             _context.Basket.Add(basket);
             return await _context.SaveChangesAsync();
@@ -50,9 +41,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
 
         public async Task<int> UpdateBasket(BasketDTO basketDTO, int applicationUserId)
         {
-            Basket basket = await basketDTO
-                .BuildAdapter()
-                .AdaptToTypeAsync<Basket>();
+            Basket basket = basketDTO.Adapt<Basket>();
             basket.ApplicationUserId = applicationUserId;
             _context.Basket.Update(basket);
             return await _context.SaveChangesAsync();
