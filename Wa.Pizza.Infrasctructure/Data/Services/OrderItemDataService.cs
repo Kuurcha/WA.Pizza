@@ -19,7 +19,7 @@ namespace Wa.Pizza.Infrasctructure.Services
         {
             OrderItem orderItem = orderItemDTO .Adapt<OrderItem>();
             orderItem.OrderId = orderId;
-            await _context.ShopOrderItem.AddAsync(orderItem);
+            _context.ShopOrderItem.Add(orderItem);
             return await _context.SaveChangesAsync();
         }
 
