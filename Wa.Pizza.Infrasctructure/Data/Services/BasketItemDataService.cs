@@ -35,7 +35,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
 
         private async Task<int> UpdateDateBasket(int basketId)
         {
-            Basket basket = await _context.Basket.Where(x => x.Id == basketId).FirstAsync();
+            Basket basket = await _context.Basket.FirstAsync(x => x.Id == basketId);
 
             basket.LastModified = DateTime.UtcNow;
 

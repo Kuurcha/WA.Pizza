@@ -32,3 +32,13 @@ BasketItem - независим
 ƒобавление в контекст
 
 await - машина состо€ний
+
+28.04.20222
+BasketItemDataService - удалить
+BasketDataService - должен содержать AddItem, UpdateItem, DeleteItem, ClearBasket, BindBuyerToBasket
+
+AddItemBasketRequest -  онтроллер. 
+«апросить CatalogItem, найти попытатьс€ найти BasketItem
+
+Request - прием модели
+Response - ответ
