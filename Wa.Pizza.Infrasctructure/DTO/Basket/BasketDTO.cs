@@ -9,5 +9,6 @@
         public int Id { get; set; }
         public DateTime LastModified { get; set; }
 
+        public int ApplicationUserId { get; set; }
     }
 }

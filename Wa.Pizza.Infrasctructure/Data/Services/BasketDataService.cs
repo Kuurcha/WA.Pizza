@@ -30,23 +30,67 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         {
             return _context.Basket.Where(x => x.ApplicationUserId == applicationUserId).ProjectToType<BasketDTO>().FirstAsync();
         }
-
-        public async Task<int> AddBasket(BasketDTO basketDTO, int applicationUserId)
+        public Task<List<BasketItemDTO>> GetBasketItemListByBasketId(int basketId)
         {
-            Basket basket = basketDTO.Adapt<Basket>();
-            basket.ApplicationUserId = applicationUserId;
-            _context.Basket.Add(basket);
+            return _context.BasketItem.Where(o => o.BasketId == basketId).ProjectToType<BasketItemDTO>().ToListAsync();
+        }
+        /// <summary>
+        /// Использовать в контроллере для уменьшения количества обновлений.
+        /// </summary>
+        /// <param name="basketId"></param>
+        /// <returns></returns>
+        public async Task<int> UpdateDateBasket(int basketId)
+        {
+            Basket basket = await _context.Basket.FirstAsync(x => x.Id == basketId);
+
+            basket.LastModified = DateTime.UtcNow;
+
+            _context.Basket.Update(basket);
+
             return await _context.SaveChangesAsync();
         }
-
-        public async Task<int> UpdateBasket(BasketDTO basketDTO, int applicationUserId)
+        public async Task<int> AddItem(BasketItemDTO basketItemDTO)
         {
-            Basket basket = basketDTO.Adapt<Basket>();
+            BasketItem basketItem = basketItemDTO.Adapt<BasketItem>();
+            _context.BasketItem.Add(basketItem);
+            return await _context.SaveChangesAsync();
+        }
+        public async Task<int> UpdateItem(BasketItemDTO basketItemDTO)
+        {
+            BasketItem originalBasketItem = await _context.BasketItem.FirstAsync(x => x.Id == basketItemDTO.Id);
+            BasketItem basketItem = basketItemDTO.Adapt<BasketItem>();
+            originalBasketItem.Adapt(basketItem);
+            _context.BasketItem.Update(originalBasketItem);
+            return await _context.SaveChangesAsync();
+        }
+        public async Task<int> DeleteItem(BasketItemDTO basketItemDTO)
+        {
+            BasketItem basketItem = await _context.BasketItem.FirstAsync(x => x.Id == basketItemDTO.Id);
+            _context.BasketItem.Remove(basketItem);
+            return await _context.SaveChangesAsync();
+        }
+        public async Task<int> ClearBasket(int basketId)
+        {
+            List<BasketItemDTO> basketItemsToClear = await GetBasketItemListByBasketId(basketId);
+            foreach (var basketItem in basketItemsToClear)
+            {
+                await DeleteItem(basketItem);
+            }
+            return await _context.SaveChangesAsync();
+        }
+        public async Task<int> BindBuyetToBasket(int basketId, int applicationUserId)
+        {
+            Basket basket = await _context.Basket.FirstAsync(x => x.Id == basketId );
             basket.ApplicationUserId = applicationUserId;
             _context.Basket.Update(basket);
             return await _context.SaveChangesAsync();
         }
 
-
+        public async Task<int> AddBasket(BasketDTO basketDTO)
+        {
+            Basket basket = basketDTO.Adapt<Basket>();
+            _context.Basket.Add(basket);
+            return await _context.SaveChangesAsync();
+        }
     }
 }
