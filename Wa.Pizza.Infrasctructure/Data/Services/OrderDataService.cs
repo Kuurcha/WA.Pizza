@@ -18,9 +18,7 @@ namespace Wa.Pizza.Infrasctructure.Services
 
         public async Task<int> AddOrder(SetOrderDTO orderDto, int applicationUserId)
         {
-            Order order = await orderDto
-                            .BuildAdapter()
-                            .AdaptToTypeAsync<Order>();
+            Order order = orderDto.Adapt<Order>();
             order.ApplicationUserId = applicationUserId;
             _context.ShopOrder.Add(order);
             return await _context.SaveChangesAsync();

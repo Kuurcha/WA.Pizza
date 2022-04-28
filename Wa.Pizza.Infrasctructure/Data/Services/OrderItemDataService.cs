@@ -17,9 +17,7 @@ namespace Wa.Pizza.Infrasctructure.Services
 
         public async Task<int> AddOrderItem(OrderItemDTO orderItemDTO, int orderId)
         {
-            OrderItem orderItem = await orderItemDTO
-                                         .BuildAdapter()
-                                         .AdaptToTypeAsync<OrderItem>();
+            OrderItem orderItem = orderItemDTO .Adapt<OrderItem>();
             orderItem.OrderId = orderId;
             await _context.ShopOrderItem.AddAsync(orderItem);
             return await _context.SaveChangesAsync();
@@ -44,9 +42,7 @@ namespace Wa.Pizza.Infrasctructure.Services
 
         public async Task<int> UpdateOrderItem(UpdateOrderItemDTO orderItemDTO)
         {
-            OrderItem orderItem = await orderItemDTO
-                            .BuildAdapter()
-                            .AdaptToTypeAsync<OrderItem>();
+            OrderItem orderItem = orderItemDTO.Adapt<OrderItem>();
             orderItem.CatalogItemName = (await _context.CatalogItem.FirstAsync(ci => ci.Id == orderItem.CatalogItemId)).Name;
             _context.ShopOrderItem.Update(orderItem);
             return await _context.SaveChangesAsync();

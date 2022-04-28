@@ -26,7 +26,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
 
         public Task<BasketItemDTO> GetByBasketId(int basketId)
         { 
-            return _context.BasketItem.Where(x => x.Id == basketId).ProjectToType<BasketItemDTO>().FirstAsync();
+            return _context.BasketItem.Where(x => x.BasketId == basketId).ProjectToType<BasketItemDTO>().FirstAsync();
         }
         public Task<List<BasketItemDTO>> GetListByBasketId(int basketId)
         {
@@ -46,8 +46,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
 
         public async Task<int> AddBasketItem(BasketItemDTO basketItemDTO, int basketId)
         {
-            BasketItem basketItem = await basketItemDTO
-                                          .BuildAdapter().AdaptToTypeAsync<BasketItem>();
+            BasketItem basketItem = basketItemDTO.Adapt<BasketItem>();
             basketItem.BasketId = basketId;
             _context.BasketItem.Add(basketItem);
             await UpdateDateBasket(basketItem.BasketId);    
@@ -60,9 +59,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             ///Переделать?
             BasketItem originalBasketItem = await _context.BasketItem.FirstAsync(x => x.Id == basketItemId);
           
-            BasketItem basketItem = await basketItemDTO
-                              .BuildAdapter()
-                              .AdaptToTypeAsync<BasketItem>();
+            BasketItem basketItem = basketItemDTO.Adapt<BasketItem>();
 
             originalBasketItem.Adapt(basketItem);
            _context.BasketItem.Update(originalBasketItem);

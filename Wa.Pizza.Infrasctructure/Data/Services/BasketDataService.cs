@@ -33,9 +33,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
 
         public async Task<int> AddBasket(BasketDTO basketDTO, int applicationUserId)
         {
-            Basket basket = await basketDTO
-                            .BuildAdapter()
-                            .AdaptToTypeAsync<Basket>();
+            Basket basket = basketDTO.Adapt<Basket>();
             basket.ApplicationUserId = applicationUserId;
             _context.Basket.Add(basket);
             return await _context.SaveChangesAsync();
@@ -43,9 +41,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
 
         public async Task<int> UpdateBasket(BasketDTO basketDTO, int applicationUserId)
         {
-            Basket basket = await basketDTO
-                .BuildAdapter()
-                .AdaptToTypeAsync<Basket>();
+            Basket basket = basketDTO.Adapt<Basket>();
             basket.ApplicationUserId = applicationUserId;
             _context.Basket.Update(basket);
             return await _context.SaveChangesAsync();
