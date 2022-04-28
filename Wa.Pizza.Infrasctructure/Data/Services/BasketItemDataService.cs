@@ -19,10 +19,19 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             _context = ctx;
         }
 
-        public Task<BasketItemDTO> GetById(int guid) => _context.BasketItem.Where(x => x.Id == guid).ProjectToType<BasketItemDTO>().FirstAsync(); 
-        public Task<BasketItemDTO> GetByBasketId(int basketId) => _context.BasketItem.Where(x => x.Id == basketId).ProjectToType<BasketItemDTO>().FirstAsync();
-        public  Task<List<BasketItemDTO>> GetListByBasketId(int basketId) => _context.BasketItem.Where(o => o.BasketId == basketId).ProjectToType<BasketItemDTO>().ToListAsync();
+        public Task<BasketItemDTO> GetById(int guid)
+        {
+            return _context.BasketItem.Where(x => x.Id == guid).ProjectToType<BasketItemDTO>().FirstAsync();
+        }
 
+        public Task<BasketItemDTO> GetByBasketId(int basketId)
+        { 
+            return _context.BasketItem.Where(x => x.Id == basketId).ProjectToType<BasketItemDTO>().FirstAsync();
+        }
+        public Task<List<BasketItemDTO>> GetListByBasketId(int basketId)
+        {
+            return _context.BasketItem.Where(o => o.BasketId == basketId).ProjectToType<BasketItemDTO>().ToListAsync();
+        }
 
         private async Task<int> UpdateDateBasket(int basketId)
         {

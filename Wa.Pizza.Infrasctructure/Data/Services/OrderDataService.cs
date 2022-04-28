@@ -26,14 +26,24 @@ namespace Wa.Pizza.Infrasctructure.Services
             return await _context.SaveChangesAsync();
         }
 
-        public Task<GetOrderDTO> GetById(int guid) => _context.ShopOrder.Where(x => x.Id == guid).ProjectToType<GetOrderDTO>().FirstAsync();
+        public Task<GetOrderDTO> GetById(int guid)
+        {
+            return _context.ShopOrder.Where(x => x.Id == guid).ProjectToType<GetOrderDTO>().FirstAsync();
+        }
+        public Task<List<GetOrderDTO>> GetAllOrders()
+        {
+            return _context.ShopOrder.ProjectToType<GetOrderDTO>().ToListAsync();
+        }
 
-        public Task<List<GetOrderDTO>> GetAllOrders() => _context.ShopOrder.ProjectToType<GetOrderDTO>().ToListAsync();
+        public Task<List<GetOrderDTO>> GetOrderByApplicationUserId(int applicationUserId)
+        {
+            return _context.ShopOrder.Where(x => x.ApplicationUserId == applicationUserId).ProjectToType<GetOrderDTO>().ToListAsync();
+        }
 
-        public Task<List<GetOrderDTO>> GetOrderByApplicationUserId(int applicationUserId) => _context.ShopOrder.Where(x => x.ApplicationUserId == applicationUserId).ProjectToType<GetOrderDTO>().ToListAsync();
-
-        public Task<List<GetOrderDTO>> GetOrderItems() => _context.ShopOrder.Where(o => o.OrderItems.Any(oi => oi.OrderId == o.Id)).ProjectToType<GetOrderDTO>().ToListAsync();
-
+        public Task<List<GetOrderDTO>> GetOrderItems()
+        {
+            return _context.ShopOrder.Where(o => o.OrderItems.Any(oi => oi.OrderId == o.Id)).ProjectToType<GetOrderDTO>().ToListAsync();
+        }
 
         public int UpdateStatus(int orderID, OrderStatus orderStatus)
         {

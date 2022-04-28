@@ -22,9 +22,14 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         }
 
 
-        public Task<BasketDTO> GetById(int guid) => _context.Basket.Where(x => x.Id == guid).ProjectToType<BasketDTO>().FirstAsync();
-        public Task<BasketDTO> GetByApplicationUserId(int applicationUserId) => _context.Basket.Where(x => x.ApplicationUserId == applicationUserId).ProjectToType<BasketDTO>().FirstAsync();
-       
+        public Task<BasketDTO> GetById(int guid)
+        {
+            return _context.Basket.Where(x => x.Id == guid).ProjectToType<BasketDTO>().FirstAsync();
+        }
+        public Task<BasketDTO> GetByApplicationUserId(int applicationUserId)
+        {
+            return _context.Basket.Where(x => x.ApplicationUserId == applicationUserId).ProjectToType<BasketDTO>().FirstAsync();
+        }
 
         public async Task<int> AddBasket(BasketDTO basketDTO, int applicationUserId)
         {
