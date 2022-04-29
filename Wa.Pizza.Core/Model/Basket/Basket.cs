@@ -11,7 +11,7 @@ public class Basket
     public DateTime LastModified { get; set; }
 	public int? ApplicationUserId { get; set; }
 	 
-	public ApplicationUser? ApplicationUser { get; set; }
+	public ApplicationUser ApplicationUser { get; set; }
 
 	public ICollection<BasketItem>? BasketItems { get; set; }
 

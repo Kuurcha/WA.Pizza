@@ -21,7 +21,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         }
         public Task<CatalogItemDTO> GetById(int guid)
         {
-            return _context.CatalogItem.Where(x => x.Id == guid).ProjectToType <CatalogItemDTO>().FirstAsync();
+            return _context.CatalogItem.Where(x => x.Id == guid).ProjectToType <CatalogItemDTO>().FirstOrDefaultAsync();
         }
         public Task<List<CatalogItemDTO>> getCatalogAsync()
         {

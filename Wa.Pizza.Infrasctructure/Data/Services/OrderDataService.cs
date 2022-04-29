@@ -26,7 +26,7 @@ namespace Wa.Pizza.Infrasctructure.Services
 
         public Task<GetOrderDTO> GetById(int guid)
         {
-            return _context.ShopOrder.Where(x => x.Id == guid).ProjectToType<GetOrderDTO>().FirstAsync();
+            return _context.ShopOrder.Where(x => x.Id == guid).ProjectToType<GetOrderDTO>().FirstOrDefaultAsync();
         }
         public Task<List<GetOrderDTO>> GetAllOrders()
         {
