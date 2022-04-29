@@ -161,7 +161,7 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="applicationUserId"></param>
         /// <returns></returns>
         [HttpPut("updateUser")]
-        public async Task<ActionResult> BindUserToBasket(int basketId, int applicationUserId)
+        public async Task<ActionResult> BindUserToBasketRequest(int basketId, int applicationUserId)
         {
             if (!(await IsBasketByIdExists(basketId)))
                 return BadRequest();
