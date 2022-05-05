@@ -11,9 +11,9 @@ namespace WA.PIzza.Web.Controllers
     [ApiController]
     public class CatalogItemController: ControllerBase
     {
-        private readonly CatalogItemDataService _catalogItemDataService;
+        private readonly CatalogDataService _catalogItemDataService;
 
-        public CatalogItemController(CatalogItemDataService catalogItemDataService)
+        public CatalogItemController(CatalogDataService catalogItemDataService)
         {
             _catalogItemDataService = catalogItemDataService;
         }
@@ -23,9 +23,9 @@ namespace WA.PIzza.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetCatalogItemDTO>>> Get()
+        public async Task<ActionResult<IEnumerable<CatalogItemDTO>>> Get()
         {
-            IEnumerable <GetCatalogItemDTO> catalogItems = await  _catalogItemDataService.getCatalogAsync();
+            IEnumerable <CatalogItemDTO> catalogItems = await  _catalogItemDataService.getCatalogAsync();
             return new ObjectResult(catalogItems);
         }
         /// <summary>
@@ -33,9 +33,9 @@ namespace WA.PIzza.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<GetCatalogItemDTO>> Get(int id)
+        public async Task<ActionResult<CatalogItemDTO>> Get(int id)
         {
-            GetCatalogItemDTO catalogItem = await _catalogItemDataService.GetById(id);
+            CatalogItemDTO catalogItem = await _catalogItemDataService.GetById(id);
             if (catalogItem == null)
                 return NotFound();
 

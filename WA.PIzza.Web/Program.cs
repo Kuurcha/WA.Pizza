@@ -13,10 +13,8 @@ var builder =
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddScoped<OrderDataService>();
-builder.Services.AddScoped<OrderItemDataService>();
-builder.Services.AddScoped<BasketItemDataService>();
 builder.Services.AddScoped<BasketDataService>();
-builder.Services.AddScoped<CatalogItemDataService>();
+builder.Services.AddScoped<CatalogDataService>();
 
 builder.Services.AddControllers();
 

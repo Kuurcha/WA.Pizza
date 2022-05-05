@@ -10,7 +10,6 @@ public class ApplicationUser
 	public int Id { get; set; }
 	public ICollection<Adress>? Adresses { get; set; }
 
-	[Required]
 	public Basket Basket { get; set; }
 
 	public ICollection<Order>? Orders { get; set; }
