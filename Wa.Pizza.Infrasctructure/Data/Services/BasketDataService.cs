@@ -41,7 +41,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         /// <summary>
         /// Использовать в контроллере для уменьшения количества обновлений.
         /// </summary>
-        /// <param name="basketId"></param>
+        /// <param name="basketId"></param> 
         /// <returns></returns>
         public async Task<int> UpdateDateBasket(int basketId)
         {
@@ -82,7 +82,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             }
             return await _context.SaveChangesAsync();
         }
-        public async Task<int> BindBuyetToBasket(int basketId, int applicationUserId)
+        public async Task<int> BindBuyerToBasket(int basketId, int applicationUserId)
         {
             Basket basket = await _context.Basket.FirstOrDefaultAsync(x => x.Id == basketId );
             basket.ApplicationUserId = applicationUserId;

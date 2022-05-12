@@ -18,5 +18,24 @@ namespace Wa.Pizza.Infrasctructure.DTO.Basket
 		public CatalogType? CatalogType { get; set; }
 		[Required]
 		public int CatalogItemId { get; set; }
+
+		public override bool Equals(object obj)
+		{
+			//Check for null and compare run-time types.
+			if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+			{
+				return false;
+			}
+			else
+			{
+				BasketItemDTO arrivedObject = (BasketItemDTO)obj;
+				return (arrivedObject.Id == this.Id && arrivedObject.BasketId == this.BasketId);
+			}
+		}
+		public override int GetHashCode()
+		{
+			return this.Id.GetHashCode() ^ this.CatalogItemName.GetHashCode() ^ this.UnitPrice.GetHashCode() ^ this.Quantity.GetHashCode();
+		}
+
 	}
 }
