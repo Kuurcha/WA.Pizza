@@ -22,6 +22,7 @@ namespace WA.Pizza.Tests
                 var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>()
                    .UseSqlServer(config.GetConnectionString("Test"));
                 applicationDbContext = new ApplicationDbContext(optionsBuilder.Options);
+
                 // ... initialize data in the test database ...
             }
 
@@ -41,17 +42,12 @@ namespace WA.Pizza.Tests
         {
             _fixture = fixture;
             _basketDataService = new BasketDataService(_fixture.applicationDbContext);
-        }
-
-        private void clearDataBase()
-        {
             _fixture.applicationDbContext.Database.EnsureDeleted();
             _fixture.applicationDbContext.Database.Migrate();
         }
         [Fact]
         public async void basket_item_is_added_to_basket()
         {
-            clearDataBase();
             //Тест завязан на OnModelCreating, хрупкий??
             //Arrange
             var basketItem = new BasketItemDTO {BasketId =1, Quantity = Faker.RandomNumber.Next(1, 100), CatalogType = Core.CatalogType.CatalogType.Pizza, UnitPrice = 150, CatalogItemName = "Classic", CatalogItemId = 3 };
@@ -68,7 +64,6 @@ namespace WA.Pizza.Tests
         [Fact]
         public async void basket_item_is_deleted_from_basket()
         {
-            clearDataBase();
             //Arrange
             var basketItems = await _basketDataService.GetBasketItemListByBasketId(1);
             //Act
@@ -81,7 +76,6 @@ namespace WA.Pizza.Tests
         [Fact]
         public async void basket_was_updated()
         {
-            clearDataBase();
             //Arrange
             var basketItemDTO = await _basketDataService.GetBasketItemById(1);
 
