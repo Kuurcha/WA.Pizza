@@ -89,5 +89,4 @@ orderService.AddOrder(order1);
 Console.WriteLine("Test");*/
 app.Run();
 
-public partial class Program { }
 

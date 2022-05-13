@@ -18,9 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-	<InternalsVisibleTo Include="WA.PIzza.Web" />
-	<InternalsVisibleTo Include="WA.Pizza.Web" />
-	<InternalsVisibleTo Include="WA.Pizza.Tests" />
     <ProjectReference Include="..\Wa.Pizza.Core\Wa.Pizza.Core.csproj" />
     <ProjectReference Include="..\Wa.Pizza.Infrasctructure\Wa.Pizza.Infrasctructure.csproj" />
   </ItemGroup>
