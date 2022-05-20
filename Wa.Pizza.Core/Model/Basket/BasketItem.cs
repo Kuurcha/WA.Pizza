@@ -22,9 +22,6 @@ public class BasketItem
 
 	[Required]
 	public int BasketId { get; set; }
-
-	//Явно написать .include basket
-	
 	public Basket Basket { get; set; }
 
 	[Required]	
