@@ -118,7 +118,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         }
         public async Task<int> DeleteItem(BasketItemDTO basketItemDTO)
         {
-            Basket basket = await _context.Basket.Include(b => b.BasketItems).FirstOrDefaultAsync(b => b.Id == basketItemDTO.Id);
+            Basket basket = await _context.Basket.Include(b => b.BasketItems).FirstOrDefaultAsync(b => b.Id == basketItemDTO.BasketId);
             if (basket == null)
                 throw new EntityNotFoundException("Basket with id: " + basketItemDTO.BasketId + "does not exists. Unable to delete");
             if (basket.BasketItems.Where(bi => bi.Id == basketItemDTO.Id) == null)
