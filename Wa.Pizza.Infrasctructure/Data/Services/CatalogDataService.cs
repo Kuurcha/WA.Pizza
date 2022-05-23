@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Wa.Pizza.Core.Exceptions;
 using Wa.Pizza.Infrasctructure.DTO.CatalogItem;
 using Wa.Pizza.Infrasctructure.Services.Interfaces;
 
@@ -19,6 +20,9 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         {
             _context = ctx;
         }
+
+
+
         public Task<CatalogItemDTO> GetById(int guid)
         {
             return _context.CatalogItem.Where(x => x.Id == guid).ProjectToType <CatalogItemDTO>().FirstOrDefaultAsync();
@@ -27,6 +31,48 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         {
             return _context.CatalogItem.ProjectToType<CatalogItemDTO>().ToListAsync();
         }
+
+        public async Task<int> AddItem(CatalogItemDTO catalogItemDTO)
+        {
+            _context.CatalogItem.Add(catalogItemDTO.Adapt<CatalogItem>());
+            return await _context.SaveChangesAsync();
+        }
+        public async Task<int> UpdateItem(CatalogItemDTO catalogItemDTO)
+        {
+            CatalogItem originalCatalogItem = await _context.CatalogItem
+                .FirstOrDefaultAsync(x => x.Id == catalogItemDTO.Id);
+
+            if (originalCatalogItem == null)
+                throw new EntityNotFoundException("Catalog item with id: " + catalogItemDTO.Id + " was not found, unable to update");
+
+            CatalogItem updatedCatalogItem = catalogItemDTO.Adapt<CatalogItem>();
+
+            //Заменить на DTO?
+            originalCatalogItem.CatalogType = catalogItemDTO.CatalogType;
+            originalCatalogItem.Description = catalogItemDTO.Description;
+            originalCatalogItem.Price = catalogItemDTO.Price;
+            originalCatalogItem.Quantity = catalogItemDTO.Quantity;
+            
+            return await _context.SaveChangesAsync();
+        }
+        public async Task<int> DeleteItem(CatalogItemDTO catalogItemDTO)
+        {
+            CatalogItem catalogItem = await _context.CatalogItem
+                .Include(ci => ci.BasketItems).Include(ci => ci.OrderItems).
+                FirstOrDefaultAsync(x => x.Id == catalogItemDTO.Id);
+
+            if (catalogItem == null)
+                throw new EntityNotFoundException("Catalog item with id: " + catalogItemDTO.Id + " was not found, unable to delete");
+
+            if (catalogItem.BasketItems != null)
+                foreach (BasketItem basketItem in catalogItem.BasketItems)
+                    _context.BasketItem.Remove(basketItem);
+                    //basketItem.Id = -1;
+
+            _context.CatalogItem.Remove(catalogItem);
+            return await _context.SaveChangesAsync();
+        }
+
 
 
     }

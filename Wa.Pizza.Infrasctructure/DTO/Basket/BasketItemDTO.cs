@@ -29,12 +29,12 @@ namespace Wa.Pizza.Infrasctructure.DTO.Basket
 			else
 			{
 				BasketItemDTO arrivedObject = (BasketItemDTO)obj;
-				return (arrivedObject.Id == this.Id && arrivedObject.BasketId == this.BasketId);
+				return (arrivedObject.CatalogItemName == this.CatalogItemName &&  arrivedObject.BasketId == this.BasketId && arrivedObject.UnitPrice == this.UnitPrice && arrivedObject.Quantity == this.Quantity && arrivedObject.CatalogItemId == this.CatalogItemId);
 			}
 		}
 		public override int GetHashCode()
 		{
-			return this.Id.GetHashCode() ^ this.CatalogItemName.GetHashCode() ^ this.UnitPrice.GetHashCode() ^ this.Quantity.GetHashCode();
+			return  this.CatalogItemName.GetHashCode() ^ this.UnitPrice.GetHashCode() ^ this.Quantity.GetHashCode() ^ this.CatalogItemId.GetHashCode();
 		}
 
 	}

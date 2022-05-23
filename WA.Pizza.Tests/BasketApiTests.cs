@@ -11,37 +11,12 @@ using Wa.Pizza.Infrasctructure.Data.Services;
 using Wa.Pizza.Infrasctructure.DTO.Basket;
 using Wa.Pizza.Infrasctructure.DTO.CatalogItem;
 using Xunit;
-using static WA.Pizza.Tests.BasketTests;
 
 namespace WA.Pizza.Tests
-{
-    public class BasketTests
+{    
+    public class BasketDataTests: IClassFixture<DataBaseFixture>
     {
-        public class BasketDataBaseFixture : IDisposable
-        {
-            public ApplicationDbContext applicationDbContext { get; private set; }
-            public BasketDataBaseFixture()
-            {
-                 var config = new ConfigurationBuilder()
-                                    .AddJsonFile("appsettings_test.json")
-                                    .Build();
-                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>()
-                   .UseSqlServer(config.GetConnectionString("Test"));
-                applicationDbContext = new ApplicationDbContext(optionsBuilder.Options);
-                applicationDbContext.Database.EnsureDeleted();
-            }
-
-            public void Dispose()
-            {
-                applicationDbContext.Database.EnsureDeleted();
-            }
-
-            public ApplicationDbContext dbContext { get; private set; }
-        }
-    }
-    public class BasketDataTests: IClassFixture<BasketDataBaseFixture>
-    {
-        private readonly BasketDataBaseFixture _fixture;
+        private readonly DataBaseFixture _fixture;
         private readonly BasketDataService _basketDataService;
 
         private Basket basketTest;
@@ -61,11 +36,11 @@ namespace WA.Pizza.Tests
             _fixture.applicationDbContext.BasketItem.Add(basketItem);
             _fixture.applicationDbContext.SaveChanges();
         }
-        public BasketDataTests(BasketDataBaseFixture fixture)
+        public BasketDataTests(DataBaseFixture fixture)
         {
             _fixture = fixture;
             _basketDataService = new BasketDataService(_fixture.applicationDbContext);
-            _fixture.applicationDbContext.Database.Migrate();
+            //_fixture.applicationDbContext.Database.Migrate();
             data_seeding();
         }
         [Fact]

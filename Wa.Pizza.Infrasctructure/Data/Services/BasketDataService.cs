@@ -59,6 +59,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         public async Task<int> AddItem(BasketItemDTO basketItemDTO)
         {
             CatalogItem? catalogItem = await _context.CatalogItem
+                            .AsNoTracking()
                             .FirstOrDefaultAsync(ci => ci.Id == basketItemDTO.CatalogItemId);
 
             if (catalogItem == null)
