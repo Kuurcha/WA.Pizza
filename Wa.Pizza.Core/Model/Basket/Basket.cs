@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 public class Basket
 {
 	//NUllable reference tiype
-	[Key]
-	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 	public int Id { get; set; }
 	[Required]
     public DateTime LastModified { get; set; }

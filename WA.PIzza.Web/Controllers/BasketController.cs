@@ -72,11 +72,11 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="quantity">Amount of chosen catalogItem</param>
         /// <returns></returns>
         [HttpPost("basketItem")]
-        public async Task<ActionResult> AddBasketItemRequest(BasketItemDTO basketItemDTO, int basketId)
+        public async Task<ActionResult> AddBasketItemRequest(BasketItemDTO basketItemDTO)
         {
             try
             {
-                await _basketDataService.AddItem(basketItemDTO, basketId);
+                await _basketDataService.AddItem(basketItemDTO);
             }
             catch (EntityNotFoundException ex)
             {

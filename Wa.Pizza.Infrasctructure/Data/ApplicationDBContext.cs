@@ -31,41 +31,128 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Order>()
-            .HasMany(o => o.OrderItems)
-            .WithOne(oi => oi.Order);
-        modelBuilder.Entity<Order>()
-            .HasOne(o => o.ApplicationUser)
-            .WithMany(a => a.Orders)
-            .HasForeignKey(o => o.ApplicationUserId);
-        modelBuilder.Entity<OrderItem>()
-            .HasOne(oi => oi.Order)
-            .WithMany(o => o.OrderItems)
-            .HasForeignKey(oi => oi.OrderId);
-        modelBuilder.Entity<OrderItem>()
-            .HasOne(oi => oi.CatalogItem)
-            .WithMany(c => c.OrderItems)
-            .HasForeignKey(oi => oi.CatalogItemId);
+        modelBuilder.Entity<Order>(entity =>
+                {
+                    entity.HasKey(o => o.Id);
 
-        modelBuilder.Entity<Basket>()
-            .HasMany(b => b.BasketItems)
-            .WithOne(bi => bi.Basket);
-        modelBuilder.Entity<Basket>()
-            .HasOne(b => b.ApplicationUser)
-            .WithOne(au => au.Basket)
-            .HasForeignKey<Basket>(b => b.ApplicationUserId);
+                    entity.Property(o => o.Id).ValueGeneratedOnAdd();
+                    entity.Property(o => o.CreationDate).IsRequired();
+                    entity.Property(o => o.Status).IsRequired();
+                    entity.Property(o => o.Description).HasMaxLength(2000);
 
-        modelBuilder.Entity<BasketItem>()
-            .HasOne(bi => bi.CatalogItem)
-            .WithMany(ci => ci.BasketItems)
-            .HasForeignKey(bi => bi.CatalogItemId);
+                    entity.HasMany(o => o.OrderItems)
+                          .WithOne(oi => oi.Order);
+                    entity.HasOne(o => o.ApplicationUser)
+                         .WithMany(a => a.Orders)
+                         .HasForeignKey(o => o.ApplicationUserId);
+                }
+        );
+        
+        modelBuilder.Entity<OrderItem>(entity =>
+            {
+                entity.HasKey(oi => oi.Id);
 
-        modelBuilder.Entity<Adress>()
-            .HasOne(au => au.ApplicationUser)
-            .WithMany(a => a.Adresses)
-            .HasForeignKey(a => a.ApplicationUserId);
+                entity.Property(oi => oi.Id).ValueGeneratedOnAdd();
+                entity.Property(oi => oi.CatalogItemId).IsRequired();
+                entity.Property(oi => oi.OrderId).IsRequired();
+
+                entity.Property(oi => oi.CatalogItemName).IsRequired();
+                entity.Property(oi => oi.CatalogItemName).HasMaxLength(30);
+
+                entity.Property(oi => oi.UnitPrice).HasColumnType("decimal(18,4)");
+                entity.Property(oi => oi.Discount).HasColumnType("decimal(18,4)");
+
+                entity.HasOne(oi => oi.Order)
+                      .WithMany(o => o.OrderItems)
+                      .HasForeignKey(oi => oi.OrderId);
+                entity.HasOne(oi => oi.CatalogItem)
+                      .WithMany(c => c.OrderItems)
+                      .HasForeignKey(oi => oi.CatalogItemId);
+            }
+        );
 
 
+        modelBuilder.Entity<Basket>(entity =>
+            {
+                entity.HasKey(b => b.Id);
+                entity.Property(b => b.Id).ValueGeneratedOnAdd();
+
+                entity.Property(b => b.LastModified).IsRequired();
+
+                entity.HasMany(b => b.BasketItems)
+                      .WithOne(bi => bi.Basket);
+                entity.HasOne(b => b.ApplicationUser)
+                      .WithOne(au => au.Basket)
+                      .HasForeignKey<Basket>(b => b.ApplicationUserId);
+            }
+        );
+
+        modelBuilder.Entity<CatalogItem>(entity =>
+            {
+                entity.HasKey(ci => ci.Id);
+                entity.Property(ci => ci.Id).ValueGeneratedOnAdd();
+
+                entity.Property(ci => ci.Name).IsRequired();
+                entity.Property(ci => ci.Name).HasMaxLength(254);
+
+                entity.Property(ci => ci.Description).IsRequired();
+                entity.Property(ci => ci.Description).HasMaxLength(2000);
+
+                entity.Property(ci => ci.Price).HasColumnType("decimal(18,4)");
+
+                entity.Property(ci => ci.CatalogType).IsRequired();
+
+                entity.HasMany(ci => ci.BasketItems)
+                      .WithOne(bi => bi.CatalogItem);
+
+                entity.HasMany(ci => ci.OrderItems)
+                      .WithOne(oi => oi.CatalogItem);
+
+            }
+        );
+
+       modelBuilder.Entity<BasketItem>(entity =>
+            {
+                entity.HasKey(bi => bi.Id);
+                entity.Property(bi => bi.Id).ValueGeneratedOnAdd();
+
+                entity.Property(bi => bi.CatalogItemName).IsRequired();
+                entity.Property(bi => bi.CatalogItemName).HasMaxLength(30);
+
+                entity.Property(bi => bi.UnitPrice).IsRequired();
+                entity.Property(bi => bi.UnitPrice).HasColumnType("decimal(18,4)");
+
+                entity.Property(bi => bi.CatalogType).IsRequired();
+                entity.Property(bi => bi.Quantity).IsRequired();
+                entity.Property(bi => bi.BasketId).IsRequired();
+                entity.Property(bi => bi.CatalogItemId).IsRequired();
+
+                entity.HasOne(bi => bi.CatalogItem)
+                      .WithMany(ci => ci.BasketItems)
+                      .HasForeignKey(bi => bi.CatalogItemId);
+            }
+        );
+
+
+        modelBuilder.Entity<Adress>(entity =>
+            {
+                entity.HasKey(a => a.Id);
+                entity.Property(a => a.Id).ValueGeneratedOnAdd();
+                
+                entity.Property(a => a.AdressString).IsRequired();
+                entity.Property(a => a.AdressString).HasMaxLength(254);
+
+                entity.Property(a => a.ApplicationUserId).IsRequired();
+
+
+                entity.HasOne(au => au.ApplicationUser)
+                      .WithMany(a => a.Adresses)
+                      .HasForeignKey(a => a.ApplicationUserId);
+            }
+        );    
+            
+
+/*
         Adress[] adressess = new Adress[]
           {
                 new Adress { Id = 1, AdressString = "Corusan 19" },
@@ -152,7 +239,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Order>().HasData(orders);
         modelBuilder.Entity<Basket>().HasData(baskets);
         modelBuilder.Entity<OrderItem>().HasData(orderItems);
-        modelBuilder.Entity<BasketItem>().HasData(basketItems);
+        modelBuilder.Entity<BasketItem>().HasData(basketItems);*/
 
 
 
