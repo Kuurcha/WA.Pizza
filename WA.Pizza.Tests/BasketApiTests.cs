@@ -13,10 +13,11 @@ using Wa.Pizza.Infrasctructure.DTO.CatalogItem;
 using Xunit;
 
 namespace WA.Pizza.Tests
-{    
-    public class BasketDataTests: IClassFixture<DataBaseFixture>
+{
+    [Collection("Test database collection")]
+    public class BasketDataTests
     {
-        private readonly DataBaseFixture _fixture;
+        private readonly TestDatabaseFixture _fixture;
         private readonly BasketDataService _basketDataService;
 
         private Basket basketTest;
@@ -36,7 +37,7 @@ namespace WA.Pizza.Tests
             _fixture.applicationDbContext.BasketItem.Add(basketItem);
             _fixture.applicationDbContext.SaveChanges();
         }
-        public BasketDataTests(DataBaseFixture fixture)
+        public BasketDataTests(TestDatabaseFixture fixture)
         {
             _fixture = fixture;
             _basketDataService = new BasketDataService(_fixture.applicationDbContext);

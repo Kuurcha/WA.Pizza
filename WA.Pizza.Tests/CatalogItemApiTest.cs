@@ -13,9 +13,10 @@ using Xunit;
 
 namespace WA.Pizza.Tests
 {
-    public class CatalogItemApiTest : IClassFixture<DataBaseFixture>
+    [Collection("Test database collection")]
+    public class CatalogItemApiTest 
     {
-        private readonly DataBaseFixture _fixture;
+        private readonly TestDatabaseFixture _fixture;
         private readonly CatalogDataService _catalogDataService;
 
         private CatalogItem _catalogItemTest = new CatalogItem { CatalogType = CatalogType.Pizza, Name = "TestCatalogObject", Price = 666, Quantity = 15, Description = "TestDecription" };
@@ -38,7 +39,7 @@ namespace WA.Pizza.Tests
             return await _fixture.applicationDbContext.SaveChangesAsync();
     
         }
-        public CatalogItemApiTest(DataBaseFixture fixture)
+        public CatalogItemApiTest(TestDatabaseFixture fixture)
         {
             _fixture = fixture;
             _catalogDataService = new CatalogDataService(_fixture.applicationDbContext);
