@@ -17,7 +17,7 @@ namespace WA.Pizza.Tests
     [Collection("Test database collection")]
     public class BasketDataTests
     {
-        private readonly TestDatabaseFixture _fixture;
+        private readonly DatabaseCollection _fixture;
         private readonly BasketDataService _basketDataService;
 
         private Basket basketTest;
@@ -39,7 +39,7 @@ namespace WA.Pizza.Tests
         }
         public BasketDataTests(TestDatabaseFixture fixture)
         {
-            _fixture = fixture;
+            _fixture = new DatabaseCollection();
             _basketDataService = new BasketDataService(_fixture.applicationDbContext);
             //_fixture.applicationDbContext.Database.Migrate();
             data_seeding();

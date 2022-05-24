@@ -16,7 +16,7 @@ namespace WA.Pizza.Tests
     [Collection("Test database collection")]
     public class CatalogItemApiTest 
     {
-        private readonly TestDatabaseFixture _fixture;
+        private readonly DatabaseCollection _fixture;
         private readonly CatalogDataService _catalogDataService;
 
         private CatalogItem _catalogItemTest = new CatalogItem { CatalogType = CatalogType.Pizza, Name = "TestCatalogObject", Price = 666, Quantity = 15, Description = "TestDecription" };
@@ -41,7 +41,7 @@ namespace WA.Pizza.Tests
         }
         public CatalogItemApiTest(TestDatabaseFixture fixture)
         {
-            _fixture = fixture;
+            _fixture = new DatabaseCollection();
             _catalogDataService = new CatalogDataService(_fixture.applicationDbContext);
             //_fixture.applicationDbContext.Database.Migrate();
         }
