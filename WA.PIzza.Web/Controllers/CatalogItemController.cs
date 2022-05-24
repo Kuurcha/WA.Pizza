@@ -46,7 +46,6 @@ namespace WA.PIzza.Web.Controllers
                 return NotFound(ex);
 
             }
-            finally{ }
             return new ObjectResult(catalogItem);
 
 
@@ -69,12 +68,26 @@ namespace WA.PIzza.Web.Controllers
                 return BadRequest(ex);
 
             }
-            finally { }
+            return Accepted();
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateCatalogItem(CatalogItemDTO catalogItemDTO)
+        {
+            CatalogItemDTO catalogItem;
+            try
+            {
+                await _catalogItemDataService.UpdateItem(catalogItemDTO);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return BadRequest(ex);
+
+            }
             return Accepted();
         }
 
 
-    
 
 
 

@@ -38,7 +38,6 @@ namespace WA.PIzza.Web.Controllers
             {
                 return NotFound(ex);
             }
-            finally { }
             return new ObjectResult(basket);
         }
         /// <summary>
@@ -59,7 +58,6 @@ namespace WA.PIzza.Web.Controllers
             {
                 return NotFound(ex);
             }
-            finally { }
             return new ObjectResult(basket);
         }
 
@@ -82,7 +80,6 @@ namespace WA.PIzza.Web.Controllers
             {
                 return NotFound(ex);
             }
-            finally { }
             return Accepted();
         }
 
@@ -103,7 +100,6 @@ namespace WA.PIzza.Web.Controllers
             {
                 return BadRequest(ex);
             }
-            finally { }
             return Ok();
         }
         /// <summary>
@@ -124,7 +120,6 @@ namespace WA.PIzza.Web.Controllers
             {
                 return BadRequest(ex);
             }
-            finally { }
             return Ok();
         }
         /// <summary>
@@ -143,7 +138,6 @@ namespace WA.PIzza.Web.Controllers
             {
                 return BadRequest(ex);
             }
-            finally { }
             return Ok();
         }
 
