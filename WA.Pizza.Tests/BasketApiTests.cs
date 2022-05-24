@@ -91,10 +91,8 @@ namespace WA.Pizza.Tests
             //Act
             await _basketDataService.UpdateItem(basketItem);
             //Assert
-            basket = await _basketDataService.GetById(basketTest.Id);
-            basketItems = basket.BasketItems;
-            //Be vs Equals?
-            basketItems.Last().Should().Be(basketItem);
+            Basket updatedBasket = await _fixture.applicationDbContext.Basket.AsNoTracking().Include(bi => bi.BasketItems).FirstOrDefaultAsync(bi => bi.Id == basketTest.Id);
+            updatedBasket.BasketItems.Last().Adapt<BasketItemDTO>().Should().Be(basketItem);
         }
 
     }
