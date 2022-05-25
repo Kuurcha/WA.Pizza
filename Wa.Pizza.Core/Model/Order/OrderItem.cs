@@ -6,12 +6,7 @@ using System.ComponentModel.DataAnnotations;
 public class OrderItem
 {
 	
-	[Key]
-	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 	public int Id { get; set; }
-	//GUID заменить на инт
-	[Required]
-	[StringLength(30)]
 	public string CatalogItemName { get; set; }
 	[Column(TypeName = "decimal(18,4)")]
 	public decimal UnitPrice { get; set; }

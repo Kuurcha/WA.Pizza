@@ -6,7 +6,7 @@ using Wa.Pizza.Infrasctructure.Services;
 
 namespace WA.PIzza.Web.Services
 {
-    [Route ("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
     {

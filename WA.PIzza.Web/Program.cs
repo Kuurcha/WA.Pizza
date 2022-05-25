@@ -77,17 +77,6 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
 }); 
 
-/*var orderService = app.Services.GetRequiredService<IOrderService>();
-
-Order order1 = new Order();
-order1.Status = OrderStatus.Canceled;
-order1.CreationDate = DateTime.Now;
-order1.Description = "test";
-order1.OrderItems = new List<OrderItem>();
-orderService.AddOrder(order1);
-
-Console.WriteLine("Test");*/
 app.Run();
-
-
+app.UseDeveloperExceptionPage();
 

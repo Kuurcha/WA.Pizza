@@ -5,8 +5,7 @@ using System.ComponentModel.DataAnnotations;
 [Table(nameof(ApplicationUser))]
 public class ApplicationUser
 {
-	[Key]
-	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+	[Required]
 	public int Id { get; set; }
 	public ICollection<Adress>? Adresses { get; set; }
 

@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wa.Pizza.Infrasctructure", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D888D62A-B301-495E-B2E3-4791C65BF78D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WA.Pizza.Tests", "WA.Pizza.Tests\WA.Pizza.Tests.csproj", "{1BDE26DD-FD40-4854-AE6F-E1121D1A004C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WA.Pizza.Tests", "WA.Pizza.Tests\WA.Pizza.Tests.csproj", "{1BDE26DD-FD40-4854-AE6F-E1121D1A004C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
