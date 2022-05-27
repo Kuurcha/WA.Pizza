@@ -25,7 +25,10 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
 
         public Task<CatalogItemDTO> GetById(int guid)
         {
-            return _context.CatalogItem.Where(x => x.Id == guid).ProjectToType <CatalogItemDTO>().FirstOrDefaultAsync();
+            Task<CatalogItemDTO> catalogItemDTO = _context.CatalogItem.Where(x => x.Id == guid).ProjectToType<CatalogItemDTO>().FirstOrDefaultAsync();
+            if (catalogItemDTO == null)
+                throw new EntityNotFoundException("CatalogItem with id: " + guid + "is not found");
+            return catalogItemDTO;
         }
         public Task<List<CatalogItemDTO>> getCatalogAsync()
         {

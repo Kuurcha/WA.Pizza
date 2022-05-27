@@ -26,7 +26,7 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("byUserId")]
-        public async Task<ActionResult<List<BasketDTO>>> GetBasketUserId(int userId)
+        public async Task<ActionResult<List<BasketDTO>>> GetBasketByUserId(int userId)
         {
             BasketDTO basket;
             try

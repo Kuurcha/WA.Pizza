@@ -1,6 +1,8 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Wa.Pizza.Core.Exceptions;
+using Wa.Pizza.Infrasctructure.DTO.Basket;
 using Wa.Pizza.Infrasctructure.DTO.Order;
 using Wa.Pizza.Infrasctructure.Services.Interfaces;
 
@@ -16,47 +18,45 @@ namespace Wa.Pizza.Infrasctructure.Services
             _context = ctx;
         }
 
-        public async Task<int> AddOrder(SetOrderDTO orderDto, int applicationUserId)
+        public async Task<int> AddOrder(int basketId, string description)
         {
-            Order order = orderDto.Adapt<Order>();
-            order.ApplicationUserId = applicationUserId;
+            Basket basket = await _context.Basket.AsNoTracking().Include(b => b.BasketItems).FirstOrDefaultAsync(b => b.Id == basketId);
+            if (basket == null)
+                throw new EntityNotFoundException("No basket with id: "  + basketId + " can't create order");
+            if (basket.BasketItems == null)
+                throw new WrongDataFormatException("Invalid basket item list");
+
+            Order order = new Order() { Description = description, CreationDate = DateTime.UtcNow, Status = OrderStatus.Accepted, ApplicationUserId = basket.ApplicationUserId, OrderItems = new List<OrderItem>() };
             _context.ShopOrder.Add(order);
+            
+            foreach (BasketItem basketItem in basket.BasketItems)
+            {
+                OrderItem orderItem = basketItem.Adapt<OrderItem>();
+                orderItem.Id = 0; //Настроить Mapster
+                orderItem.OrderId = order.Id;
+                order.OrderItems.Add(orderItem);
+            }
             return await _context.SaveChangesAsync();
         }
 
         public Task<GetOrderDTO> GetById(int guid)
         {
-            return _context.ShopOrder.Where(x => x.Id == guid).ProjectToType<GetOrderDTO>().FirstOrDefaultAsync();
-        }
-        public Task<List<GetOrderDTO>> GetAllOrders()
-        {
-            return _context.ShopOrder.ProjectToType<GetOrderDTO>().ToListAsync();
-        }
-
-        public Task<List<GetOrderDTO>> GetOrderByApplicationUserId(int applicationUserId)
-        {
-            return _context.ShopOrder.Where(x => x.ApplicationUserId == applicationUserId).ProjectToType<GetOrderDTO>().ToListAsync();
+            Task<GetOrderDTO> orderDTO = _context.ShopOrder.Where(x => x.Id == guid).Include(o => o.OrderItems).ProjectToType<GetOrderDTO>().FirstOrDefaultAsync();
+            if (orderDTO == null)
+                throw new EntityNotFoundException("Order with id: " + guid + " does not exists");
+            return orderDTO;
         }
 
-        public Task<List<GetOrderDTO>> GetOrderItems()
+        public async Task<int> UpdateStatus(int orderID, OrderStatus orderStatus)
         {
-            return _context.ShopOrder.Where(o => o.OrderItems.Any(oi => oi.OrderId == o.Id)).ProjectToType<GetOrderDTO>().ToListAsync();
-        }
-
-        public int UpdateStatus(int orderID, OrderStatus orderStatus)
-        {
-            var order = new Order { Id = orderID, Status = orderStatus};
-            _context.ShopOrder.Attach(order);
-            _context.Entry(order).Property(o => o.Status).IsModified = true;
-             return _context.SaveChanges();
+            Order order = await _context.ShopOrder.FirstOrDefaultAsync(b => b.Id == orderID);
+            if (order == null)
+                throw new EntityNotFoundException("Order with id: " + orderID + " does not exists");
+            order.Status = orderStatus;
+            return await _context.SaveChangesAsync();
                 
         }
 
-        public async Task<int> removeById(int orderId)
-        {
-            _context.ShopOrder.Remove(await _context.ShopOrder.FirstOrDefaultAsync(x => x.Id == orderId));
-            return await _context.SaveChangesAsync();
-        }
 
     }
 }

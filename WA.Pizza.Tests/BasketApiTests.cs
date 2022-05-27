@@ -17,7 +17,7 @@ namespace WA.Pizza.Tests
     [Collection("Test database collection")]
     public class BasketDataTests
     {
-        private readonly DatabaseCollection _fixture;
+        ApplicationDbContext applicationDbContext;
         private readonly BasketDataService _basketDataService;
 
         private Basket basketTest;
@@ -25,23 +25,23 @@ namespace WA.Pizza.Tests
         private void data_seeding()
         {
 
-            ApplicationUser applicationUser = _fixture.applicationDbContext.ApplicationUser.Add(new ApplicationUser { }).Entity;
-             _fixture.applicationDbContext.SaveChanges();
-            basketTest = _fixture.applicationDbContext.Basket.Add(new Basket { LastModified = new DateTime(2066, 11, 11), ApplicationUserId = applicationUser.Id }).Entity;
-            catalogItemTest = _fixture.applicationDbContext.CatalogItem.Add( new CatalogItem { Quantity = 150, Name = "Cheeze", Description = "Classic", Price = 150, CatalogType = WA.Pizza.Core.CatalogType.CatalogType.Pizza }).Entity;
-            _fixture.applicationDbContext.SaveChanges();
+            ApplicationUser applicationUser = applicationDbContext.ApplicationUser.Add(new ApplicationUser { }).Entity;
+             applicationDbContext.SaveChanges();
+            basketTest = applicationDbContext.Basket.Add(new Basket { LastModified = new DateTime(2066, 11, 11), ApplicationUserId = applicationUser.Id }).Entity;
+            catalogItemTest = applicationDbContext.CatalogItem.Add( new CatalogItem { Quantity = 150, Name = "Cheeze", Description = "Classic", Price = 150, CatalogType = WA.Pizza.Core.CatalogType.CatalogType.Pizza }).Entity;
+            applicationDbContext.SaveChanges();
         }
         private void addTestBasketItem()
         {
             var basketItem = new BasketItem { BasketId = basketTest.Id, Quantity = Faker.RandomNumber.Next(1, 100), CatalogType = Core.CatalogType.CatalogType.Pizza, UnitPrice = 150, CatalogItemName = "Classic", CatalogItemId = catalogItemTest.Id };
-            _fixture.applicationDbContext.BasketItem.Add(basketItem);
-            _fixture.applicationDbContext.SaveChanges();
+            applicationDbContext.BasketItem.Add(basketItem);
+            applicationDbContext.SaveChanges();
         }
         public BasketDataTests(TestDatabaseFixture fixture)
         {
-            _fixture = new DatabaseCollection();
-            _basketDataService = new BasketDataService(_fixture.applicationDbContext);
-            //_fixture.applicationDbContext.Database.Migrate();
+            applicationDbContext = TestDatabaseFixture.createContext();
+            _basketDataService = new BasketDataService(applicationDbContext);
+            //applicationDbContext.Database.Migrate();
             data_seeding();
         }
         [Fact]
@@ -91,7 +91,7 @@ namespace WA.Pizza.Tests
             //Act
             await _basketDataService.UpdateItem(basketItem);
             //Assert
-            Basket updatedBasket = await _fixture.applicationDbContext.Basket.AsNoTracking().Include(bi => bi.BasketItems).FirstOrDefaultAsync(bi => bi.Id == basketTest.Id);
+            Basket updatedBasket = await applicationDbContext.Basket.AsNoTracking().Include(bi => bi.BasketItems).FirstOrDefaultAsync(bi => bi.Id == basketTest.Id);
             updatedBasket.BasketItems.Last().Adapt<BasketItemDTO>().Should().Be(basketItem);
         }
 

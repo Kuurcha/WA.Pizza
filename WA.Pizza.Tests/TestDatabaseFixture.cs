@@ -11,29 +11,33 @@ namespace WA.Pizza.Tests
 {
     public class TestDatabaseFixture
     {
-
-    }
-    [CollectionDefinition("Test database collection")]
-    public class DatabaseCollection : ICollectionFixture<TestDatabaseFixture>,  IDisposable
-    {
-        public ApplicationDbContext applicationDbContext { get; private set; }
-        public DatabaseCollection()
+        public static ApplicationDbContext createContext()
         {
+            ApplicationDbContext applicationDbContext;
             var config = new ConfigurationBuilder()
-                               .AddJsonFile("appsettings_test.json")
-                               .Build();
+                       .AddJsonFile("appsettings_test.json")
+                       .Build();
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>()
                .UseSqlServer(config.GetConnectionString("Test"));
             applicationDbContext = new ApplicationDbContext(optionsBuilder.Options);
 
             applicationDbContext.Database.EnsureDeleted();
             applicationDbContext.Database.Migrate();
+            return applicationDbContext;
+        }
+
+    }
+    [CollectionDefinition("Test database collection")]
+    public class DatabaseCollection : ICollectionFixture<TestDatabaseFixture>,  IDisposable
+    {
+        public DatabaseCollection()
+        {
+
 
         }
 
         public void Dispose()
         {
-            applicationDbContext.Database.EnsureDeleted();
         }
 
         // This class has no code, and is never created. Its purpose is simply
