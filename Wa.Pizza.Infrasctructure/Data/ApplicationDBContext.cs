@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿    using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 public class ApplicationDbContext : DbContext
@@ -45,6 +45,7 @@ public class ApplicationDbContext : DbContext
                     entity.HasOne(o => o.ApplicationUser)
                          .WithMany(a => a.Orders)
                          .HasForeignKey(o => o.ApplicationUserId);
+                         
                 }
         );
         
@@ -79,11 +80,13 @@ public class ApplicationDbContext : DbContext
 
                 entity.Property(b => b.LastModified).IsRequired();
 
+                
                 entity.HasMany(b => b.BasketItems)
                       .WithOne(bi => bi.Basket);
                 entity.HasOne(b => b.ApplicationUser)
                       .WithOne(au => au.Basket)
                       .HasForeignKey<Basket>(b => b.ApplicationUserId);
+                      
             }
         );
 

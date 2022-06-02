@@ -14,7 +14,7 @@ using Wa.Pizza.Core.Exceptions;
 
 namespace Wa.Pizza.Infrasctructure.Data.Services
 {
-    public class BasketDataService : IEntityService<BasketDTO>
+    public class BasketDataService : IEntityService<BasketDTO> 
     {
         private readonly ApplicationDbContext _context;
 
@@ -148,14 +148,14 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         public async Task<int> BindBuyerToBasket(BasketDTO basketDTO, int applicationUserId)
         {
             Basket basket = await _context.Basket.FirstOrDefaultAsync(b => b.Id == basketDTO.Id);
-            if (basket.ApplicationUserId == null)
+            ApplicationUser applicationUser = await _context.ApplicationUser.FirstOrDefaultAsync(a => a.Id == applicationUserId);
+            if (basket != null && basket.ApplicationUserId == null)
             {
-                basket.ApplicationUserId = applicationUserId;
+                basket.ApplicationUser = applicationUser;
                 return await _context.SaveChangesAsync();
             }
             return 0; //?
         }
-
 
     }
 }

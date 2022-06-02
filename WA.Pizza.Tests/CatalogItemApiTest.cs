@@ -14,34 +14,34 @@ using Xunit;
 namespace WA.Pizza.Tests
 {
     [Collection("Test database collection")]
-    public class CatalogItemApiTest 
+    public class CatalogItemApiTest: BaseDatabaseTestClass
     {
-        ApplicationDbContext applicationDbContext;
         private readonly CatalogDataService _catalogDataService;
 
         private CatalogItem _catalogItemTest = new CatalogItem { CatalogType = CatalogType.Pizza, Name = "TestCatalogObject", Price = 666, Quantity = 15, Description = "TestDecription" };
 
-        
+
         // TODO: OrderItems
         private async Task<int> _addTestBasketAndOrderItems()
         {
-            _catalogItemTest =  applicationDbContext.CatalogItem.Add(_catalogItemTest).Entity;
-            ApplicationUser applicationUser =  applicationDbContext.ApplicationUser.Add(new ApplicationUser { }).Entity;
-            await  applicationDbContext.SaveChangesAsync();
-            Basket basket =  applicationDbContext.Basket.Add(new Basket { LastModified = new DateTime(2066, 11, 11), ApplicationUserId = applicationUser.Id }).Entity;
-            await  applicationDbContext.SaveChangesAsync();
-            BasketItem[] basketItems =
+
+           
+            _catalogItemTest = applicationDbContext.CatalogItem.Add(_catalogItemTest).Entity;
+            await applicationDbContext.SaveChangesAsync();
+            Basket basket = applicationDbContext.Basket.Add(new Basket { LastModified = new DateTime(2066, 11, 11) }).Entity;
+
+            var basketItems = new List<BasketItem>()
             {
-                            new BasketItem {  BasketId = basket.Id, Quantity = Faker.RandomNumber.Next(1, 100), CatalogType = _catalogItemTest.CatalogType, UnitPrice = _catalogItemTest.Price, CatalogItemName = _catalogItemTest.Name, CatalogItemId = _catalogItemTest.Id },
-                             new BasketItem {  BasketId = basket.Id, Quantity = Faker.RandomNumber.Next(1, 100), CatalogType = _catalogItemTest.CatalogType, UnitPrice = _catalogItemTest.Price, CatalogItemName = _catalogItemTest.Name, CatalogItemId = _catalogItemTest.Id }
-                        };
-             applicationDbContext.BasketItem.AddRange(basketItems);
+                new BasketItem { Quantity = Faker.RandomNumber.Next(1, 100), CatalogType = _catalogItemTest.CatalogType, UnitPrice = _catalogItemTest.Price, CatalogItemName = _catalogItemTest.Name, CatalogItem = _catalogItemTest },
+                new BasketItem { Quantity = Faker.RandomNumber.Next(1, 100), CatalogType = _catalogItemTest.CatalogType, UnitPrice = _catalogItemTest.Price, CatalogItemName = _catalogItemTest.Name, CatalogItem = _catalogItemTest }
+             };
+            basket.BasketItems = basketItems;
+            applicationDbContext.Basket.Add(basket);
             return await  applicationDbContext.SaveChangesAsync();
     
         }
-        public CatalogItemApiTest(TestDatabaseFixture fixture)
+        public CatalogItemApiTest() : base()
         {
-            applicationDbContext = TestDatabaseFixture.createContext();
             _catalogDataService = new CatalogDataService( applicationDbContext);
             // applicationDbContext.Database.Migrate();
         }

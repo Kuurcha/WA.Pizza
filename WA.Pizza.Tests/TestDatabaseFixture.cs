@@ -9,36 +9,34 @@ using Xunit;
 
 namespace WA.Pizza.Tests
 {
-    public class TestDatabaseFixture
+    public class TestDatabaseFixture: IDisposable
     {
-        public static ApplicationDbContext createContext()
+        ApplicationDbContext applicationDbContext;
+        public TestDatabaseFixture()
         {
-            ApplicationDbContext applicationDbContext;
+
             var config = new ConfigurationBuilder()
                        .AddJsonFile("appsettings_test.json")
                        .Build();
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>()
                .UseSqlServer(config.GetConnectionString("Test"));
             applicationDbContext = new ApplicationDbContext(optionsBuilder.Options);
-
-            applicationDbContext.Database.EnsureDeleted();
+            if (applicationDbContext.Database.CanConnect())
+                applicationDbContext.Database.EnsureDeleted();
             applicationDbContext.Database.Migrate();
-            return applicationDbContext;
+
         }
 
+        void IDisposable.Dispose()
+        {
+            if (applicationDbContext.Database.CanConnect())
+                applicationDbContext.Database.EnsureDeleted();
+        }
     }
     [CollectionDefinition("Test database collection")]
-    public class DatabaseCollection : ICollectionFixture<TestDatabaseFixture>,  IDisposable
+    public class DatabaseCollection : ICollectionFixture<TestDatabaseFixture>
     {
-        public DatabaseCollection()
-        {
 
-
-        }
-
-        public void Dispose()
-        {
-        }
 
         // This class has no code, and is never created. Its purpose is simply
         // to be the place to apply [CollectionDefinition] and all the

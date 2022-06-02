@@ -66,7 +66,6 @@ namespace Wa.Pizza.Core.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("ApplicationUserId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LastModified")
@@ -75,7 +74,8 @@ namespace Wa.Pizza.Core.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[ApplicationUserId] IS NOT NULL");
 
                     b.ToTable("Basket");
                 });
@@ -230,9 +230,7 @@ namespace Wa.Pizza.Core.Migrations
                 {
                     b.HasOne("ApplicationUser", "ApplicationUser")
                         .WithOne("Basket")
-                        .HasForeignKey("Basket", "ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Basket", "ApplicationUserId");
 
                     b.Navigation("ApplicationUser");
                 });
