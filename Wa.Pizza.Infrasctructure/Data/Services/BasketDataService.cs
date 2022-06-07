@@ -14,7 +14,7 @@ using Wa.Pizza.Core.Exceptions;
 
 namespace Wa.Pizza.Infrasctructure.Data.Services
 {
-    public class BasketDataService : IEntityService<BasketDTO>
+    public class BasketDataService : IEntityService<BasketDTO> 
     {
         private readonly ApplicationDbContext _context;
 
@@ -28,24 +28,28 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         /// </summary>
         /// <param name="guid"></param>
         /// <returns></returns>
-        public async Task<BasketDTO> GetById(int guid)
+        public Task<BasketDTO> GetById(int guid)
         {
             //.Basket.Where(x => x.Id == guid).IProjectToType<BasketDTO>().FirstOrDefaultAsync();
-            BasketDTO basket = await _context.Basket.AsNoTracking()
-                .Include(b => b.BasketItems)
-                .ProjectToType<BasketDTO>()
-                .Where(x => x.Id == guid)
-                .FirstOrDefaultAsync();
+            Task<BasketDTO> basket = _context.Basket.AsNoTracking()
+                                              .Include(b => b.BasketItems)
+                                              .ProjectToType<BasketDTO>()
+                                              .Where(x => x.Id == guid)
+                                              .FirstOrDefaultAsync();
+            if (basket == null)
+                throw new EntityNotFoundException("basket with user id: " + guid + " does not exist");
             return basket;
         }
 
-        public async Task<BasketDTO> GetByUserId(int userId)
+        public Task<BasketDTO> GetByUserId(int userId)
         {
-            BasketDTO basket = await _context.Basket.AsNoTracking()
-                .Include(b => b.BasketItems)
-                .ProjectToType<BasketDTO>()
-                .Where(x => x.ApplicationUserId == userId)
-                .FirstOrDefaultAsync();
+            Task<BasketDTO>  basket = _context.Basket.AsNoTracking()
+                                              .Include(b => b.BasketItems)
+                                              .ProjectToType<BasketDTO>()
+                                              .Where(x => x.ApplicationUserId == userId)
+                                              .FirstOrDefaultAsync();
+            if (basket == null)
+                throw new EntityNotFoundException("basket with user id: " + userId + " does not exist");
             return basket;
         }
 
@@ -144,14 +148,14 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         public async Task<int> BindBuyerToBasket(BasketDTO basketDTO, int applicationUserId)
         {
             Basket basket = await _context.Basket.FirstOrDefaultAsync(b => b.Id == basketDTO.Id);
-            if (basket.ApplicationUserId == null)
+            ApplicationUser applicationUser = await _context.ApplicationUser.FirstOrDefaultAsync(a => a.Id == applicationUserId);
+            if (basket != null && basket.ApplicationUserId == null)
             {
-                basket.ApplicationUserId = applicationUserId;
+                basket.ApplicationUser = applicationUser;
                 return await _context.SaveChangesAsync();
             }
             return 0; //?
         }
-
 
     }
 }

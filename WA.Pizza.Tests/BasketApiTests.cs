@@ -15,9 +15,8 @@ using Xunit;
 namespace WA.Pizza.Tests
 {
     [Collection("Test database collection")]
-    public class BasketDataTests
+    public class BasketDataTests: BaseDatabaseTestClass
     {
-        private readonly DatabaseCollection _fixture;
         private readonly BasketDataService _basketDataService;
 
         private Basket basketTest;
@@ -25,23 +24,20 @@ namespace WA.Pizza.Tests
         private void data_seeding()
         {
 
-            ApplicationUser applicationUser = _fixture.applicationDbContext.ApplicationUser.Add(new ApplicationUser { }).Entity;
-             _fixture.applicationDbContext.SaveChanges();
-            basketTest = _fixture.applicationDbContext.Basket.Add(new Basket { LastModified = new DateTime(2066, 11, 11), ApplicationUserId = applicationUser.Id }).Entity;
-            catalogItemTest = _fixture.applicationDbContext.CatalogItem.Add( new CatalogItem { Quantity = 150, Name = "Cheeze", Description = "Classic", Price = 150, CatalogType = WA.Pizza.Core.CatalogType.CatalogType.Pizza }).Entity;
-            _fixture.applicationDbContext.SaveChanges();
+            basketTest = applicationDbContext.Basket.Add(new Basket { LastModified = new DateTime(2066, 11, 11) }).Entity;
+            catalogItemTest = applicationDbContext.CatalogItem.Add( new CatalogItem { Quantity = 150, Name = "Cheeze", Description = "Classic", Price = 150, CatalogType = WA.Pizza.Core.CatalogType.CatalogType.Pizza }).Entity;
+            applicationDbContext.SaveChanges();
         }
-        private void addTestBasketItem()
+        private async Task<int> addTestBasketItemAsync()
         {
             var basketItem = new BasketItem { BasketId = basketTest.Id, Quantity = Faker.RandomNumber.Next(1, 100), CatalogType = Core.CatalogType.CatalogType.Pizza, UnitPrice = 150, CatalogItemName = "Classic", CatalogItemId = catalogItemTest.Id };
-            _fixture.applicationDbContext.BasketItem.Add(basketItem);
-            _fixture.applicationDbContext.SaveChanges();
+            applicationDbContext.BasketItem.Add(basketItem);
+            return await applicationDbContext.SaveChangesAsync();
         }
-        public BasketDataTests(TestDatabaseFixture fixture)
+        public BasketDataTests(): base()
         {
-            _fixture = new DatabaseCollection();
-            _basketDataService = new BasketDataService(_fixture.applicationDbContext);
-            //_fixture.applicationDbContext.Database.Migrate();
+            _basketDataService = new BasketDataService(applicationDbContext);
+            //applicationDbContext.Database.Migrate();
             data_seeding();
         }
         [Fact]
@@ -65,7 +61,7 @@ namespace WA.Pizza.Tests
         [Fact]
         public async void basket_item_is_deleted_from_basket()
         {
-            addTestBasketItem();
+            await addTestBasketItemAsync();
             //Arrange
             var basket = await _basketDataService.GetById(basketTest.Id);
             var basketItems = basket.BasketItems;
@@ -81,7 +77,7 @@ namespace WA.Pizza.Tests
         public async void basket_was_updated()
         {
             //Arrange
-            addTestBasketItem();
+            await addTestBasketItemAsync();
             var basket = await _basketDataService.GetById(basketTest.Id);
             var basketItems = basket.BasketItems;
             var basketItem = basketItems.Last();
@@ -91,8 +87,37 @@ namespace WA.Pizza.Tests
             //Act
             await _basketDataService.UpdateItem(basketItem);
             //Assert
-            Basket updatedBasket = await _fixture.applicationDbContext.Basket.AsNoTracking().Include(bi => bi.BasketItems).FirstOrDefaultAsync(bi => bi.Id == basketTest.Id);
+            Basket updatedBasket = await applicationDbContext.Basket.AsNoTracking().Include(bi => bi.BasketItems).FirstOrDefaultAsync(bi => bi.Id == basketTest.Id);
             updatedBasket.BasketItems.Last().Adapt<BasketItemDTO>().Should().Be(basketItem);
+        }
+
+        [Fact]
+        public async void basket_was_cleared()
+        {
+            //Arrange
+            await addTestBasketItemAsync();
+            BasketDTO basketToDelete = basketTest.Adapt<BasketDTO>(); 
+            //Act
+            await _basketDataService.ClearBasket(basketToDelete);
+            //Assert
+            Basket updatedBasket = await applicationDbContext.Basket.AsNoTracking().Include(bi => bi.BasketItems).FirstOrDefaultAsync(bi => bi.Id == basketTest.Id);
+            updatedBasket.BasketItems.Count.Should().Be(0);
+        }
+
+        [Fact]
+        public async void user_was_binded_to_basket()
+        {
+            //Arrange
+            await addTestBasketItemAsync();
+            ApplicationUser user = new ApplicationUser();
+            user = applicationDbContext.ApplicationUser.Add(user).Entity;
+            await applicationDbContext.SaveChangesAsync();
+            BasketDTO basketToBind = basketTest.Adapt<BasketDTO>();
+            //Act
+            await _basketDataService.BindBuyerToBasket(basketToBind, user.Id);
+            //Assert
+            Basket bindedBasket = await applicationDbContext.Basket.AsNoTracking().Include(b => b.ApplicationUser).FirstOrDefaultAsync(bi => bi.Id == basketTest.Id);
+            bindedBasket.ApplicationUser.Should().NotBeNull();
         }
 
     }

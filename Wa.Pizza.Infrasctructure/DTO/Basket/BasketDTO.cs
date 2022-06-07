@@ -12,5 +12,6 @@
         public int ApplicationUserId { get; set; }
 
         public ICollection<BasketItemDTO>? BasketItems { get; set; }
+
     }
 }

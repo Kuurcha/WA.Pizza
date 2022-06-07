@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 public enum OrderStatus
 {
-    Canceled,
+    Accepted,
     Cooking,
     Delivering,
     Delivered,
+    Canceled,
 }
