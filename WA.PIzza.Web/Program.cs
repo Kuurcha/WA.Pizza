@@ -5,7 +5,7 @@ using System.Reflection;
 using Wa.Pizza.Infrasctructure.Data.Services;
 using Wa.Pizza.Infrasctructure.Services;
 using Wa.Pizza.Infrasctructure.Services.Interfaces;
-
+using WA.PIzza.Web.Extensions;
 
 var builder =
     WebApplication.CreateBuilder(args);
@@ -65,6 +65,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.ConfigureCustomExceptionhandler();
 
 app.UseEndpoints(endpoints =>
 {
