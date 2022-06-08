@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Wa.Pizza.Core.MiddlewareError;
 
 namespace WA.PIzza.Web.Middleware
 {
@@ -21,16 +20,15 @@ namespace WA.PIzza.Web.Middleware
                 await HandleExceptionAsync(httpContext, ex);
             }
         }
+
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            string exceptionMessage = exception.Message;
+            var exceptionText = new { StatusCode = context.Response.StatusCode, Message = exceptionMessage };
+            await context.Response.WriteAsJsonAsync(exceptionText);
 
-            await context.Response.WriteAsync(new ErrorDetails()
-            {
-                StatusCode = context.Response.StatusCode,
-                Message = "Internal server error"
-            }.ToString());
         }
     }
 }

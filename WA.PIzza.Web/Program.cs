@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -5,6 +6,7 @@ using System.Reflection;
 using Wa.Pizza.Infrasctructure.Data.Services;
 using Wa.Pizza.Infrasctructure.Services;
 using Wa.Pizza.Infrasctructure.Services.Interfaces;
+using Wa.Pizza.Infrasctructure.Validators;
 using WA.PIzza.Web.Extensions;
 
 var builder =
@@ -42,8 +44,12 @@ builder.Services.AddSwaggerGen(options =>
     });
     options.IncludeXmlComments(fullPath);
 });
+builder.Services.AddControllers().AddFluentValidation(options =>
+{
+    options.AutomaticValidationEnabled = true;
+    options.RegisterValidatorsFromAssemblyContaining<BasketItemValidator>();
+});
 var app = builder.Build();
-
 
 
 
