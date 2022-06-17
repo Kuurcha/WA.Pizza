@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Wa.Pizza.Core\Wa.Pizza.Core.csproj" />
     <ProjectReference Include="..\Wa.Pizza.Infrasctructure\Wa.Pizza.Infrasctructure.csproj" />
   </ItemGroup>

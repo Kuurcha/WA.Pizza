@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 
 public class ApplicationDbContext : DbContext
-    {
+{
     public DbSet<Adress> Adress { get; set; }
 
     public DbSet<ApplicationUser> ApplicationUser { get; set; }
@@ -20,13 +20,12 @@ public class ApplicationDbContext : DbContext
     {
         optionsBuilder.EnableSensitiveDataLogging();
     }
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base(options){
-            
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    {
     }
 
-    public ApplicationDbContext() 
-    { 
-
+    public ApplicationDbContext()
+    {
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -58,7 +57,7 @@ public class ApplicationDbContext : DbContext
                 entity.Property(oi => oi.OrderId).IsRequired();
 
                 entity.Property(oi => oi.CatalogItemName).IsRequired();
-                entity.Property(oi => oi.CatalogItemName).HasMaxLength(30);
+                entity.Property(oi => oi.CatalogItemName).HasMaxLength(254);
 
                 entity.Property(oi => oi.UnitPrice).HasColumnType("decimal(18,4)");
                 entity.Property(oi => oi.Discount).HasColumnType("decimal(18,4)");
@@ -152,10 +151,10 @@ public class ApplicationDbContext : DbContext
                       .WithMany(a => a.Adresses)
                       .HasForeignKey(a => a.ApplicationUserId);
             }
-        );    
-            
+        );
 
-/*
+
+
         Adress[] adressess = new Adress[]
           {
                 new Adress { Id = 1, AdressString = "Corusan 19" },
@@ -171,7 +170,7 @@ public class ApplicationDbContext : DbContext
 
             };
         CatalogItem[] catalogItems = new CatalogItem[]
-         { 
+         {
             new CatalogItem {  Id = 7567,  Quantity = 1, Name = "Rex", Description = "Clone trooper commander", Price = 10000, CatalogType =  WA.Pizza.Core.CatalogType.CatalogType.Sweets },
             new CatalogItem {  Id = 2224,  Quantity = 1, Name = "Cody", Description = "Clone trooper commander", Price = 10000, CatalogType =  WA.Pizza.Core.CatalogType.CatalogType.Sweets },
             new CatalogItem {  Id = 1,  Quantity = 3000000, Name = "Clone trooper", Description = "Regular clone trooper", Price = 4000, CatalogType =  WA.Pizza.Core.CatalogType.CatalogType.Sweets},
@@ -242,7 +241,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Order>().HasData(orders);
         modelBuilder.Entity<Basket>().HasData(baskets);
         modelBuilder.Entity<OrderItem>().HasData(orderItems);
-        modelBuilder.Entity<BasketItem>().HasData(basketItems);*/
+        modelBuilder.Entity<BasketItem>().HasData(basketItems);
 
 
 

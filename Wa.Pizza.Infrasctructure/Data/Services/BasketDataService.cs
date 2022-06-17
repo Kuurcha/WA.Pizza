@@ -11,16 +11,20 @@ using Wa.Pizza.Infrasctructure.DTO.Basket;
 using Mapster;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Wa.Pizza.Core.Exceptions;
+using Wa.Pizza.Infrasctructure.Validators;
+using FluentValidation.Results;
 
 namespace Wa.Pizza.Infrasctructure.Data.Services
 {
     public class BasketDataService : IEntityService<BasketDTO> 
     {
         private readonly ApplicationDbContext _context;
-
-        public BasketDataService(ApplicationDbContext ctx)
+        private readonly BasketItemValidator _basketItemValidator;
+        public BasketDataService(ApplicationDbContext ctx, BasketItemValidator basketItemValidator )
         {
             _context = ctx;
+           _basketItemValidator = basketItemValidator;
+//            _basketItemValidator = new BasketItemValidator();
         }
 
         /// <summary>
@@ -54,7 +58,19 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         }
 
         //Получение Basket => получение списка 
+        private async Task<bool> validateDTOAsync(BasketItemDTO basketItemDTO)
+        {
 
+            ValidationResult results = await _basketItemValidator.ValidateAsync(basketItemDTO.Adapt<BasketItem>());
+            List<ValidationFailure> failures = results.Errors;
+            string errorString = "";
+            foreach (ValidationFailure failure in failures)
+            {
+                errorString += System.Environment.NewLine + failure.ErrorMessage;
+            }
+            throw new WrongDataFormatException(errorString);
+            return results.IsValid;
+        }
         /// <summary>
         /// Использовать в контроллере для уменьшения количества обновлений.
         /// </summary>
@@ -62,54 +78,61 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         /// <returns></returns>
         public async Task<int> AddItem(BasketItemDTO basketItemDTO)
         {
-            CatalogItem? catalogItem = await _context.CatalogItem
-                            .AsNoTracking()
-                            .FirstOrDefaultAsync(ci => ci.Id == basketItemDTO.CatalogItemId);
 
-            if (catalogItem == null)
-                throw new EntityNotFoundException("Catalog item by id: " + basketItemDTO.CatalogItemId + " does not exist");
+                await validateDTOAsync(basketItemDTO);   
 
-            BasketItem? basketItem = await _context.BasketItem
-                .FirstOrDefaultAsync(bi => bi.Id == basketItemDTO.Id);
+                CatalogItem? catalogItem = await _context.CatalogItem
+                                            .AsNoTracking()
+                                            .FirstOrDefaultAsync(ci => ci.Id == basketItemDTO.CatalogItemId);
 
-            Basket? basket = await _context.Basket
-                .Include(b => b.BasketItems)
-                .FirstOrDefaultAsync(b => b.Id == basketItemDTO.BasketId);
+                if (catalogItem == null)
+                    throw new EntityNotFoundException("Catalog item by id: " + basketItemDTO.CatalogItemId + " does not exist");
+                BasketItem? basketItem = await _context.BasketItem
+                                        .FirstOrDefaultAsync(bi => bi.Id == basketItemDTO.Id);
 
-            if (basketItem != null)
-            {
-                basketItem.Quantity = basketItemDTO.Quantity;
-                basket!.LastModified = DateTime.UtcNow;
+                Basket? basket = await _context.Basket
+                    .Include(b => b.BasketItems)
+                    .FirstOrDefaultAsync(b => b.Id == basketItemDTO.BasketId);
+
+                if (basketItem != null)
+                {
+                    basketItem.Quantity = basketItemDTO.Quantity;
+                    basket!.LastModified = DateTime.UtcNow;
+                    return await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    //Мапстер перемапить?
+                    basketItem = catalogItem.Adapt<BasketItem>();
+                    basketItem.Id = 0;
+                    basketItem.Quantity = basketItemDTO.Quantity;
+                    basketItem.CatalogItemName = catalogItem.Name;
+                    basketItem.CatalogItemId = catalogItem.Id;
+                }
+
+
+                if (basket == null)
+                {
+                    basket = new Basket { };
+                    basketItem.BasketId = basket.Id;
+                    _context.Basket.Adapt(basket);
+                    _context.Basket.Attach(basket).State = EntityState.Added;
+                }
+
+                if (basket!.BasketItems == null)
+                    basket.BasketItems = new List<BasketItem>();
+                basket.BasketItems.Add(basketItem);
+                basket.LastModified = DateTime.UtcNow;
                 return await _context.SaveChangesAsync();
-            }
-            else
-            {
-                //Мапстер перемапить?
-                basketItem = catalogItem.Adapt<BasketItem>();
-                basketItem.Id = 0;
-                basketItem.Quantity = basketItemDTO.Quantity;
-                basketItem.CatalogItemName = catalogItem.Name;
-                basketItem.CatalogItemId = catalogItem.Id;
-            }
+    
 
-
-            if (basket == null)
-            {
-                basket = new Basket { };
-                basketItem.BasketId = basket.Id;
-                _context.Basket.Adapt(basket);
-                _context.Basket.Attach(basket).State = EntityState.Added;
-            }
-
-            if (basket!.BasketItems == null)
-                basket.BasketItems = new List<BasketItem>();
-            basket.BasketItems.Add(basketItem);
-            basket.LastModified = DateTime.UtcNow;
-            return await _context.SaveChangesAsync();
 
         }
         public async Task<int> UpdateItem(BasketItemDTO basketItemDTO)
         {
+
+            await validateDTOAsync(basketItemDTO);
+
             BasketItem originalBasketItem = await _context.BasketItem.Include(bi => bi.Basket).FirstOrDefaultAsync(x => x.Id == basketItemDTO.Id);
             if (originalBasketItem == null)
                 throw new EntityNotFoundException("Basket item with id: " + basketItemDTO.Id + " not found. Nothing to update.");
@@ -123,6 +146,9 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         }
         public async Task<int> DeleteItem(BasketItemDTO basketItemDTO)
         {
+
+            await validateDTOAsync(basketItemDTO);
+
             Basket basket = await _context.Basket.Include(b => b.BasketItems).FirstOrDefaultAsync(b => b.Id == basketItemDTO.BasketId);
             if (basket == null)
                 throw new EntityNotFoundException("Basket with id: " + basketItemDTO.BasketId + "does not exists. Unable to delete");
@@ -139,6 +165,9 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         }
         public async Task<int> ClearBasket(BasketDTO basketDTO)
         {
+
+           
+
             Basket basket = await _context.Basket.Include(b => b.BasketItems).FirstOrDefaultAsync(b => b.Id == basketDTO.Id);
             if (basket == null)
                 throw new EntityNotFoundException("Basket with id: " + basketDTO.Id + "does not exists. Unable to delete");

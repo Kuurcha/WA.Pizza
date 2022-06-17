@@ -5,14 +5,14 @@ using Wa.Pizza.Core.Exceptions;
 using Wa.Pizza.Infrasctructure.DTO.Basket;
 using Wa.Pizza.Infrasctructure.DTO.Order;
 using Wa.Pizza.Infrasctructure.Services.Interfaces;
+using Wa.Pizza.Infrasctructure.Validators;
 
 namespace Wa.Pizza.Infrasctructure.Services
 {
     public class OrderDataService : IEntityService<GetOrderDTO>
     {
         private readonly ApplicationDbContext _context;
-        
-        
+
         public OrderDataService(ApplicationDbContext ctx)
         {
             _context = ctx;

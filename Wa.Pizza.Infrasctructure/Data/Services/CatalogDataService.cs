@@ -1,4 +1,5 @@
-﻿using Mapster;
+﻿using FluentValidation.Results;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using Wa.Pizza.Core.Exceptions;
 using Wa.Pizza.Infrasctructure.DTO.CatalogItem;
 using Wa.Pizza.Infrasctructure.Services.Interfaces;
+using Wa.Pizza.Infrasctructure.Validators;
 
 namespace Wa.Pizza.Infrasctructure.Data.Services
 {
@@ -15,13 +17,29 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
     {
         // Маппинг происходит на уровне сервисов 
         private readonly ApplicationDbContext _context;
+        private CatalogItemValidator _catalogItemValidator;
 
-        public CatalogDataService(ApplicationDbContext ctx)
+
+        public CatalogDataService(ApplicationDbContext ctx, CatalogItemValidator catalogItemValidator)
         {
             _context = ctx;
+            _catalogItemValidator = catalogItemValidator;
+
         }
 
+        private async Task<bool> validateDTOAsync(CatalogItemDTO catalogItemDTO)
+        {
 
+            ValidationResult results = await _catalogItemValidator.ValidateAsync(catalogItemDTO.Adapt<CatalogItem>());
+            List<ValidationFailure> failures = results.Errors;
+            string errorString = "";
+            foreach (ValidationFailure failure in failures)
+            {
+                errorString += System.Environment.NewLine + failure.ErrorMessage;
+            }
+            throw new WrongDataFormatException(errorString);
+            return results.IsValid;
+        }
 
         public Task<CatalogItemDTO> GetById(int guid)
         {
@@ -37,11 +55,13 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
 
         public async Task<int> AddItem(CatalogItemDTO catalogItemDTO)
         {
+            await validateDTOAsync(catalogItemDTO);
             _context.CatalogItem.Add(catalogItemDTO.Adapt<CatalogItem>());
             return await _context.SaveChangesAsync();
         }
         public async Task<int> UpdateItem(CatalogItemDTO catalogItemDTO)
         {
+            await validateDTOAsync(catalogItemDTO);
             CatalogItem originalCatalogItem = await _context.CatalogItem
                 .FirstOrDefaultAsync(x => x.Id == catalogItemDTO.Id);
 
@@ -60,6 +80,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         }
         public async Task<int> DeleteItem(CatalogItemDTO catalogItemDTO)
         {
+            await validateDTOAsync(catalogItemDTO);
             CatalogItem catalogItem = await _context.CatalogItem
                 .Include(ci => ci.BasketItems).Include(ci => ci.OrderItems).
                 FirstOrDefaultAsync(x => x.Id == catalogItemDTO.Id);
