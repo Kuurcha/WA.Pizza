@@ -1,0 +1,22 @@
+version: '3.4'
+services:
+  wa.pizza.web:
+    image: ${DOCKER_REGISTRY-}wapizzaweb
+    ports:
+        - "7091:80"
+        - "7090:443"
+    build:  
+      context: .
+      dockerfile: WA.PIzza.Web\Dockerfile
+    environment:
+        ASPNETCORE_URLS: "https://+:443;http://+:80;http://+:7090"
+  seq: 
+    image: datalust/seq 
+    container_name: seqWebApi
+    volumes:
+      - D:\logs:/data
+    ports:
+        - "5341:80"
+    environment:
+      ACCEPT_EULA: "Y"
+

@@ -14,10 +14,12 @@ namespace WA.PIzza.Web.Controllers
     {
         private readonly BasketDataService _basketDataService;
         private readonly CatalogDataService _catalogDataService;
-        public BasketController(BasketDataService basketDataService, CatalogDataService catalogDataService)
+        readonly ILogger<BasketController> _log;
+        public BasketController(BasketDataService basketDataService, CatalogDataService catalogDataService, ILogger<BasketController> log)
         {
             _basketDataService = basketDataService;
             _catalogDataService = catalogDataService;
+            _log = log;
         }
 
         /// <summary>
@@ -29,6 +31,7 @@ namespace WA.PIzza.Web.Controllers
         public async Task<ActionResult<List<BasketDTO>>> GetBasketByUserId(int userId)
         {
             BasketDTO basket;
+            _log.LogInformation("Hello, world!");
             try
             {
                 basket = await _basketDataService.GetByUserId(userId);

@@ -25,6 +25,14 @@
       },
       "sqlDebugging": true,
       "nativeDebugging": true
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "commandLineArgs": "-p 7090",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "publishAllPorts": true,
+      "useSSL": true
     }
   }
 }

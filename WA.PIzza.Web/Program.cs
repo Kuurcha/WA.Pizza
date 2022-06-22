@@ -2,6 +2,7 @@ using FluentValidation.AspNetCore;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System.Reflection;
 using Wa.Pizza.Infrasctructure.Data.Services;
 using Wa.Pizza.Infrasctructure.Services;
@@ -44,11 +45,27 @@ builder.Services.AddSwaggerGen(options =>
     });
     options.IncludeXmlComments(fullPath);
 });
+var logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
+
+Log.Logger = logger;
+
+Log.Information("Application is starting up...");
+builder.Host.UseSerilog(logger);
+
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.AddSeq();
+});
+
 builder.Services.AddControllers().AddFluentValidation(options =>
 {
     options.AutomaticValidationEnabled = true;
     options.RegisterValidatorsFromAssemblyContaining<BasketItemValidator>();
 });
+
+
 var app = builder.Build();
 
 
@@ -62,13 +79,18 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }   
 
+
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
 app.UseRouting();
 
+
+
 app.UseAuthorization();
+
+
 
 app.MapRazorPages();
 
@@ -80,11 +102,16 @@ app.UseEndpoints(endpoints =>
 });
 
 app.UseSwagger();
+
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-}); 
+});
+
+app.UseSerilogRequestLogging();
 
 app.Run();
+Log.Information("Application is starting up...");
+
 app.UseDeveloperExceptionPage();
 
