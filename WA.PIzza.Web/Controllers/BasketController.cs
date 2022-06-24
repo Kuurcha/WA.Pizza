@@ -31,14 +31,15 @@ namespace WA.PIzza.Web.Controllers
         public async Task<ActionResult<List<BasketDTO>>> GetBasketByUserId(int userId)
         {
             BasketDTO basket;
-            _log.LogInformation("Hello, world!");
+            _log.LogInformation("Retriving basket by user id " + userId + "..");
             try
             {
                 basket = await _basketDataService.GetByUserId(userId);
-
+                _log.LogInformation("Item retrieved: " + basket.ToString());
             }
             catch (EntityNotFoundException ex)
             {
+                _log.LogError(ex.Message);
                 return NotFound(ex);
             }
             return new ObjectResult(basket);
@@ -51,14 +52,17 @@ namespace WA.PIzza.Web.Controllers
         [HttpGet("byBasketId")]
         public async Task<ActionResult<List<BasketDTO>>> GetBasketById(int id)
         {
+            _log.LogInformation("Retriving basket by  id " + id + "..");
             BasketDTO basket;
             try
             {
                 basket = await _basketDataService.GetByUserId(id);
+                _log.LogInformation("Item retrieved: " + basket.ToString());
 
             }
             catch (EntityNotFoundException ex)
             {
+                _log.LogError(ex.Message);
                 return NotFound(ex);
             }
             return new ObjectResult(basket);
@@ -75,12 +79,16 @@ namespace WA.PIzza.Web.Controllers
         [HttpPost("basketItem")]
         public async Task<ActionResult> AddBasketItemRequest(BasketItemDTO basketItemDTO)
         {
+            _log.LogInformation("Adding Basket Item " + basketItemDTO.ToString() + "..");
             try
             {
+
                 await _basketDataService.AddItem(basketItemDTO);
+                _log.LogInformation("Item added");
             }
             catch (EntityNotFoundException ex)
             {
+                _log.LogError(ex.Message);
                 return NotFound(ex);
             }
             return Accepted();
@@ -95,12 +103,15 @@ namespace WA.PIzza.Web.Controllers
         [HttpDelete]
         public async Task<ActionResult> RemoveBasketItemRequest(BasketItemDTO basketItemDTO)
         {
+            _log.LogInformation("Removing Basket Item " + basketItemDTO.ToString() + "..");
             try
             {
                 await _basketDataService.DeleteItem(basketItemDTO);
+                _log.LogInformation("Item removed");
             }
             catch (EntityNotFoundException ex)
             {
+                _log.LogError(ex.Message);
                 return BadRequest(ex);
             }
             return Ok();
@@ -114,13 +125,16 @@ namespace WA.PIzza.Web.Controllers
         [HttpPut]
         public async Task<ActionResult> ChangeBasketItemQuantityRequest(BasketItemDTO basketItemDTO)
         {
+            _log.LogInformation("Changing basket item qunatity... " + basketItemDTO + "..");
             try 
             {
-                await _basketDataService.DeleteItem(basketItemDTO);
+                await _basketDataService.UpdateItem(basketItemDTO);
+                _log.LogInformation("Item updated");
 
             }
             catch(EntityNotFoundException ex)
             {
+                _log.LogError(ex.Message);
                 return BadRequest(ex);
             }
             return Ok();
@@ -133,12 +147,15 @@ namespace WA.PIzza.Web.Controllers
         [HttpDelete("clear")]
         public async Task<ActionResult> ClearBasketRequest(BasketDTO basketDTO)
         {
+            _log.LogInformation("Clearing basket: " + basketDTO.ToString() + "..." );
             try
             {
                 await _basketDataService.ClearBasket(basketDTO);
+                _log.LogInformation("Basket Cleared");
             }
             catch (EntityNotFoundException ex)
             {
+                _log.LogError(ex.Message);
                 return BadRequest(ex);
             }
             return Ok();
@@ -147,18 +164,21 @@ namespace WA.PIzza.Web.Controllers
         /// <summary>
         /// Binds existing Basket to user
         /// </summary>
-        /// <param name="basketId"></param>
+        /// <param name="basketDTO"></param>
         /// <param name="applicationUserId"></param>
         /// <returns></returns>
         [HttpPut("updateUser")]
-        public async Task<ActionResult> BindUserToBasketRequest(BasketDTO basketDTO)
+        public async Task<ActionResult> BindUserToBasketRequest(BasketDTO basketDTO, int applicationUserId)
         {
+            _log.LogInformation("Binding Buyer To Basket: " + basketDTO.ToString() + "to id: + " + applicationUserId + "...");
             try
             {
-                await _basketDataService.ClearBasket(basketDTO);
+                await _basketDataService.BindBuyerToBasket(basketDTO, applicationUserId);
+                _log.LogInformation("Basket binded");
             }
             catch (EntityNotFoundException ex)
             {
+                _log.LogError(ex.Message);
                 return BadRequest(ex);
             }
             finally { }

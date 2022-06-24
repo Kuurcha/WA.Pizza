@@ -13,10 +13,11 @@ namespace WA.PIzza.Web.Controllers
     public class CatalogItemController: ControllerBase
     {
         private readonly CatalogDataService _catalogItemDataService;
-
-        public CatalogItemController(CatalogDataService catalogItemDataService)
+        readonly ILogger<CatalogItemController> _log;
+        public CatalogItemController(CatalogDataService catalogItemDataService, ILogger<CatalogItemController> log)
         {
             _catalogItemDataService = catalogItemDataService;
+            _log = log;
         }
 
         /// <summary>
@@ -26,7 +27,9 @@ namespace WA.PIzza.Web.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CatalogItemDTO>>> Get()
         {
+            _log.LogInformation("Catalog items requested...");
             IEnumerable <CatalogItemDTO> catalogItems = await  _catalogItemDataService.getCatalogAsync();
+            _log.LogInformation("Catalog items sent: " + catalogItems.ToString());
             return new ObjectResult(catalogItems);
         }
         /// <summary>
@@ -37,18 +40,18 @@ namespace WA.PIzza.Web.Controllers
         public async Task<ActionResult<CatalogItemDTO>> GetById(int id)
         {
             CatalogItemDTO catalogItem;
+            _log.LogInformation("Catalog item by id requested: " + id + "...");
             try
             {
                 catalogItem = await _catalogItemDataService.GetById(id);
+                _log.LogInformation("Catalog item sent: " + catalogItem.ToString());
             }
             catch (EntityNotFoundException ex)
             {
+                _log.LogError(ex.Message);
                 return NotFound(ex);
-
             }
             return new ObjectResult(catalogItem);
-
-
         }
         /// <summary>
         /// Adds catalog item
@@ -59,14 +62,16 @@ namespace WA.PIzza.Web.Controllers
         public async Task<ActionResult> AddCatalogItem(CatalogItemDTO catalogItemDTO)
         {
             CatalogItemDTO catalogItem;
+            _log.LogInformation("Catalog item add request: " + catalogItemDTO.ToString());
             try
             {
                 await _catalogItemDataService.AddItem(catalogItemDTO);
+                _log.LogInformation("Catalog item added");
             }
             catch (EntityNotFoundException ex)
             {
+                _log.LogError(ex.Message);
                 return BadRequest(ex);
-
             }
             return Accepted();
         }
@@ -75,12 +80,15 @@ namespace WA.PIzza.Web.Controllers
         public async Task<ActionResult> UpdateCatalogItem(CatalogItemDTO catalogItemDTO)
         {
             CatalogItemDTO catalogItem;
+            _log.LogInformation("Catalog item update request: " + catalogItemDTO.ToString());
             try
             {
                 await _catalogItemDataService.UpdateItem(catalogItemDTO);
+                _log.LogInformation("Catalog item updated");
             }
             catch (EntityNotFoundException ex)
             {
+                _log.LogError(ex.Message);
                 return BadRequest(ex);
 
             }
