@@ -1,6 +1,10 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using Wa.Pizza.Core.Configuration;
+
 [Table(nameof(Basket))]
+[EntityTypeConfiguration(typeof(BasketConfiguration))]
 public class Basket
 {
 	//NUllable reference tiype
