@@ -1,0 +1,34 @@
+version: '3.4'
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Test_Password1
+    mem_limit: 4GB
+    volumes:
+        - D:\test:/var/opt/mssql/data
+  seq: 
+    image: datalust/seq 
+    container_name: seqWebApi
+    volumes:
+      - D:\logs:/data
+    ports:
+        - "5341:80"
+    environment:
+      ACCEPT_EULA: "Y"
+  wa.pizza.web:
+    image: ${DOCKER_REGISTRY-}wapizzaweb
+    ports:
+        - "7091:80"
+        - "7090:443"
+    build:  
+      context: .
+      dockerfile: WA.PIzza.Web\Dockerfile
+    environment:
+        ASPNETCORE_URLS: "https://+:443;http://+:80;http://+:7090"
+    depends_on: 
+        - "seq"
+        - "mssql"

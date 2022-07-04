@@ -1,0 +1,37 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "wa.pizza.web",
+      "composeLaunchUrl": "{Scheme}://{ServiceIPAddress}{ServicePort}",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "seq": "StartWithoutDebugging",
+        "wa.pizza.web": "StartDebugging",
+        "mssql": "StartWithoutDebugging"
+      }
+    },
+    "databaseInit": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "mssql": "StartWithoutDebugging",
+        "seq": "DoNotStart",
+        "wa.pizza.web": "DoNotStart"
+      }
+    },
+    "StartProjectContainer": {
+      "commandName": "DockerCompose",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "wa.pizza.web",
+      "composeLaunchUrl": "{Scheme}://{ServiceIPAddress}{ServicePort}",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "mssql": "DoNotStart",
+        "seq": "DoNotStart",
+        "wa.pizza.web": "StartDebugging"
+      }
+    }
+  }
+}

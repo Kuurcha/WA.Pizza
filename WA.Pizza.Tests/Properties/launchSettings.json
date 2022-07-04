@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "WA.Pizza.Tests": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

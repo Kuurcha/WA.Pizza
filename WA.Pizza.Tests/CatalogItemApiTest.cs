@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Wa.Pizza.Infrasctructure.Data.Services;
 using Wa.Pizza.Infrasctructure.DTO.CatalogItem;
+using Wa.Pizza.Infrasctructure.Validators;
 using WA.Pizza.Core.CatalogType;
 using Xunit;
 
@@ -17,6 +18,7 @@ namespace WA.Pizza.Tests
     public class CatalogItemApiTest: BaseDatabaseTestClass
     {
         private readonly CatalogDataService _catalogDataService;
+        private CatalogItemValidator _catalogItemValidator;
 
         private CatalogItem _catalogItemTest = new CatalogItem { CatalogType = CatalogType.Pizza, Name = "TestCatalogObject", Price = 666, Quantity = 15, Description = "TestDecription" };
 
@@ -42,7 +44,8 @@ namespace WA.Pizza.Tests
         }
         public CatalogItemApiTest() : base()
         {
-            _catalogDataService = new CatalogDataService( applicationDbContext);
+            _catalogItemValidator = new CatalogItemValidator();
+            _catalogDataService = new CatalogDataService(applicationDbContext, _catalogItemValidator);
             // applicationDbContext.Database.Migrate();
         }
         [Fact]

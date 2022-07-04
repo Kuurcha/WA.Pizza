@@ -12,12 +12,11 @@ namespace WA.PIzza.Web.Services
     public class OrderController : ControllerBase
     {
         private readonly OrderDataService _orderDataService;
-
-        public OrderController(OrderDataService orderDataService)
+        readonly ILogger<OrderController> _log;
+        public OrderController(OrderDataService orderDataService, ILogger<OrderController> log)
         {
             _orderDataService = orderDataService;
-            //Эндпоинты, http, GET
-            //ctor
+            _log = log;
         }
         /// <summary>
         /// Returns specific order by specific id
@@ -28,12 +27,15 @@ namespace WA.PIzza.Web.Services
         public async Task<ActionResult<GetOrderDTO>> GetById(int id)
         {
             GetOrderDTO order;
+            _log.LogInformation("Get by id request: " + id);
             try
             {
                 order = await _orderDataService.GetById(id);
+                _log.LogInformation("Item recieved: " + order.ToString());
             }
             catch (EntityNotFoundException ex)
             {
+                _log.LogError(ex.Message);
                 return NotFound(ex);
             }
             return new ObjectResult(order);
@@ -46,12 +48,15 @@ namespace WA.PIzza.Web.Services
         [HttpPost]
         public async Task<ActionResult<Order>> CreateOrder(int basketId, string description)
         {
+            _log.LogInformation("Create order request with id:  " + basketId + " and description: " + description + " ...");
             try
             {
                 await _orderDataService.AddOrder(basketId, description);
+                _log.LogInformation("Order added");
             }
             catch( EntityNotFoundException ex)
             {
+                _log.LogError(ex.Message);
                 BadRequest(ex);
             }
             return Accepted();
@@ -59,12 +64,16 @@ namespace WA.PIzza.Web.Services
         [HttpPut]
         public async Task<ActionResult<Order>> UpdateOrderStatus(int orderId, OrderStatus orderStatus)
         {
+            _log.LogInformation("Updating order with id: " + orderId + " to status:" + orderStatus.ToString() + "...");  
             try
             {
+
                 await _orderDataService.UpdateStatus(orderId, orderStatus);
+                _log.LogInformation("Order updated");
             }
             catch (EntityNotFoundException ex)
             {
+                _log.LogError(ex.Message);
                 BadRequest(ex);
             }
             return Accepted();

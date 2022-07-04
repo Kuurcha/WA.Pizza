@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Wa.Pizza.Infrasctructure.Data.Services;
 using Wa.Pizza.Infrasctructure.DTO.Basket;
 using Wa.Pizza.Infrasctructure.DTO.CatalogItem;
+using Wa.Pizza.Infrasctructure.Validators;
 using Xunit;
 
 namespace WA.Pizza.Tests
@@ -18,6 +19,7 @@ namespace WA.Pizza.Tests
     public class BasketDataTests: BaseDatabaseTestClass
     {
         private readonly BasketDataService _basketDataService;
+        private BasketItemValidator _basketItemValidator;
 
         private Basket basketTest;
         private CatalogItem catalogItemTest;
@@ -36,7 +38,8 @@ namespace WA.Pizza.Tests
         }
         public BasketDataTests(): base()
         {
-            _basketDataService = new BasketDataService(applicationDbContext);
+            _basketItemValidator = new BasketItemValidator();
+            _basketDataService = new BasketDataService(applicationDbContext, _basketItemValidator);
             //applicationDbContext.Database.Migrate();
             data_seeding();
         }

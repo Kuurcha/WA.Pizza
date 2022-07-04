@@ -70,3 +70,14 @@ Response - ответ
 23.05.20222
 //X-unit collection,  посмотреть
 //Database collection fixture
+
+
+Serilog
+настроить запись логов в Seq
+
+
+!!docker compose!!
+генерить docker compose с помощью студии
+описывать там приложение
+БД ms sql
+и seq
