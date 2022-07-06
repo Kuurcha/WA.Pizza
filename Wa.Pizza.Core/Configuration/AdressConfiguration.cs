@@ -18,12 +18,12 @@ namespace Wa.Pizza.Core.Configuration
             builder.Property(a => a.AdressString).IsRequired();
             builder.Property(a => a.AdressString).HasMaxLength(254);
 
-            builder.Property(a => a.ApplicationUserId).IsRequired();
-
 
             builder.HasOne(au => au.ApplicationUser)
                   .WithMany(a => a.Adresses)
                   .HasForeignKey(a => a.ApplicationUserId);
+
+            
         }
     }
 }

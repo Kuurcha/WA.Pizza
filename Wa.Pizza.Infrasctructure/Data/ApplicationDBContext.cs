@@ -28,9 +28,8 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    private void seedDate(ModelBuilder modelBuilder)
     {
-
         Adress[] adressess = new Adress[]
           {
                 new Adress { Id = 1, AdressString = "Corusan 19" },
@@ -96,9 +95,9 @@ public class ApplicationDbContext : DbContext
 
         ApplicationUser[] applicationUsers = new ApplicationUser[]
       {
-            new ApplicationUser { Id = 1 },
-            new ApplicationUser { Id = 2 },
-            new ApplicationUser { Id = 3 }
+            new ApplicationUser { UserName = "Test" },
+            new ApplicationUser { UserName = "Test1" },
+            new ApplicationUser { UserName = "Test2" }
       };
 
         for (int i = 0; i < applicationUsers.Length; i++)
@@ -119,14 +118,10 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<OrderItem>().HasData(orderItems);
         modelBuilder.Entity<BasketItem>().HasData(basketItems);
 
-
-
-
-
-
-
-
-
+    }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        //seedDate(modelBuilder);
     }
 
 }

@@ -34,61 +34,71 @@ namespace Wa.Pizza.Core.Migrations
                         .HasMaxLength(254)
                         .HasColumnType("nvarchar(254)");
 
-                    b.Property<int>("ApplicationUserId")
-                        .HasColumnType("int");
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Test")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Adress");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AdressString = "Corusan 19",
-                            ApplicationUserId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AdressString = "Omega-4",
-                            ApplicationUserId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AdressString = "Terra-4",
-                            ApplicationUserId = 3
-                        });
                 });
 
             modelBuilder.Entity("ApplicationUser", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("ApplicationUser");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1
-                        },
-                        new
-                        {
-                            Id = 2
-                        },
-                        new
-                        {
-                            Id = 3
-                        });
                 });
 
             modelBuilder.Entity("Basket", b =>
@@ -99,8 +109,9 @@ namespace Wa.Pizza.Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("ApplicationUserId")
-                        .HasColumnType("int");
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
@@ -108,30 +119,9 @@ namespace Wa.Pizza.Core.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId")
-                        .IsUnique()
-                        .HasFilter("[ApplicationUserId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Basket");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ApplicationUserId = 1,
-                            LastModified = new DateTime(2050, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ApplicationUserId = 2,
-                            LastModified = new DateTime(2186, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ApplicationUserId = 3,
-                            LastModified = new DateTime(4000, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("BasketItem", b =>
@@ -169,58 +159,6 @@ namespace Wa.Pizza.Core.Migrations
                     b.HasIndex("CatalogItemId");
 
                     b.ToTable("BasketItem");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            BasketId = 1,
-                            CatalogItemId = 7567,
-                            CatalogItemName = "Rex",
-                            CatalogType = 3,
-                            Quantity = 1,
-                            UnitPrice = 10000m
-                        },
-                        new
-                        {
-                            Id = 2,
-                            BasketId = 1,
-                            CatalogItemId = 2224,
-                            CatalogItemName = "Cody",
-                            CatalogType = 3,
-                            Quantity = 1,
-                            UnitPrice = 10000m
-                        },
-                        new
-                        {
-                            Id = 3,
-                            BasketId = 1,
-                            CatalogItemId = 1,
-                            CatalogItemName = "Clone trooper",
-                            CatalogType = 3,
-                            Quantity = 3000000,
-                            UnitPrice = 4000m
-                        },
-                        new
-                        {
-                            Id = 4,
-                            BasketId = 2,
-                            CatalogItemId = 2,
-                            CatalogItemName = "Tomato pizza",
-                            CatalogType = 0,
-                            Quantity = 500,
-                            UnitPrice = 100m
-                        },
-                        new
-                        {
-                            Id = 5,
-                            BasketId = 3,
-                            CatalogItemId = 3,
-                            CatalogItemName = "Classic",
-                            CatalogType = 0,
-                            Quantity = 150,
-                            UnitPrice = 150m
-                        });
                 });
 
             modelBuilder.Entity("CatalogItem", b =>
@@ -253,53 +191,6 @@ namespace Wa.Pizza.Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CatalogItem");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 7567,
-                            CatalogType = 3,
-                            Description = "Clone trooper commander",
-                            Name = "Rex",
-                            Price = 10000m,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 2224,
-                            CatalogType = 3,
-                            Description = "Clone trooper commander",
-                            Name = "Cody",
-                            Price = 10000m,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 1,
-                            CatalogType = 3,
-                            Description = "Regular clone trooper",
-                            Name = "Clone trooper",
-                            Price = 4000m,
-                            Quantity = 3000000
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CatalogType = 0,
-                            Description = "With extra Tomato Sauce",
-                            Name = "Tomato pizza",
-                            Price = 100m,
-                            Quantity = 500
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CatalogType = 0,
-                            Description = "Classic",
-                            Name = "Pepperoni",
-                            Price = 150m,
-                            Quantity = 150
-                        });
                 });
 
             modelBuilder.Entity("Order", b =>
@@ -310,8 +201,9 @@ namespace Wa.Pizza.Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("ApplicationUserId")
-                        .HasColumnType("int");
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
@@ -329,32 +221,6 @@ namespace Wa.Pizza.Core.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Order");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 66,
-                            ApplicationUserId = 1,
-                            CreationDate = new DateTime(2019, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "The republic will be reogranised into a first galactic empire",
-                            Status = 3
-                        },
-                        new
-                        {
-                            Id = 1,
-                            ApplicationUserId = 2,
-                            CreationDate = new DateTime(2186, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Bring extra tomato sauce, don't be late, don't make Aria mad",
-                            Status = 2
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ApplicationUserId = 3,
-                            CreationDate = new DateTime(4000, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Someone order pepperoni pizza into the Emperor's palace",
-                            Status = 4
-                        });
                 });
 
             modelBuilder.Entity("OrderItem", b =>
@@ -370,8 +236,8 @@ namespace Wa.Pizza.Core.Migrations
 
                     b.Property<string>("CatalogItemName")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasMaxLength(254)
+                        .HasColumnType("nvarchar(254)");
 
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,4)");
@@ -392,76 +258,50 @@ namespace Wa.Pizza.Core.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("OrderItem");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CatalogItemId = 7567,
-                            CatalogItemName = "Rex",
-                            Discount = 1m,
-                            OrderId = 66,
-                            Quantity = 1,
-                            UnitPrice = 10000m
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CatalogItemId = 2224,
-                            CatalogItemName = "Cody",
-                            Discount = 1m,
-                            OrderId = 66,
-                            Quantity = 1,
-                            UnitPrice = 10000m
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CatalogItemId = 1,
-                            CatalogItemName = "Clone trooper",
-                            Discount = 0.8m,
-                            OrderId = 66,
-                            Quantity = 3000000,
-                            UnitPrice = 4000m
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CatalogItemId = 2,
-                            CatalogItemName = "Tomato pizza",
-                            Discount = 0.01m,
-                            OrderId = 1,
-                            Quantity = 50,
-                            UnitPrice = 100m
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CatalogItemId = 3,
-                            CatalogItemName = "Pepperoni",
-                            Discount = 0.99m,
-                            OrderId = 2,
-                            Quantity = 5,
-                            UnitPrice = 150m
-                        });
                 });
 
             modelBuilder.Entity("Adress", b =>
                 {
                     b.HasOne("ApplicationUser", "ApplicationUser")
                         .WithMany("Adresses")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApplicationUserId");
 
                     b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("ApplicationUser", b =>
+                {
+                    b.OwnsOne("Wa.Pizza.Core.Model.AuthenticateController.RefreshToken", "refreshToken", b1 =>
+                        {
+                            b1.Property<string>("ApplicationUserId")
+                                .HasColumnType("nvarchar(450)");
+
+                            b1.Property<DateTime>("ExpirationDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("Token")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ApplicationUserId");
+
+                            b1.ToTable("RefreshToken");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ApplicationUserId");
+                        });
+
+                    b.Navigation("refreshToken")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Basket", b =>
                 {
                     b.HasOne("ApplicationUser", "ApplicationUser")
                         .WithOne("Basket")
-                        .HasForeignKey("Basket", "ApplicationUserId");
+                        .HasForeignKey("Basket", "ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
                 });
@@ -489,7 +329,9 @@ namespace Wa.Pizza.Core.Migrations
                 {
                     b.HasOne("ApplicationUser", "ApplicationUser")
                         .WithMany("Orders")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
                 });

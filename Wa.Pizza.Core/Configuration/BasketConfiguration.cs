@@ -19,9 +19,11 @@ namespace Wa.Pizza.Core.Configuration
 
             builder.HasMany(b => b.BasketItems)
                   .WithOne(bi => bi.Basket);
+
             builder.HasOne(b => b.ApplicationUser)
                   .WithOne(au => au.Basket)
                   .HasForeignKey<Basket>(b => b.ApplicationUserId);
+
         }
     }
 }
