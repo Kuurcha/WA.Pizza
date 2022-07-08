@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Wa.Pizza.Core.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220708032740_authInit")]
+    partial class authInit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,26 +44,6 @@ namespace Wa.Pizza.Core.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Adress");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AdressString = "Corusan 19",
-                            ApplicationUserId = "aa1df5e9-59d4-402b-8694-1a022a9e4df7"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AdressString = "Omega-4",
-                            ApplicationUserId = "c5f7f70d-d516-493b-947c-eb4e81935b8c"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AdressString = "Terra-4",
-                            ApplicationUserId = "0cfd6406-58b5-47c9-9727-60c8e8c4a946"
-                        });
                 });
 
             modelBuilder.Entity("ApplicationUser", b =>
@@ -115,44 +97,6 @@ namespace Wa.Pizza.Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ApplicationUser");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "aa1df5e9-59d4-402b-8694-1a022a9e4df7",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "4a2f4449-c3d1-4d68-b09b-de5f1f08aa6c",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "69571162-2f70-41b0-b80f-b20a6e19e858",
-                            TwoFactorEnabled = false,
-                            UserName = "Test"
-                        },
-                        new
-                        {
-                            Id = "c5f7f70d-d516-493b-947c-eb4e81935b8c",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "1733ecef-d214-409d-9461-84df7002bccb",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "be399f7a-be62-4fc6-9dc4-2ed85f7d1d90",
-                            TwoFactorEnabled = false,
-                            UserName = "Test1"
-                        },
-                        new
-                        {
-                            Id = "0cfd6406-58b5-47c9-9727-60c8e8c4a946",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "946a3ccf-4c9a-45ec-a12d-5a891c2e939b",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "152cfbc2-8a38-49e7-890d-90121478f7e5",
-                            TwoFactorEnabled = false,
-                            UserName = "Test2"
-                        });
                 });
 
             modelBuilder.Entity("Basket", b =>
@@ -176,26 +120,6 @@ namespace Wa.Pizza.Core.Migrations
                         .IsUnique();
 
                     b.ToTable("Basket");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ApplicationUserId = "aa1df5e9-59d4-402b-8694-1a022a9e4df7",
-                            LastModified = new DateTime(2050, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ApplicationUserId = "c5f7f70d-d516-493b-947c-eb4e81935b8c",
-                            LastModified = new DateTime(2186, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ApplicationUserId = "0cfd6406-58b5-47c9-9727-60c8e8c4a946",
-                            LastModified = new DateTime(4000, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("BasketItem", b =>
@@ -233,58 +157,6 @@ namespace Wa.Pizza.Core.Migrations
                     b.HasIndex("CatalogItemId");
 
                     b.ToTable("BasketItem");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            BasketId = 1,
-                            CatalogItemId = 7567,
-                            CatalogItemName = "Rex",
-                            CatalogType = 3,
-                            Quantity = 1,
-                            UnitPrice = 10000m
-                        },
-                        new
-                        {
-                            Id = 2,
-                            BasketId = 1,
-                            CatalogItemId = 2224,
-                            CatalogItemName = "Cody",
-                            CatalogType = 3,
-                            Quantity = 1,
-                            UnitPrice = 10000m
-                        },
-                        new
-                        {
-                            Id = 3,
-                            BasketId = 1,
-                            CatalogItemId = 1,
-                            CatalogItemName = "Clone trooper",
-                            CatalogType = 3,
-                            Quantity = 3000000,
-                            UnitPrice = 4000m
-                        },
-                        new
-                        {
-                            Id = 4,
-                            BasketId = 2,
-                            CatalogItemId = 2,
-                            CatalogItemName = "Tomato pizza",
-                            CatalogType = 0,
-                            Quantity = 500,
-                            UnitPrice = 100m
-                        },
-                        new
-                        {
-                            Id = 5,
-                            BasketId = 3,
-                            CatalogItemId = 3,
-                            CatalogItemName = "Classic",
-                            CatalogType = 0,
-                            Quantity = 150,
-                            UnitPrice = 150m
-                        });
                 });
 
             modelBuilder.Entity("CatalogItem", b =>
@@ -317,53 +189,6 @@ namespace Wa.Pizza.Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CatalogItem");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 7567,
-                            CatalogType = 3,
-                            Description = "Clone trooper commander",
-                            Name = "Rex",
-                            Price = 10000m,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 2224,
-                            CatalogType = 3,
-                            Description = "Clone trooper commander",
-                            Name = "Cody",
-                            Price = 10000m,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 1,
-                            CatalogType = 3,
-                            Description = "Regular clone trooper",
-                            Name = "Clone trooper",
-                            Price = 4000m,
-                            Quantity = 3000000
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CatalogType = 0,
-                            Description = "With extra Tomato Sauce",
-                            Name = "Tomato pizza",
-                            Price = 100m,
-                            Quantity = 500
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CatalogType = 0,
-                            Description = "Classic",
-                            Name = "Pepperoni",
-                            Price = 150m,
-                            Quantity = 150
-                        });
                 });
 
             modelBuilder.Entity("Order", b =>
@@ -394,32 +219,6 @@ namespace Wa.Pizza.Core.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Order");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 66,
-                            ApplicationUserId = "aa1df5e9-59d4-402b-8694-1a022a9e4df7",
-                            CreationDate = new DateTime(2019, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "The republic will be reogranised into a first galactic empire",
-                            Status = 3
-                        },
-                        new
-                        {
-                            Id = 1,
-                            ApplicationUserId = "c5f7f70d-d516-493b-947c-eb4e81935b8c",
-                            CreationDate = new DateTime(2186, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Bring extra tomato sauce, don't be late, don't make Aria mad",
-                            Status = 2
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ApplicationUserId = "0cfd6406-58b5-47c9-9727-60c8e8c4a946",
-                            CreationDate = new DateTime(4000, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Someone order pepperoni pizza into the Emperor's palace",
-                            Status = 4
-                        });
                 });
 
             modelBuilder.Entity("OrderItem", b =>
@@ -457,58 +256,6 @@ namespace Wa.Pizza.Core.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("OrderItem");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CatalogItemId = 7567,
-                            CatalogItemName = "Rex",
-                            Discount = 1m,
-                            OrderId = 66,
-                            Quantity = 1,
-                            UnitPrice = 10000m
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CatalogItemId = 2224,
-                            CatalogItemName = "Cody",
-                            Discount = 1m,
-                            OrderId = 66,
-                            Quantity = 1,
-                            UnitPrice = 10000m
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CatalogItemId = 1,
-                            CatalogItemName = "Clone trooper",
-                            Discount = 0.8m,
-                            OrderId = 66,
-                            Quantity = 3000000,
-                            UnitPrice = 4000m
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CatalogItemId = 2,
-                            CatalogItemName = "Tomato pizza",
-                            Discount = 0.01m,
-                            OrderId = 1,
-                            Quantity = 50,
-                            UnitPrice = 100m
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CatalogItemId = 3,
-                            CatalogItemName = "Pepperoni",
-                            Discount = 0.99m,
-                            OrderId = 2,
-                            Quantity = 5,
-                            UnitPrice = 150m
-                        });
                 });
 
             modelBuilder.Entity("Adress", b =>

@@ -1,5 +1,6 @@
 ﻿    using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Wa.Pizza.Core.Model.AuthenticateController;
 
 public class ApplicationDbContext : DbContext
 {
@@ -16,6 +17,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<OrderItem> ShopOrderItem { get; set; }
 
     public DbSet<CatalogItem> CatalogItem { get; set; }
+
+    public DbSet<RefreshToken> RefreshToken { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.EnableSensitiveDataLogging();
@@ -121,7 +124,7 @@ public class ApplicationDbContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //seedDate(modelBuilder);
+        seedDate(modelBuilder);
     }
 
 }

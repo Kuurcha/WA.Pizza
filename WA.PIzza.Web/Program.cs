@@ -16,12 +16,7 @@ var builder =
     WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-builder.Services.AddScoped<OrderDataService>();
-builder.Services.AddScoped<BasketDataService>();
-builder.Services.AddScoped<CatalogDataService>();
 
-builder.Services.AddControllers();
 
 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
 var fullPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
@@ -61,12 +56,20 @@ builder.Services.AddLogging(loggingBuilder =>
     loggingBuilder.AddSeq();
 });
 
+
+
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddScoped<OrderDataService>();
+builder.Services.AddScoped<BasketDataService>();
+builder.Services.AddScoped<CatalogDataService>();
+
+builder.Services.AddControllers();
+
 builder.Services.AddControllers().AddFluentValidation(options =>
 {
     options.AutomaticValidationEnabled = true;
     options.RegisterValidatorsFromAssemblyContaining<BasketItemValidator>();
 });
-
 
 var app = builder.Build();
 
