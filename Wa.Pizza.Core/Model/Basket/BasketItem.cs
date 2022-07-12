@@ -1,11 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using WA.Pizza.Core.CatalogType;
-using Microsoft.EntityFrameworkCore;
-using Wa.Pizza.Core.Configuration;
 
 [Table(nameof(BasketItem))]
-[EntityTypeConfiguration(typeof(BasketItemConfiguration))]
 public class BasketItem
 {
 	
