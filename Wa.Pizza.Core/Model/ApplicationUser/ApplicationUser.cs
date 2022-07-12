@@ -1,17 +1,20 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using Wa.Pizza.Core.Configuration;
 
 [Table(nameof(ApplicationUser))]
-public class ApplicationUser
+[EntityTypeConfiguration(typeof(ApplicationUserConfiguration))]
+public class ApplicationUser : Microsoft.AspNetCore.Identity.IdentityUser
 {
-	[Required]
-	public int Id { get; set; }
 	public ICollection<Adress>? Adresses { get; set; }
 
 	public Basket Basket { get; set; }
 
 	public ICollection<Order>? Orders { get; set; }
+
+	public RefreshToken refreshToken { get; set; }
 
 
 }

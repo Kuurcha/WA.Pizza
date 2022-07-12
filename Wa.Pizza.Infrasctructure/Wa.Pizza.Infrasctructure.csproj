@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Wa.Pizza.Core\Wa.Pizza.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Wa\Pizza\Core\Migrations\" />
+  </ItemGroup>
+
 </Project>
