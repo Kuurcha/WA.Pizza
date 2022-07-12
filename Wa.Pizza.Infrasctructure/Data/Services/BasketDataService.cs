@@ -165,20 +165,17 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         }
         public async Task<int> ClearBasket(BasketDTO basketDTO)
         {
-
-           
-
             Basket basket = await _context.Basket.Include(b => b.BasketItems).FirstOrDefaultAsync(b => b.Id == basketDTO.Id);
             if (basket == null)
                 throw new EntityNotFoundException("Basket with id: " + basketDTO.Id + "does not exists. Unable to delete");
             basket.BasketItems.Clear();
             return await _context.SaveChangesAsync();
         }
-        public async Task<int> BindBuyerToBasket(BasketDTO basketDTO, int applicationUserId)
+        public async Task<int> BindBuyerToBasket(BasketDTO basketDTO, string applicationUserId)
         {
             Basket basket = await _context.Basket.FirstOrDefaultAsync(b => b.Id == basketDTO.Id);
-            ApplicationUser applicationUser = await _context.ApplicationUser.FirstOrDefaultAsync(a => a.Id == applicationUserId);
-            if (basket != null && basket.ApplicationUserId == null)
+            ApplicationUser applicationUser = await _context.Users.FirstOrDefaultAsync(a => a.Id == applicationUserId);
+            if (basket != null && basket.ApplicationUser == null)
             {
                 basket.ApplicationUser = applicationUser;
                 return await _context.SaveChangesAsync();
