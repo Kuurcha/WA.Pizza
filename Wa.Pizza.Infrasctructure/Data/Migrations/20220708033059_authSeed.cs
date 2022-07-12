@@ -5,17 +5,18 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Wa.Pizza.Core.Migrations
 {
-    public partial class MockData07062022 : Migration
+    public partial class authSeed : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.InsertData(
                 table: "ApplicationUser",
-                column: "Id",
-                values: new object[]
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
                 {
-                    1,
-                    3
+                    { "0cfd6406-58b5-47c9-9727-60c8e8c4a946", 0, "946a3ccf-4c9a-45ec-a12d-5a891c2e939b", null, false, false, null, null, null, null, null, false, "152cfbc2-8a38-49e7-890d-90121478f7e5", false, "Test2" },
+                    { "aa1df5e9-59d4-402b-8694-1a022a9e4df7", 0, "4a2f4449-c3d1-4d68-b09b-de5f1f08aa6c", null, false, false, null, null, null, null, null, false, "69571162-2f70-41b0-b80f-b20a6e19e858", false, "Test" },
+                    { "c5f7f70d-d516-493b-947c-eb4e81935b8c", 0, "1733ecef-d214-409d-9461-84df7002bccb", null, false, false, null, null, null, null, null, false, "be399f7a-be62-4fc6-9dc4-2ed85f7d1d90", false, "Test1" }
                 });
 
             migrationBuilder.InsertData(
@@ -35,9 +36,9 @@ namespace Wa.Pizza.Core.Migrations
                 columns: new[] { "Id", "AdressString", "ApplicationUserId" },
                 values: new object[,]
                 {
-                    { 1, "Corusan 19", 1 },
-                    { 2, "Omega-4", 2 },
-                    { 3, "Terra-4", 3 }
+                    { 1, "Corusan 19", "aa1df5e9-59d4-402b-8694-1a022a9e4df7" },
+                    { 2, "Omega-4", "c5f7f70d-d516-493b-947c-eb4e81935b8c" },
+                    { 3, "Terra-4", "0cfd6406-58b5-47c9-9727-60c8e8c4a946" }
                 });
 
             migrationBuilder.InsertData(
@@ -45,9 +46,9 @@ namespace Wa.Pizza.Core.Migrations
                 columns: new[] { "Id", "ApplicationUserId", "LastModified" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2050, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, 2, new DateTime(2186, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 3, 3, new DateTime(4000, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, "aa1df5e9-59d4-402b-8694-1a022a9e4df7", new DateTime(2050, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, "c5f7f70d-d516-493b-947c-eb4e81935b8c", new DateTime(2186, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, "0cfd6406-58b5-47c9-9727-60c8e8c4a946", new DateTime(4000, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -55,9 +56,9 @@ namespace Wa.Pizza.Core.Migrations
                 columns: new[] { "Id", "ApplicationUserId", "CreationDate", "Description", "Status" },
                 values: new object[,]
                 {
-                    { 1, 2, new DateTime(2186, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "Bring extra tomato sauce, don't be late, don't make Aria mad", 2 },
-                    { 2, 3, new DateTime(4000, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "Someone order pepperoni pizza into the Emperor's palace", 4 },
-                    { 66, 1, new DateTime(2019, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), "The republic will be reogranised into a first galactic empire", 3 }
+                    { 1, "c5f7f70d-d516-493b-947c-eb4e81935b8c", new DateTime(2186, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "Bring extra tomato sauce, don't be late, don't make Aria mad", 2 },
+                    { 2, "0cfd6406-58b5-47c9-9727-60c8e8c4a946", new DateTime(4000, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "Someone order pepperoni pizza into the Emperor's palace", 4 },
+                    { 66, "aa1df5e9-59d4-402b-8694-1a022a9e4df7", new DateTime(2019, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), "The republic will be reogranised into a first galactic empire", 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -210,17 +211,17 @@ namespace Wa.Pizza.Core.Migrations
             migrationBuilder.DeleteData(
                 table: "ApplicationUser",
                 keyColumn: "Id",
-                keyValue: 1);
+                keyValue: "0cfd6406-58b5-47c9-9727-60c8e8c4a946");
 
             migrationBuilder.DeleteData(
                 table: "ApplicationUser",
                 keyColumn: "Id",
-                keyValue: 2);
+                keyValue: "aa1df5e9-59d4-402b-8694-1a022a9e4df7");
 
             migrationBuilder.DeleteData(
                 table: "ApplicationUser",
                 keyColumn: "Id",
-                keyValue: 3);
+                keyValue: "c5f7f70d-d516-493b-947c-eb4e81935b8c");
         }
     }
 }
