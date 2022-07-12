@@ -1,11 +1,8 @@
 ﻿
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-using Wa.Pizza.Core.Configuration;
 
 [Table(nameof(OrderItem))]
-[EntityTypeConfiguration(typeof(OrderItemConfiguration))]
 public class OrderItem
 {
 	

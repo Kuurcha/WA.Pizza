@@ -18,7 +18,6 @@
   <ItemGroup>
     <Compile Remove="Controllers\AdressController.cs" />
     <Compile Remove="Controllers\ApplicationUserController.cs" />
-    <Compile Remove="Controllers\AuthController.cs" />
   </ItemGroup>
 
   <ItemGroup>
