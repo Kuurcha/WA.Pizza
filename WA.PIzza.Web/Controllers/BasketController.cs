@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Wa.Pizza.Core.Exceptions;
@@ -8,6 +9,7 @@ using Wa.Pizza.Infrasctructure.DTO.CatalogItem;
 using Wa.Pizza.Infrasctructure.Services;
 namespace WA.PIzza.Web.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BasketController : ControllerBase

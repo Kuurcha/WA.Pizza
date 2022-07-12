@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Wa.Pizza.Core.Configuration;
 
-[Table(nameof(ApplicationUser))]
 [EntityTypeConfiguration(typeof(ApplicationUserConfiguration))]
 public class ApplicationUser : Microsoft.AspNetCore.Identity.IdentityUser
 {

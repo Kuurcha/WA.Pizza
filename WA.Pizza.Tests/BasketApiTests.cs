@@ -113,7 +113,7 @@ namespace WA.Pizza.Tests
             //Arrange
             await addTestBasketItemAsync();
             ApplicationUser user = new ApplicationUser();
-            user = applicationDbContext.ApplicationUser.Add(user).Entity;
+            user = applicationDbContext.Users.Add(user).Entity;
             await applicationDbContext.SaveChangesAsync();
             BasketDTO basketToBind = basketTest.Adapt<BasketDTO>();
             //Act
