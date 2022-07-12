@@ -34,8 +34,8 @@ namespace Wa.Pizza.Core.Migrations
                         .HasMaxLength(254)
                         .HasColumnType("nvarchar(254)");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -48,69 +48,29 @@ namespace Wa.Pizza.Core.Migrations
                         {
                             Id = 1,
                             AdressString = "Corusan 19",
-                            ApplicationUserId = "aa1df5e9-59d4-402b-8694-1a022a9e4df7"
+                            ApplicationUserId = 1
                         },
                         new
                         {
                             Id = 2,
                             AdressString = "Omega-4",
-                            ApplicationUserId = "c5f7f70d-d516-493b-947c-eb4e81935b8c"
+                            ApplicationUserId = 2
                         },
                         new
                         {
                             Id = 3,
                             AdressString = "Terra-4",
-                            ApplicationUserId = "0cfd6406-58b5-47c9-9727-60c8e8c4a946"
+                            ApplicationUserId = 3
                         });
                 });
 
             modelBuilder.Entity("ApplicationUser", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.HasKey("Id");
 
@@ -119,39 +79,15 @@ namespace Wa.Pizza.Core.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "aa1df5e9-59d4-402b-8694-1a022a9e4df7",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "4a2f4449-c3d1-4d68-b09b-de5f1f08aa6c",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "69571162-2f70-41b0-b80f-b20a6e19e858",
-                            TwoFactorEnabled = false,
-                            UserName = "Test"
+                            Id = 1
                         },
                         new
                         {
-                            Id = "c5f7f70d-d516-493b-947c-eb4e81935b8c",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "1733ecef-d214-409d-9461-84df7002bccb",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "be399f7a-be62-4fc6-9dc4-2ed85f7d1d90",
-                            TwoFactorEnabled = false,
-                            UserName = "Test1"
+                            Id = 2
                         },
                         new
                         {
-                            Id = "0cfd6406-58b5-47c9-9727-60c8e8c4a946",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "946a3ccf-4c9a-45ec-a12d-5a891c2e939b",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "152cfbc2-8a38-49e7-890d-90121478f7e5",
-                            TwoFactorEnabled = false,
-                            UserName = "Test2"
+                            Id = 3
                         });
                 });
 
@@ -163,9 +99,8 @@ namespace Wa.Pizza.Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("ApplicationUserId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
@@ -173,7 +108,8 @@ namespace Wa.Pizza.Core.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[ApplicationUserId] IS NOT NULL");
 
                     b.ToTable("Basket");
 
@@ -181,19 +117,19 @@ namespace Wa.Pizza.Core.Migrations
                         new
                         {
                             Id = 1,
-                            ApplicationUserId = "aa1df5e9-59d4-402b-8694-1a022a9e4df7",
+                            ApplicationUserId = 1,
                             LastModified = new DateTime(2050, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
-                            ApplicationUserId = "c5f7f70d-d516-493b-947c-eb4e81935b8c",
+                            ApplicationUserId = 2,
                             LastModified = new DateTime(2186, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
-                            ApplicationUserId = "0cfd6406-58b5-47c9-9727-60c8e8c4a946",
+                            ApplicationUserId = 3,
                             LastModified = new DateTime(4000, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -374,9 +310,8 @@ namespace Wa.Pizza.Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("ApplicationUserId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
@@ -399,7 +334,7 @@ namespace Wa.Pizza.Core.Migrations
                         new
                         {
                             Id = 66,
-                            ApplicationUserId = "aa1df5e9-59d4-402b-8694-1a022a9e4df7",
+                            ApplicationUserId = 1,
                             CreationDate = new DateTime(2019, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "The republic will be reogranised into a first galactic empire",
                             Status = 3
@@ -407,7 +342,7 @@ namespace Wa.Pizza.Core.Migrations
                         new
                         {
                             Id = 1,
-                            ApplicationUserId = "c5f7f70d-d516-493b-947c-eb4e81935b8c",
+                            ApplicationUserId = 2,
                             CreationDate = new DateTime(2186, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Bring extra tomato sauce, don't be late, don't make Aria mad",
                             Status = 2
@@ -415,7 +350,7 @@ namespace Wa.Pizza.Core.Migrations
                         new
                         {
                             Id = 2,
-                            ApplicationUserId = "0cfd6406-58b5-47c9-9727-60c8e8c4a946",
+                            ApplicationUserId = 3,
                             CreationDate = new DateTime(4000, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Someone order pepperoni pizza into the Emperor's palace",
                             Status = 4
@@ -435,8 +370,8 @@ namespace Wa.Pizza.Core.Migrations
 
                     b.Property<string>("CatalogItemName")
                         .IsRequired()
-                        .HasMaxLength(254)
-                        .HasColumnType("nvarchar(254)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,4)");
@@ -515,44 +450,18 @@ namespace Wa.Pizza.Core.Migrations
                 {
                     b.HasOne("ApplicationUser", "ApplicationUser")
                         .WithMany("Adresses")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("ApplicationUser", b =>
-                {
-                    b.OwnsOne("RefreshToken", "refreshToken", b1 =>
-                        {
-                            b1.Property<string>("ApplicationUserId")
-                                .HasColumnType("nvarchar(450)");
-
-                            b1.Property<DateTime>("ExpirationDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<string>("Token")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("ApplicationUserId");
-
-                            b1.ToTable("RefreshToken");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ApplicationUserId");
-                        });
-
-                    b.Navigation("refreshToken")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Basket", b =>
                 {
                     b.HasOne("ApplicationUser", "ApplicationUser")
                         .WithOne("Basket")
-                        .HasForeignKey("Basket", "ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Basket", "ApplicationUserId");
 
                     b.Navigation("ApplicationUser");
                 });
@@ -580,9 +489,7 @@ namespace Wa.Pizza.Core.Migrations
                 {
                     b.HasOne("ApplicationUser", "ApplicationUser")
                         .WithMany("Orders")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApplicationUserId");
 
                     b.Navigation("ApplicationUser");
                 });

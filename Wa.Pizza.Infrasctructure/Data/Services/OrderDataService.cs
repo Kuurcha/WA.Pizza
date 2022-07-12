@@ -26,7 +26,7 @@ namespace Wa.Pizza.Infrasctructure.Services
             if (basket.BasketItems == null)
                 throw new WrongDataFormatException("Invalid basket item list");
 
-            Order order = new Order() { Description = description, CreationDate = DateTime.UtcNow, Status = OrderStatus.Accepted, ApplicationUser = basket.ApplicationUser, OrderItems = new List<OrderItem>() };
+            Order order = new Order() { Description = description, CreationDate = DateTime.UtcNow, Status = OrderStatus.Accepted, ApplicationUserId = basket.ApplicationUserId, OrderItems = new List<OrderItem>() };
             _context.ShopOrder.Add(order);
             
             foreach (BasketItem basketItem in basket.BasketItems)
