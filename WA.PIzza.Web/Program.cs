@@ -16,26 +16,24 @@ var builder =  WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 
-builder.Services.InjectServices();
+builder.Services.injectServices();
 
+builder.Services.configureLogger(builder);
 
+builder.Services.configureDBContext(builder.Configuration.GetConnectionString("Default"));
 
-builder.Services.ConfigureDBContext(builder.Configuration.GetConnectionString("Default"));
+builder.Services.configureWeb();
 
-builder.Services.ConfigureWeb();
-
-builder.Services.ConfigureIdentity(builder.Configuration);
-
-builder.Services.ConfigureSwagger();
-
-builder.Services.ConfigureLogger(builder);
+builder.Services.configureSwagger();
 
 var app = builder.Build();
 
 
+
+
 // Configure the HTTP request pipeline.
 app.useHttp(!app.Environment.IsDevelopment());
-app.UseAuthorization();
+
 app.MapRazorPages();
 
 app.useSwaggerWithUI();
@@ -48,12 +46,12 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
 
     var context = services.GetRequiredService<ApplicationDbContext>();
-     if (context.Database.GetPendingMigrations().Any())
+    if (context.Database.GetPendingMigrations().Any())
     {
         context.Database.Migrate();
     }
 }
-Log.Information("Application is starting up...");
+
 app.Run();
 
 app.UseDeveloperExceptionPage();

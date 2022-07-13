@@ -174,7 +174,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         public async Task<int> BindBuyerToBasket(BasketDTO basketDTO, string applicationUserId)
         {
             Basket basket = await _context.Basket.FirstOrDefaultAsync(b => b.Id == basketDTO.Id);
-            ApplicationUser applicationUser = await _context.Users.FirstOrDefaultAsync(a => a.Id == applicationUserId);
+            ApplicationUser applicationUser = await _context.ApplicationUser.FirstOrDefaultAsync(a => a.Id == applicationUserId);
             if (basket != null && basket.ApplicationUser == null)
             {
                 basket.ApplicationUser = applicationUser;

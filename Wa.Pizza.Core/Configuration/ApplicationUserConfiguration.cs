@@ -12,6 +12,9 @@ namespace Wa.Pizza.Core.Configuration
     {
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
+            builder.HasKey(a => a.Id);
+
+            builder.Property(a => a.Id).ValueGeneratedOnAdd();
 
             builder.OwnsOne(a => a.refreshToken);
 

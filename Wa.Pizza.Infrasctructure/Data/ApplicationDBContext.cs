@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿    using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Wa.Pizza.Core.Model.ApplicationUser;
 using Wa.Pizza.Core.Model.AuthenticateController;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+public class ApplicationDbContext : DbContext
 {
     public DbSet<Adress> Adress { get; set; }
+
+    public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
     public DbSet<Basket> Basket { get; set; }
 
@@ -18,8 +17,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<OrderItem> ShopOrderItem { get; set; }
 
     public DbSet<CatalogItem> CatalogItem { get; set; }
-    public DbSet<RefreshToken> RefreshToken { get; set; }
 
+    public DbSet<RefreshToken> RefreshToken { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.EnableSensitiveDataLogging();
@@ -125,8 +124,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers");
         seedDate(modelBuilder);
     }
 
