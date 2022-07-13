@@ -168,7 +168,7 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="applicationUserId"></param>
         /// <returns></returns>
         [HttpPut("updateUser")]
-        public async Task<ActionResult> BindUserToBasketRequest(BasketDTO basketDTO, int applicationUserId)
+        public async Task<ActionResult> BindUserToBasketRequest(BasketDTO basketDTO, string applicationUserId)
         {
             _log.LogInformation("Binding Buyer To Basket: " + basketDTO.ToString() + "to id: + " + applicationUserId + "...");
             try
