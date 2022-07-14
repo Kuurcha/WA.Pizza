@@ -22,9 +22,8 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         private readonly BasketItemValidator _basketItemValidator;
         public BasketDataService(ApplicationDbContext ctx, BasketItemValidator basketItemValidator )
         {
-            _context = ctx;
+           _context = ctx;
            _basketItemValidator = basketItemValidator;
-//            _basketItemValidator = new BasketItemValidator();
         }
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             return basket;
         }
 
-        public Task<BasketDTO> GetByUserId(int userId)
+        public Task<BasketDTO> GetByUserId(string userId)
         {
             Task<BasketDTO>  basket = _context.Basket.AsNoTracking()
                                               .Include(b => b.BasketItems)

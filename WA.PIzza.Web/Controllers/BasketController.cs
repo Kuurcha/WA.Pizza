@@ -1,11 +1,17 @@
 ﻿using Mapster;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Wa.Pizza.Core.Exceptions;
+using Wa.Pizza.Core.Model.ApplicationUser;
 using Wa.Pizza.Infrasctructure.Data.Services;
 using Wa.Pizza.Infrasctructure.DTO.Basket;
 using Wa.Pizza.Infrasctructure.DTO.CatalogItem;
 using Wa.Pizza.Infrasctructure.Services;
+using static BasketQueries;
+using static Wa.Pizza.Infrasctructure.Data.CQRS.Basket.BasketCommands;
+
 namespace WA.PIzza.Web.Controllers
 {
     [Route("api/[controller]")]
@@ -13,12 +19,12 @@ namespace WA.PIzza.Web.Controllers
     public class BasketController : ControllerBase
     {
         private readonly BasketDataService _basketDataService;
-        private readonly CatalogDataService _catalogDataService;
+        private readonly IMediator _mediator;
         readonly ILogger<BasketController> _log;
-        public BasketController(BasketDataService basketDataService, CatalogDataService catalogDataService, ILogger<BasketController> log)
+        public BasketController(BasketDataService basketDataService, CatalogDataService catalogDataService, ILogger<BasketController> log, IMediator mediator)
         {
             _basketDataService = basketDataService;
-            _catalogDataService = catalogDataService;
+            _mediator = mediator;
             _log = log;
         }
 
@@ -28,13 +34,14 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("byUserId")]
-        public async Task<ActionResult<List<BasketDTO>>> GetBasketByUserId(int userId)
+        [Authorize(Roles = Roles.Admin)]
+        public async Task<ActionResult<List<BasketDTO>>> GetBasketByUserId(string userId)
         {
             BasketDTO basket;
             _log.LogInformation("Retriving basket by user id " + userId + "..");
             try
             {
-                basket = await _basketDataService.GetByUserId(userId);
+                basket = (BasketDTO)await _mediator.Send(new GetBasketByUserIdQuery(userId));
                 _log.LogInformation("Item retrieved: " + basket.ToString());
             }
             catch (EntityNotFoundException ex)
@@ -47,16 +54,17 @@ namespace WA.PIzza.Web.Controllers
         /// <summary>
         /// Gets specific baket by specific user id
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("byBasketId")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<BasketDTO>>> GetBasketById(int id)
         {
             _log.LogInformation("Retriving basket by  id " + id + "..");
             BasketDTO basket;
             try
             {
-                basket = await _basketDataService.GetByUserId(id);
+                basket = (BasketDTO)await _mediator.Send(new GetBasketByIdQuery(id));
                 _log.LogInformation("Item retrieved: " + basket.ToString());
 
             }
@@ -82,8 +90,7 @@ namespace WA.PIzza.Web.Controllers
             _log.LogInformation("Adding Basket Item " + basketItemDTO.ToString() + "..");
             try
             {
-
-                await _basketDataService.AddItem(basketItemDTO);
+               await _mediator.Send(new InsertItemCommand(basketItemDTO));
                 _log.LogInformation("Item added");
             }
             catch (EntityNotFoundException ex)
