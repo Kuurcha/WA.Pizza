@@ -71,7 +71,7 @@ class InsertItemCommandHandler : BaseBasketHandler, IRequestHandler<InsertItemCo
             .Include(b => b.BasketItems)
             .FirstOrDefaultAsync(b => b.Id == request.basketItemDTO.BasketId);
 
-        if (basketItem != null)
+        if (basketItem != null && basket.BasketItems.Any(bi => bi.BasketId == basketItem.BasketId))
         {
             basketItem.Quantity = request.basketItemDTO.Quantity;
             basket!.LastModified = DateTime.UtcNow;

@@ -7,6 +7,8 @@
     <OutputType>Library</OutputType>
     <UserSecretsId>80303ee7-37ce-41f3-aae0-82a9e159f519</UserSecretsId>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

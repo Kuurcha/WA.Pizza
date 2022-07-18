@@ -7,6 +7,8 @@
     <IsPackable>false</IsPackable>
 
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
