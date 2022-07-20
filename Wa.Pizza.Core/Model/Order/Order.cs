@@ -13,7 +13,7 @@ public class Order
     public OrderStatus Status { get; set; }
     public string ApplicationUserId { get; set; }
 
-    public ApplicationUser? ApplicationUser { get; set; }
+    public ApplicationUser ApplicationUser { get; set; }
     
     public ICollection<OrderItem> OrderItems { get; set; }
 

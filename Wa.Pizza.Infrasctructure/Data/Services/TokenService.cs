@@ -32,7 +32,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
                 // token is a cryptographically strong random sequence of values
                 var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
                 // ensure token is unique by checking against db
-                var tokenIsUnique = !_context.Users.Any(u => u.refreshToken.Token == token);
+                var tokenIsUnique = !_context.Users.Any(u => u.refreshToken != null && u.refreshToken.Token == token);
 
                 if (!tokenIsUnique)
                     return getUniqueToken();

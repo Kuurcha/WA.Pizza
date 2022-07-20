@@ -14,15 +14,25 @@ using Microsoft.AspNetCore.Builder;
 
 namespace WA.PIzza.Web.Extensions
 {
+    /// <summary>
+    /// Extension for setting up services 
+    /// </summary>
     public static class ServiceCollectionExtension
     {
+        /// <summary>
+        /// Injects user created services into the program
+        /// </summary>
+        /// <param name="services"></param>
        public static void injectServices (this IServiceCollection services)
         {
             services.AddScoped<OrderDataService>();
-            services.AddScoped<BasketDataService>();
             services.AddScoped<CatalogDataService>();
             services.AddScoped<TokenService>();
         }
+        /// <summary>
+        /// Injects and configures swagger
+        /// </summary>
+        /// <param name="services"></param>
         public static void configureSwagger(this IServiceCollection services)
         {
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -76,6 +86,11 @@ namespace WA.PIzza.Web.Extensions
 
             });
         }
+        /// <summary>
+        /// Injects and configures logging with Seq and Serilog
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="builder"></param>
         public static void configureLogger(this IServiceCollection services, WebApplicationBuilder builder)
         {
             var logger = new LoggerConfiguration()
@@ -90,6 +105,10 @@ namespace WA.PIzza.Web.Extensions
                 loggingBuilder.AddSeq();
             });
         }
+        /// <summary>
+        /// Configures and injects controllers
+        /// </summary>
+        /// <param name="services"></param>
         public static void configureWeb(this IServiceCollection services)
         {
             services.AddControllers();
@@ -99,11 +118,20 @@ namespace WA.PIzza.Web.Extensions
                 options.RegisterValidatorsFromAssemblyContaining<BasketItemValidator>();
             });
         }
-
+        /// <summary>
+        /// Injects applicationDbContext
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="connectionString"></param>
         public static void configureDBContext(this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
         }
+        /// <summary>
+        /// Injects authentication, using JWT, identity.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="Configuration"></param>
         public static void ConfigureIdentity(this IServiceCollection services, ConfigurationManager Configuration)
         {
             services.AddIdentity<ApplicationUser, IdentityRole>()

@@ -18,12 +18,22 @@ using Wa.Pizza.Infrasctructure.DTO.Auth;
 
 namespace WA.PIzza.Web.Controllers
 {
+    /// <summary>
+    /// Controller for managing registering, managing refresh and access tokens
+    /// </summary>
     public class AuthenticateController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration _configuration;
         private readonly TokenService _tokenService;
+        /// <summary>
+        /// Authenticate Controller DI injection constructor
+        /// </summary>
+        /// <param name="userManager"></param>
+        /// <param name="roleManager"></param>
+        /// <param name="configuration"></param>
+        /// <param name="tokenService"></param>
         public AuthenticateController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, TokenService tokenService)
         {
             this.userManager = userManager;
@@ -32,11 +42,21 @@ namespace WA.PIzza.Web.Controllers
             _tokenService = tokenService;
 
         }
+        /// <summary>
+        /// Checks if user with requested username exists
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<bool> checkIfUserExists(RegisterRequest model)
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
             return userExists != null;
         }
+        /// <summary>
+        /// Registers user with specified data with "user" role
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest model)
@@ -58,6 +78,11 @@ namespace WA.PIzza.Web.Controllers
             return Ok(new AuthResponse { Status = "Success", Message = "User created successfully!" });
 
         }
+        /// <summary>
+        ///  Registers user with specified data with "admin" role
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("register - admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterRequest model)
@@ -86,6 +111,11 @@ namespace WA.PIzza.Web.Controllers
 
             return Ok(new AuthResponse { Status = "Success", Message = "User created successfully!" });
         }
+        /// <summary>
+        /// Returns access and refresh token if user data is correct
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest model)
@@ -133,10 +163,17 @@ namespace WA.PIzza.Web.Controllers
             }
             return Unauthorized();
         }
+        /// <summary>
+        /// Refreshes access token based on refresh token
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>New access token for the same user</returns>
         [HttpPost]
         [Route("refresh")]
+
         public async Task<IActionResult> RefreshAsync(TokenRequestDTO request)
         {
+            //Кто угодно может его обновлять??
             string accessToken = request.Token;
             string refreshToken = request.RefreshToken;
             var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
@@ -166,6 +203,10 @@ namespace WA.PIzza.Web.Controllers
                 refreshToken = newRefreshToken
             });
         }
+        /// <summary>
+        /// Resets user's current refresh token
+        /// </summary>
+        /// <returns></returns>
         [HttpPost, Authorize]
         [Route("revoke")]
         public async Task<IActionResult> RevokeAsync()

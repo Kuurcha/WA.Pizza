@@ -7,12 +7,21 @@ using Wa.Pizza.Infrasctructure.Services;
 
 namespace WA.PIzza.Web.Services
 {
+    /// <summary>
+    /// Controller for managing orders
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
     {
         private readonly OrderDataService _orderDataService;
         readonly ILogger<OrderController> _log;
+
+        /// <summary>
+        /// OrderController's DI constructor
+        /// </summary>
+        /// <param name="orderDataService"></param>
+        /// <param name="log"></param>
         public OrderController(OrderDataService orderDataService, ILogger<OrderController> log)
         {
             _orderDataService = orderDataService;
@@ -41,9 +50,10 @@ namespace WA.PIzza.Web.Services
             return new ObjectResult(order);
         }
         /// <summary>
-        /// Posts order 
+        /// Creates new order with specified description
         /// </summary>
-        /// <param name="order"></param>
+        /// <param name="basketId"></param>
+        /// <param name="description"></param>
         /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Order>> CreateOrder(int basketId, string description)
@@ -61,6 +71,12 @@ namespace WA.PIzza.Web.Services
             }
             return Accepted();
         }
+        /// <summary>
+        /// Updates order status based on orderId and user data
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="orderStatus"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<ActionResult<Order>> UpdateOrderStatus(int orderId, OrderStatus orderStatus)
         {

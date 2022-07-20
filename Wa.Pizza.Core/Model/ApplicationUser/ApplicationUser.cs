@@ -13,7 +13,7 @@ public class ApplicationUser : Microsoft.AspNetCore.Identity.IdentityUser
 
 	public ICollection<Order>? Orders { get; set; }
 
-	public RefreshToken refreshToken { get; set; }
+	public RefreshToken? refreshToken { get; set; }
 
 
 }

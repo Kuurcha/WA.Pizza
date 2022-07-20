@@ -15,6 +15,7 @@ using Xunit;
 
 namespace WA.Pizza.Tests
 {
+#nullable disable
     [Collection("Test database collection")]
     public class BasketDataTests: BaseDatabaseTestClass
     {

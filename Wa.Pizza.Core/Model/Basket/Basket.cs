@@ -7,7 +7,6 @@ using Wa.Pizza.Core.Configuration;
 [EntityTypeConfiguration(typeof(BasketConfiguration))]
 public class Basket
 {
-	//NUllable reference tiype
 	public int Id { get; set; }
 	[Required]
     public DateTime LastModified { get; set; }

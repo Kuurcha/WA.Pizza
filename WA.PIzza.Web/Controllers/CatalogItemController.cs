@@ -8,12 +8,20 @@ using Wa.Pizza.Infrasctructure.Services;
 
 namespace WA.PIzza.Web.Controllers
 {
+    /// <summary>
+    /// Controler for managing Catalog Items
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class CatalogItemController: ControllerBase
     {
         private readonly CatalogDataService _catalogItemDataService;
         readonly ILogger<CatalogItemController> _log;
+        /// <summary>
+        /// CatalogItemController DI constructor
+        /// </summary>
+        /// <param name="catalogItemDataService"></param>
+        /// <param name="log"></param>
         public CatalogItemController(CatalogDataService catalogItemDataService, ILogger<CatalogItemController> log)
         {
             _catalogItemDataService = catalogItemDataService;
@@ -61,7 +69,6 @@ namespace WA.PIzza.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> AddCatalogItem(CatalogItemDTO catalogItemDTO)
         {
-            CatalogItemDTO catalogItem;
             _log.LogInformation("Catalog item add request: " + catalogItemDTO.ToString());
             try
             {
@@ -75,11 +82,14 @@ namespace WA.PIzza.Web.Controllers
             }
             return Accepted();
         }
-
+        /// <summary>
+        /// Updates catalog item based on user data
+        /// </summary>
+        /// <param name="catalogItemDTO"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<ActionResult> UpdateCatalogItem(CatalogItemDTO catalogItemDTO)
         {
-            CatalogItemDTO catalogItem;
             _log.LogInformation("Catalog item update request: " + catalogItemDTO.ToString());
             try
             {

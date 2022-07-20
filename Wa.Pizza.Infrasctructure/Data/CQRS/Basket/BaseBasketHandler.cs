@@ -12,12 +12,10 @@ namespace Wa.Pizza.Infrasctructure.Data.CQRS.Basket
     {
         internal readonly ApplicationDbContext context;
         internal readonly BasketItemValidator basketItemValidator;
-        internal readonly IMediator mediator;
-        public BaseBasketHandler(ApplicationDbContext _ctx, BasketItemValidator _basketItemValidator, IMediator _mediator)
+        public BaseBasketHandler(ApplicationDbContext _ctx, BasketItemValidator _basketItemValidator)
         {
             context = _ctx;
             basketItemValidator = _basketItemValidator;
-
 
         }
         internal async Task<bool> validateDTOAsync(BasketItemDTO basketItemDTO)

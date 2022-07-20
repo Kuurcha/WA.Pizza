@@ -10,7 +10,7 @@ public class Adress
     public int Id { get; set; }
     public string AdressString { get; set; }
     public string? ApplicationUserId { get; set; }
-    public ApplicationUser ApplicationUser { get; set; }
+    public ApplicationUser? ApplicationUser { get; set; }
     
     
 

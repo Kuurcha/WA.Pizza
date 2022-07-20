@@ -15,12 +15,21 @@ using static Wa.Pizza.Infrasctructure.Data.CQRS.Basket.BasketCommands;
 
 namespace WA.PIzza.Web.Controllers
 {
+    /// <summary>
+    /// Controller for managing baskets
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class BasketController : ControllerBase
     {
         private readonly IMediator _mediator;
         readonly ILogger<BasketController> _log;
+        /// <summary>
+        /// BasketController DI Injection constructor
+        /// </summary>
+        /// <param name="catalogDataService"></param>
+        /// <param name="log"></param>
+        /// <param name="mediator"></param>
         public BasketController(CatalogDataService catalogDataService, ILogger<BasketController> log, IMediator mediator)
         {
             _mediator = mediator;
@@ -104,9 +113,7 @@ namespace WA.PIzza.Web.Controllers
         /// <summary>
         /// Adds basket item based on picked catalogItem
         /// </summary>
-        /// <param name="catalogItemId">chosen catalogItem</param>
-        /// <param name="basketId">id of Basket to add to</param>
-        /// <param name="quantity">Amount of chosen catalogItem</param>
+        /// <param name="basketItemDTO">chosen catalogItem</param>
         /// <returns></returns>
         [HttpPost("basketItem")]
         public async Task<ActionResult> AddBasketItemRequest(BasketItemDTO basketItemDTO)
@@ -125,11 +132,11 @@ namespace WA.PIzza.Web.Controllers
             return Accepted();
         }
 
-        
+
         /// <summary>
         /// Removes the basket item by it's id 
         /// </summary>
-        /// <param name="basketItemId"></param>
+        /// <param name="basketItemDTO"></param>
         /// <returns></returns>
         [HttpDelete]
         public async Task<ActionResult> RemoveBasketItemRequest(BasketItemDTO basketItemDTO)
@@ -150,8 +157,7 @@ namespace WA.PIzza.Web.Controllers
         /// <summary>
         /// Changes quantity of an item already existing item
         /// </summary>
-        /// <param name="basketItemId"></param>
-        /// <param name="quantity"></param>
+        /// <param name="basketItemDTO"></param>
         /// <returns></returns>
         [HttpPut]
         public async Task<ActionResult> ChangeBasketItemQuantityRequest(BasketItemDTO basketItemDTO)
@@ -173,7 +179,7 @@ namespace WA.PIzza.Web.Controllers
         /// <summary>
         /// Clear specified basket by it's id
         /// </summary>
-        /// <param name="basketId"></param>
+        /// <param name="basketDTO"></param>
         /// <returns></returns>
         [HttpDelete("clear")]
         public async Task<ActionResult> ClearBasketRequest(BasketDTO basketDTO)

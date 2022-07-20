@@ -1,7 +1,15 @@
 ﻿namespace WA.PIzza.Web.Extensions
 {
+    /// <summary>
+    /// Extension to separate IApplicationBuilder usings to specific part of the system
+    /// </summary>
     public static class ApplicationBuilderExtension
     {
+        /// <summary>
+        /// Use all networking parts of the system  
+        /// </summary>
+        /// <param name="appBuilder"></param>
+        /// <param name="isDevelopment"></param>
         public static void useHttp(this IApplicationBuilder appBuilder, bool isDevelopment)
         {
             if (isDevelopment)
@@ -27,6 +35,10 @@
                 endpoints.MapControllers(); // подключаем маршрутизацию на контроллеры
             });
         }
+        /// <summary>
+        /// Specifies swagger's use
+        /// </summary>
+        /// <param name="appBuilder"></param>
         public static void useSwaggerWithUI(this IApplicationBuilder appBuilder)
         {
             appBuilder.UseSwagger();

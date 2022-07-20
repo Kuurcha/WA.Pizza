@@ -32,13 +32,19 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
 
             ValidationResult results = await _catalogItemValidator.ValidateAsync(catalogItemDTO.Adapt<CatalogItem>());
             List<ValidationFailure> failures = results.Errors;
-            string errorString = "";
-            foreach (ValidationFailure failure in failures)
+            if (failures.Count > 0)
             {
-                errorString += System.Environment.NewLine + failure.ErrorMessage;
+                string errorString = "";
+                foreach (ValidationFailure failure in failures)
+                {
+                    errorString += System.Environment.NewLine + failure.ErrorMessage;
+                }
+                throw new WrongDataFormatException(errorString);
             }
-            throw new WrongDataFormatException(errorString);
-            return results.IsValid;
+            else
+            {
+                return results.IsValid;
+            }
         }
 
         public Task<CatalogItemDTO> GetById(int guid)
@@ -62,7 +68,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         public async Task<int> UpdateItem(CatalogItemDTO catalogItemDTO)
         {
             await validateDTOAsync(catalogItemDTO);
-            CatalogItem originalCatalogItem = await _context.CatalogItem
+            CatalogItem? originalCatalogItem = await _context.CatalogItem
                 .FirstOrDefaultAsync(x => x.Id == catalogItemDTO.Id);
 
             if (originalCatalogItem == null)
@@ -81,7 +87,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         public async Task<int> DeleteItem(CatalogItemDTO catalogItemDTO)
         {
             await validateDTOAsync(catalogItemDTO);
-            CatalogItem catalogItem = await _context.CatalogItem
+            CatalogItem? catalogItem = await _context.CatalogItem
                 .Include(ci => ci.BasketItems).Include(ci => ci.OrderItems).
                 FirstOrDefaultAsync(x => x.Id == catalogItemDTO.Id);
 

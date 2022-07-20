@@ -17,6 +17,7 @@ namespace WA.Pizza.Tests
     [Collection("Test database collection")]
     public class CatalogItemApiTest: BaseDatabaseTestClass
     {
+#nullable disable
         private readonly CatalogDataService _catalogDataService;
         private CatalogItemValidator _catalogItemValidator;
 
@@ -94,7 +95,7 @@ namespace WA.Pizza.Tests
             afterDeletionBasketItemsCount.Should().Be(basketItemsCount - 2);
             afterDeletionCatalogItemCount.Should().Be(catalogItemCount - 1);
         }
-        public void Dispose()
+        public new void Dispose()
         {
             applicationDbContext.Database.EnsureDeleted();
         }
