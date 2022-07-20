@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -18,12 +19,10 @@ namespace WA.PIzza.Web.Controllers
     [ApiController]
     public class BasketController : ControllerBase
     {
-        private readonly BasketDataService _basketDataService;
         private readonly IMediator _mediator;
         readonly ILogger<BasketController> _log;
-        public BasketController(BasketDataService basketDataService, CatalogDataService catalogDataService, ILogger<BasketController> log, IMediator mediator)
+        public BasketController(CatalogDataService catalogDataService, ILogger<BasketController> log, IMediator mediator)
         {
-            _basketDataService = basketDataService;
             _mediator = mediator;
             _log = log;
         }
@@ -34,7 +33,7 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("byUserId")]
-        [Authorize(Roles = Roles.Admin)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin)]
         public async Task<ActionResult<List<BasketDTO>>> GetBasketByUserId(string userId)
         {
             BasketDTO basket;
@@ -57,8 +56,33 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("byBasketId")]
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin)]
         public async Task<ActionResult<List<BasketDTO>>> GetBasketById(int id)
+        {
+            _log.LogInformation("Retriving basket by  id " + id + "..");
+            BasketDTO basket;
+            try
+            {
+                basket = await _mediator.Send(new GetBasketByIdQuery(id));
+                _log.LogInformation("Item retrieved: " + basket.ToString());
+
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _log.LogError(ex.Message);
+                return NotFound(ex);
+            }
+            return new ObjectResult(basket);
+        }
+
+        /// <summary>
+        /// Gets specific baket by specific user id Anon
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("byBasketIdAnon")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<BasketDTO>>> GetBasketByIdAnon(int id)
         {
             _log.LogInformation("Retriving basket by  id " + id + "..");
             BasketDTO basket;

@@ -72,6 +72,7 @@ namespace WA.PIzza.Web.Extensions
 
                     }
                 });
+                
 
             });
         }
@@ -121,6 +122,7 @@ namespace WA.PIzza.Web.Extensions
             {
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
+               
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = false,
