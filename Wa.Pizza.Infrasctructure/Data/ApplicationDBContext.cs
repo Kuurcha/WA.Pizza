@@ -1,8 +1,9 @@
-﻿    using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Wa.Pizza.Core.Model.AuthenticateController;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public DbSet<Adress> Adress { get; set; }
 
@@ -124,6 +125,8 @@ public class ApplicationDbContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers");
         seedDate(modelBuilder);
     }
 

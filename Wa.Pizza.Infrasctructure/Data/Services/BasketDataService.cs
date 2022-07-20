@@ -16,15 +16,15 @@ using FluentValidation.Results;
 
 namespace Wa.Pizza.Infrasctructure.Data.Services
 {
+#nullable disable
     public class BasketDataService : IEntityService<BasketDTO> 
     {
         private readonly ApplicationDbContext _context;
         private readonly BasketItemValidator _basketItemValidator;
         public BasketDataService(ApplicationDbContext ctx, BasketItemValidator basketItemValidator )
         {
-            _context = ctx;
+           _context = ctx;
            _basketItemValidator = basketItemValidator;
-//            _basketItemValidator = new BasketItemValidator();
         }
 
         /// <summary>
@@ -45,9 +45,9 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             return basket;
         }
 
-        public Task<BasketDTO> GetByUserId(int userId)
+        public Task<BasketDTO> GetByUserId(string userId)
         {
-            Task<BasketDTO>  basket = _context.Basket.AsNoTracking()
+            Task<BasketDTO> basket = _context.Basket.AsNoTracking()
                                               .Include(b => b.BasketItems)
                                               .ProjectToType<BasketDTO>()
                                               .Where(x => x.ApplicationUserId == userId)
@@ -63,12 +63,15 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
 
             ValidationResult results = await _basketItemValidator.ValidateAsync(basketItemDTO.Adapt<BasketItem>());
             List<ValidationFailure> failures = results.Errors;
-            string errorString = "";
-            foreach (ValidationFailure failure in failures)
+            if (failures.Count > 0)
             {
-                errorString += System.Environment.NewLine + failure.ErrorMessage;
+                string errorString = "";
+                foreach (ValidationFailure failure in failures)
+                {
+                    errorString += System.Environment.NewLine + failure.ErrorMessage;
+                }
+                throw new WrongDataFormatException(errorString);
             }
-            throw new WrongDataFormatException(errorString);
             return results.IsValid;
         }
         /// <summary>
@@ -81,16 +84,16 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
 
                 await validateDTOAsync(basketItemDTO);   
 
-                CatalogItem? catalogItem = await _context.CatalogItem
+                CatalogItem catalogItem = await _context.CatalogItem
                                             .AsNoTracking()
                                             .FirstOrDefaultAsync(ci => ci.Id == basketItemDTO.CatalogItemId);
 
                 if (catalogItem == null)
                     throw new EntityNotFoundException("Catalog item by id: " + basketItemDTO.CatalogItemId + " does not exist");
-                BasketItem? basketItem = await _context.BasketItem
+                BasketItem basketItem = await _context.BasketItem
                                         .FirstOrDefaultAsync(bi => bi.Id == basketItemDTO.Id);
 
-                Basket? basket = await _context.Basket
+                Basket basket = await _context.Basket
                     .Include(b => b.BasketItems)
                     .FirstOrDefaultAsync(b => b.Id == basketItemDTO.BasketId);
 
@@ -133,7 +136,8 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
 
             await validateDTOAsync(basketItemDTO);
 
-            BasketItem originalBasketItem = await _context.BasketItem.Include(bi => bi.Basket).FirstOrDefaultAsync(x => x.Id == basketItemDTO.Id);
+            BasketItem originalBasketItem = await _context.BasketItem.Include(bi => bi.Basket)
+                                                                       .FirstOrDefaultAsync(x => x.Id == basketItemDTO.Id);
             if (originalBasketItem == null)
                 throw new EntityNotFoundException("Basket item with id: " + basketItemDTO.Id + " not found. Nothing to update.");
             if (basketItemDTO.Quantity <= 0)
@@ -152,7 +156,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             Basket basket = await _context.Basket.Include(b => b.BasketItems).FirstOrDefaultAsync(b => b.Id == basketItemDTO.BasketId);
             if (basket == null)
                 throw new EntityNotFoundException("Basket with id: " + basketItemDTO.BasketId + "does not exists. Unable to delete");
-            if (basket.BasketItems.Where(bi => bi.Id == basketItemDTO.Id) == null)
+            if (basket.BasketItems == null || basket.BasketItems.Where(bi => bi.Id == basketItemDTO.Id) == null)
                 throw new EntityNotFoundException("BasketItem with id: " + basketItemDTO.Id + "does not exists. Unable to delete");
 
             basket.LastModified= DateTime.UtcNow;
@@ -168,17 +172,21 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             Basket basket = await _context.Basket.Include(b => b.BasketItems).FirstOrDefaultAsync(b => b.Id == basketDTO.Id);
             if (basket == null)
                 throw new EntityNotFoundException("Basket with id: " + basketDTO.Id + "does not exists. Unable to delete");
-            basket.BasketItems.Clear();
+            if (basket.BasketItems != null)
+                basket.BasketItems.Clear();
             return await _context.SaveChangesAsync();
         }
         public async Task<int> BindBuyerToBasket(BasketDTO basketDTO, string applicationUserId)
         {
             Basket basket = await _context.Basket.FirstOrDefaultAsync(b => b.Id == basketDTO.Id);
-            ApplicationUser applicationUser = await _context.ApplicationUser.FirstOrDefaultAsync(a => a.Id == applicationUserId);
-            if (basket != null && basket.ApplicationUser == null)
+            if (basket != null)
             {
-                basket.ApplicationUser = applicationUser;
-                return await _context.SaveChangesAsync();
+                ApplicationUser applicationUser = await _context.ApplicationUser.FirstOrDefaultAsync(a => a.Id == applicationUserId);
+                if (basket.ApplicationUser == null)
+                {
+                    basket.ApplicationUser = applicationUser;
+                    return await _context.SaveChangesAsync();
+                }
             }
             return 0; //?
         }

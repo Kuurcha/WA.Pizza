@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using Mapster;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -9,6 +10,8 @@ using Wa.Pizza.Infrasctructure.Services;
 using Wa.Pizza.Infrasctructure.Services.Interfaces;
 using Wa.Pizza.Infrasctructure.Validators;
 using WA.PIzza.Web.Extensions;
+using static BasketQueries;
+using static Wa.Pizza.Infrasctructure.Data.CQRS.Basket.BasketCommands;
 
 AppDomain.CurrentDomain.SetData("DataDirectory", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
 
@@ -18,6 +21,8 @@ builder.Services.AddRazorPages();
 
 builder.Services.injectServices();
 
+builder.Services.ConfigureIdentity(builder.Configuration);
+
 builder.Services.configureLogger(builder);
 
 builder.Services.configureDBContext(builder.Configuration.GetConnectionString("Default"));
@@ -25,6 +30,12 @@ builder.Services.configureDBContext(builder.Configuration.GetConnectionString("D
 builder.Services.configureWeb();
 
 builder.Services.configureSwagger();
+
+builder.Services.AddMediatR(typeof(GetBasketByIdQuery));
+
+builder.Services.AddMediatR(typeof(GetBasketByUserIdQuery));
+
+builder.Services.AddMediatR(typeof(InsertItemCommand));
 
 var app = builder.Build();
 
