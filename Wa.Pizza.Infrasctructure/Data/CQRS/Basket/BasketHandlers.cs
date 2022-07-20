@@ -56,24 +56,24 @@ class InsertItemCommandHandler : BaseBasketHandler, IRequestHandler<InsertItemCo
 
     public async Task<int> Handle(InsertItemCommand request, CancellationToken cancellationToken)
     {
-        await validateDTOAsync(request.basketItemDTO);
+        await validateDTOAsync(request.BasketItemDTO);
 
         CatalogItem? catalogItem = await context.CatalogItem
                                     .AsNoTracking()
-                                    .FirstOrDefaultAsync(ci => ci.Id == request.basketItemDTO.CatalogItemId);
+                                    .FirstOrDefaultAsync(ci => ci.Id == request.BasketItemDTO.CatalogItemId);
 
         if (catalogItem == null)
-            throw new EntityNotFoundException("Catalog item by id: " + request.basketItemDTO.CatalogItemId + " does not exist");
+            throw new EntityNotFoundException("Catalog item by id: " + request.BasketItemDTO.CatalogItemId + " does not exist");
         BasketItem? basketItem = await context.BasketItem
-                                .FirstOrDefaultAsync(bi => bi.Id == request.basketItemDTO.Id);
+                                .FirstOrDefaultAsync(bi => bi.Id == request.BasketItemDTO.Id);
 
         Basket? basket = await context.Basket
             .Include(b => b.BasketItems)
-            .FirstOrDefaultAsync(b => b.Id == request.basketItemDTO.BasketId);
+            .FirstOrDefaultAsync(b => b.Id == request.BasketItemDTO.BasketId);
 
         if (basketItem != null && basket.BasketItems.Any(bi => bi.BasketId == basketItem.BasketId))
         {
-            basketItem.Quantity = request.basketItemDTO.Quantity;
+            basketItem.Quantity = request.BasketItemDTO.Quantity;
             basket!.LastModified = DateTime.UtcNow;
             return await context.SaveChangesAsync();
         }
@@ -82,7 +82,7 @@ class InsertItemCommandHandler : BaseBasketHandler, IRequestHandler<InsertItemCo
             //Мапстер перемапить?
             basketItem = catalogItem.Adapt<BasketItem>();
             basketItem.Id = 0;
-            basketItem.Quantity = request.basketItemDTO.Quantity;
+            basketItem.Quantity = request.BasketItemDTO.Quantity;
             basketItem.CatalogItemName = catalogItem.Name;
             basketItem.CatalogItemId = catalogItem.Id;
         }
@@ -104,3 +104,89 @@ class InsertItemCommandHandler : BaseBasketHandler, IRequestHandler<InsertItemCo
     }
 }
 
+class UpdateItemCommandHandler : BaseBasketHandler, IRequestHandler<UpdateItemCommand, int>
+{
+    public UpdateItemCommandHandler(ApplicationDbContext _ctx, BasketItemValidator _basketItemValidator, IMediator _mediator) : base(_ctx, _basketItemValidator, _mediator)
+    {
+    }
+
+
+    public async Task<int> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
+    {
+        await validateDTOAsync(request.BasketItemDTO);
+
+        BasketItem originalBasketItem = await context.BasketItem.Include(bi => bi.Basket).FirstOrDefaultAsync(x => x.Id == request.BasketItemDTO.Id);
+        if (originalBasketItem == null)
+            throw new EntityNotFoundException("Basket item with id: " + request.BasketItemDTO.Id + " not found. Nothing to update.");
+        if (request.BasketItemDTO.Quantity <= 0)
+            context.BasketItem.Remove(originalBasketItem);
+        else
+            originalBasketItem.Quantity = request.BasketItemDTO.Quantity;
+        originalBasketItem.Basket.LastModified = DateTime.UtcNow;
+        return await context.SaveChangesAsync();
+    }
+}
+
+class DeleteItemCommandHandler : BaseBasketHandler, IRequestHandler<DeleteItemCommand, int>
+{
+    public DeleteItemCommandHandler(ApplicationDbContext _ctx, BasketItemValidator _basketItemValidator, IMediator _mediator) : base(_ctx, _basketItemValidator, _mediator)
+    {
+    }
+
+
+    public async Task<int> Handle(DeleteItemCommand request, CancellationToken cancellationToken)
+    {
+
+        Basket basket = await context.Basket.Include(b => b.BasketItems).FirstOrDefaultAsync(b => b.Id == request.BasketItemDTO.BasketId);
+        if (basket == null)
+            throw new EntityNotFoundException("Basket with id: " + request.BasketItemDTO.BasketId + "does not exists. Unable to delete");
+        if (basket.BasketItems.Where(bi => bi.Id == request.BasketItemDTO.Id) == null)
+            throw new EntityNotFoundException("BasketItem with id: " + request.BasketItemDTO.Id + "does not exists. Unable to delete");
+
+        basket.LastModified = DateTime.UtcNow;
+        var basketItems = basket.BasketItems.Where(bi => bi.Id == request.BasketItemDTO.Id);
+        foreach (var basketItem in basketItems)
+        {
+            basket.BasketItems.Remove(basketItem);
+        }
+        return await context.SaveChangesAsync();
+    }
+}
+
+class ClearBasketCommandHandler : BaseBasketHandler, IRequestHandler<ClearBasketCommand, int>
+{
+    public ClearBasketCommandHandler(ApplicationDbContext _ctx, BasketItemValidator _basketItemValidator, IMediator _mediator) : base(_ctx, _basketItemValidator, _mediator)
+    {
+    }
+
+
+    public async Task<int> Handle(ClearBasketCommand request, CancellationToken cancellationToken)
+    {
+
+        Basket basket = await context.Basket.Include(b => b.BasketItems).FirstOrDefaultAsync(b => b.Id == request.BasketDTO.Id);
+        if (basket == null)
+            throw new EntityNotFoundException("Basket with id: " + request.BasketDTO.Id + "does not exists. Unable to delete");
+        basket.BasketItems.Clear();
+        return await context.SaveChangesAsync();
+    }
+}
+
+class BindBuyerToBasketCommandHandler : BaseBasketHandler, IRequestHandler<BindBuyerToBasketCommand, int>
+{
+    public BindBuyerToBasketCommandHandler(ApplicationDbContext _ctx, BasketItemValidator _basketItemValidator, IMediator _mediator) : base(_ctx, _basketItemValidator, _mediator)
+    {
+    }
+
+
+    public async Task<int> Handle(BindBuyerToBasketCommand request, CancellationToken cancellationToken)
+    {
+        Basket basket = await context.Basket.FirstOrDefaultAsync(b => b.Id == request.BasketDTO.Id);
+        ApplicationUser applicationUser = await context.ApplicationUser.FirstOrDefaultAsync(a => a.Id == request.ApplicationUserId);
+        if (basket != null && basket.ApplicationUser == null)
+        {
+            basket.ApplicationUser = applicationUser;
+            return await context.SaveChangesAsync();
+        }
+        return 0; 
+    }
+}

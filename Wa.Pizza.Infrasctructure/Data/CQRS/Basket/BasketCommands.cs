@@ -5,11 +5,11 @@ namespace Wa.Pizza.Infrasctructure.Data.CQRS.Basket
 {
     public class BasketCommands
     {
-        public record InsertItemCommand(BasketItemDTO basketItemDTO) : IRequest<int>;
-        public record UpdateItemCommand(BasketItemDTO basketItemDTO) : IRequest;
-        public record DeleteItemCommand(BasketItemDTO basketItemDTO) : IRequest;
-        public record ClearBasketCommand(BasketDTO BasketDTO ) : IRequest;
-        public record BindBuyerToBasket(BasketDTO BasketDTO, string applicationUserId);
+        public record InsertItemCommand(BasketItemDTO BasketItemDTO) : IRequest<int>;
+        public record UpdateItemCommand(BasketItemDTO BasketItemDTO) : IRequest<int>;
+        public record DeleteItemCommand(BasketItemDTO BasketItemDTO) : IRequest<int>;
+        public record ClearBasketCommand(BasketDTO BasketDTO ) : IRequest<int>;
+        public record BindBuyerToBasketCommand(BasketDTO BasketDTO, string ApplicationUserId): IRequest<int>;
 
 
 

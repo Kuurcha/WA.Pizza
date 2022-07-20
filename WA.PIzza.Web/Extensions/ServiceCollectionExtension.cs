@@ -21,6 +21,7 @@ namespace WA.PIzza.Web.Extensions
             services.AddScoped<OrderDataService>();
             services.AddScoped<BasketDataService>();
             services.AddScoped<CatalogDataService>();
+            services.AddScoped<TokenService>();
         }
         public static void configureSwagger(this IServiceCollection services)
         {
@@ -122,8 +123,8 @@ namespace WA.PIzza.Web.Extensions
                 options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
                     ValidAudience = Configuration["JWT: ValidAudience"],
                     ValidIssuer = Configuration["JWT: ValidIssuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT: SecretKey"]))

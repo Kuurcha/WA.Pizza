@@ -13,6 +13,8 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using Wa.Pizza.Infrasctructure.DTO.Auth;
 
 namespace WA.PIzza.Web.Controllers
 {
@@ -21,11 +23,14 @@ namespace WA.PIzza.Web.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration _configuration;
-        public AuthenticateController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        private readonly TokenService _tokenService;
+        public AuthenticateController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, TokenService tokenService)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             _configuration = configuration;
+            _tokenService = tokenService;
+
         }
         public async Task<bool> checkIfUserExists(RegisterRequest model)
         {
@@ -65,7 +70,7 @@ namespace WA.PIzza.Web.Controllers
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(), //Random value to change each time credential information about user changes
-                UserName = model.Username
+                UserName = model.Username,
             };
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -88,6 +93,7 @@ namespace WA.PIzza.Web.Controllers
             var user = await userManager.FindByNameAsync(model.Username);
             if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
             {
+                
                 var userRoles = await userManager.GetRolesAsync(user);
 
                 var authClaims = new List<Claim>
@@ -103,24 +109,73 @@ namespace WA.PIzza.Web.Controllers
                 string secretKey = _configuration["JWT: SecretKey"];
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
+                var generatedRefreshToken = _tokenService.GenerateRefreshToken();
+
                 var token = new JwtSecurityToken(
-                issuer: _configuration["JWT: ValidIssuer"],
-                audience: _configuration["JWT: ValidAudience"],
-                expires: DateTime.Now.AddHours(1),
-               
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                    issuer: _configuration["JWT: ValidIssuer"],
+                    audience: _configuration["JWT: ValidAudience"],
+                    expires: DateTime.Now.AddHours(1),
+                    claims: authClaims,
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+       
                 );
+
+                user.refreshToken = generatedRefreshToken;
+
+                await userManager.UpdateAsync(user);
 
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
+                    expiration = token.ValidTo,
+                    refreshToken = generatedRefreshToken
                 });
             }
             return Unauthorized();
         }
+        [HttpPost]
+        [Route("refresh")]
+        public async Task<IActionResult> RefreshAsync(TokenRequestDTO request)
+        {
+            string accessToken = request.Token;
+            string refreshToken = request.RefreshToken;
+            var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
+            var username = principal.Identity.Name; //this is mapped to the Name claim by default
+            var user = await userManager.FindByNameAsync(username);
+            if (user is null || user.refreshToken.Token != refreshToken || user.refreshToken.ExpirationDate <= DateTime.Now)
+                return BadRequest("Invalid client request");
+            string secretKey = _configuration["JWT: SecretKey"];
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var newAccessToken  = new JwtSecurityToken(
+                issuer: _configuration["JWT: ValidIssuer"],
+                audience: _configuration["JWT: ValidAudience"],
+                expires: DateTime.Now.AddHours(1),
 
+                claims: principal.Claims,
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+            );
+
+            var newRefreshToken = _tokenService.GenerateRefreshToken();
+
+            user.refreshToken = newRefreshToken;
+            await userManager.UpdateAsync(user);
+
+            return Ok(new 
+            {
+                token = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
+                refreshToken = newRefreshToken
+            });
+        }
+        [HttpPost, Authorize]
+        [Route("revoke")]
+        public async Task<IActionResult> RevokeAsync()
+        {
+            var username = User.Identity.Name;
+            var user = await userManager.FindByNameAsync(username);
+            if (user == null) return BadRequest();
+            user.refreshToken = null;
+            return NoContent();
+        }
 
     }
 }

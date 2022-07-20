@@ -41,7 +41,7 @@ namespace WA.PIzza.Web.Controllers
             _log.LogInformation("Retriving basket by user id " + userId + "..");
             try
             {
-                basket = (BasketDTO)await _mediator.Send(new GetBasketByUserIdQuery(userId));
+                basket = await _mediator.Send(new GetBasketByUserIdQuery(userId));
                 _log.LogInformation("Item retrieved: " + basket.ToString());
             }
             catch (EntityNotFoundException ex)
@@ -64,7 +64,7 @@ namespace WA.PIzza.Web.Controllers
             BasketDTO basket;
             try
             {
-                basket = (BasketDTO)await _mediator.Send(new GetBasketByIdQuery(id));
+                basket = await _mediator.Send(new GetBasketByIdQuery(id));
                 _log.LogInformation("Item retrieved: " + basket.ToString());
 
             }
@@ -113,7 +113,7 @@ namespace WA.PIzza.Web.Controllers
             _log.LogInformation("Removing Basket Item " + basketItemDTO.ToString() + "..");
             try
             {
-                await _basketDataService.DeleteItem(basketItemDTO);
+                await _mediator.Send(new DeleteItemCommand(basketItemDTO));
                 _log.LogInformation("Item removed");
             }
             catch (EntityNotFoundException ex)
@@ -135,7 +135,7 @@ namespace WA.PIzza.Web.Controllers
             _log.LogInformation("Changing basket item qunatity... " + basketItemDTO + "..");
             try 
             {
-                await _basketDataService.UpdateItem(basketItemDTO);
+                await _mediator.Send(new UpdateItemCommand(basketItemDTO)); 
                 _log.LogInformation("Item updated");
 
             }
@@ -157,7 +157,7 @@ namespace WA.PIzza.Web.Controllers
             _log.LogInformation("Clearing basket: " + basketDTO.ToString() + "..." );
             try
             {
-                await _basketDataService.ClearBasket(basketDTO);
+                await _mediator.Send(new ClearBasketCommand(basketDTO));
                 _log.LogInformation("Basket Cleared");
             }
             catch (EntityNotFoundException ex)
@@ -180,7 +180,7 @@ namespace WA.PIzza.Web.Controllers
             _log.LogInformation("Binding Buyer To Basket: " + basketDTO.ToString() + "to id: + " + applicationUserId + "...");
             try
             {
-                await _basketDataService.BindBuyerToBasket(basketDTO, applicationUserId);
+                await _mediator.Send(new BindBuyerToBasketCommand(basketDTO, applicationUserId));
                 _log.LogInformation("Basket binded");
             }
             catch (EntityNotFoundException ex)
