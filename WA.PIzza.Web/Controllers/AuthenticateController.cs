@@ -23,35 +23,24 @@ namespace WA.PIzza.Web.Controllers
     /// </summary>
     public class AuthenticateController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
-        private readonly IConfiguration _configuration;
-        private readonly TokenService _tokenService;
+
+        private readonly ILogger<BasketController> _log;
+        private readonly AuthenticationService _authenticationService;
+        private readonly UserManager<ApplicationUser> _userManager;
         /// <summary>
         /// Authenticate Controller DI injection constructor
         /// </summary>
+        /// <param name="log"></param>
+        /// <param name="authenticationService"></param>
         /// <param name="userManager"></param>
-        /// <param name="roleManager"></param>
-        /// <param name="configuration"></param>
-        /// <param name="tokenService"></param>
-        public AuthenticateController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, TokenService tokenService)
+        public AuthenticateController(UserManager<ApplicationUser> userManager, ILogger<BasketController> log, AuthenticationService authenticationService)
         {
-            this.userManager = userManager;
-            this.roleManager = roleManager;
-            _configuration = configuration;
-            _tokenService = tokenService;
+            _log = log;
+            _authenticationService = authenticationService;
+            _userManager = userManager;
 
         }
-        /// <summary>
-        /// Checks if user with requested username exists
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public async Task<bool> checkIfUserExists(RegisterRequest model)
-        {
-            var userExists = await userManager.FindByNameAsync(model.Username);
-            return userExists != null;
-        }
+
         /// <summary>
         /// Registers user with specified data with "user" role
         /// </summary>
@@ -61,22 +50,16 @@ namespace WA.PIzza.Web.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest model)
         {
-            if (await checkIfUserExists(model))
+            try
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new AuthResponse { Status = "Error", Message = "User already exists!" });
+                await _authenticationService.Register(model);
             }
-            ApplicationUser user = new ApplicationUser()
+            catch (EntityNotFoundException ex)
             {
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(), //Random value to change each time credential information about user changes
-                UserName = model.Username
-            };
-            var result = await userManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new AuthResponse { Status = "Error", Message = "User creation failed! Please check user details and try again." });
-
+                _log.LogError(ex.Message);
+                return NotFound(ex);
+            }
             return Ok(new AuthResponse { Status = "Success", Message = "User created successfully!" });
-
         }
         /// <summary>
         ///  Registers user with specified data with "admin" role
@@ -87,28 +70,15 @@ namespace WA.PIzza.Web.Controllers
         [Route("register - admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterRequest model)
         {
-            if (await checkIfUserExists(model))
+            try
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new AuthResponse { Status = "Error", Message = "User already exists!" });
+                await _authenticationService.RegisterAdmin(model);
             }
-            ApplicationUser user = new ApplicationUser()
+            catch (EntityNotFoundException ex)
             {
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(), //Random value to change each time credential information about user changes
-                UserName = model.Username,
-            };
-            var result = await userManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new AuthResponse { Status = "Error", Message = "User creation failed! Please check user details and try again." });
-            if (!await roleManager.RoleExistsAsync(Roles.Admin))
-                await roleManager.CreateAsync(new IdentityRole(Roles.Admin));
-            if (!await roleManager.RoleExistsAsync(Roles.RegularUser))
-                await roleManager.CreateAsync(new IdentityRole(Roles.RegularUser));
-            if (await roleManager.RoleExistsAsync(Roles.Admin))
-            {
-                await userManager.AddToRoleAsync(user, Roles.Admin);
+                _log.LogError(ex.Message);
+                return NotFound(ex);
             }
-
             return Ok(new AuthResponse { Status = "Success", Message = "User created successfully!" });
         }
         /// <summary>
@@ -120,48 +90,24 @@ namespace WA.PIzza.Web.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest model)
         {
-            var user = await userManager.FindByNameAsync(model.Username);
-            if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
+            TokenResponse tokenResponse;
+            try
             {
-                
-                var userRoles = await userManager.GetRolesAsync(user);
-
-                var authClaims = new List<Claim>
-                        {
-                            new Claim(ClaimTypes.Name, user.UserName),
-                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        };
-
-                foreach (var userRole in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                }
-                string secretKey = _configuration["JWT: SecretKey"];
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-
-                var generatedRefreshToken = _tokenService.GenerateRefreshToken();
-
-                var token = new JwtSecurityToken(
-                    issuer: _configuration["JWT: ValidIssuer"],
-                    audience: _configuration["JWT: ValidAudience"],
-                    expires: DateTime.Now.AddHours(1),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-       
-                );
-
-                user.refreshToken = generatedRefreshToken;
-
-                await userManager.UpdateAsync(user);
-
-                return Ok(new
-                {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo,
-                    refreshToken = generatedRefreshToken
-                });
+               tokenResponse = await _authenticationService.LoginUser(model);
             }
-            return Unauthorized();
+            catch (EntityNotFoundException ex)
+            {
+                _log.LogError(ex.Message);
+                return NotFound(ex);
+            }
+
+            return Ok(new
+                {
+                token = new JwtSecurityTokenHandler().WriteToken(tokenResponse.accessToken),
+                expiration = tokenResponse.accessToken.ValidTo,
+                refreshToken = tokenResponse.refreshToken
+            });
+            
         }
         /// <summary>
         /// Refreshes access token based on refresh token
@@ -173,35 +119,24 @@ namespace WA.PIzza.Web.Controllers
 
         public async Task<IActionResult> RefreshAsync(TokenRequestDTO request)
         {
-            //Кто угодно может его обновлять??
-            string accessToken = request.Token;
-            string refreshToken = request.RefreshToken;
-            var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
-            var username = principal.Identity.Name; //this is mapped to the Name claim by default
-            var user = await userManager.FindByNameAsync(username);
-            if (user is null || user.refreshToken.Token != refreshToken || user.refreshToken.ExpirationDate <= DateTime.Now)
-                return BadRequest("Invalid client request");
-            string secretKey = _configuration["JWT: SecretKey"];
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-            var newAccessToken  = new JwtSecurityToken(
-                issuer: _configuration["JWT: ValidIssuer"],
-                audience: _configuration["JWT: ValidAudience"],
-                expires: DateTime.Now.AddHours(1),
 
-                claims: principal.Claims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-            );
-
-            var newRefreshToken = _tokenService.GenerateRefreshToken();
-
-            user.refreshToken = newRefreshToken;
-            await userManager.UpdateAsync(user);
+            TokenResponse tokenResponse;
+            try
+            {
+                tokenResponse = await _authenticationService.RefreshAccessToken(request);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _log.LogError(ex.Message);
+                return NotFound(ex);
+            }
 
             return Ok(new 
             {
-                token = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
-                refreshToken = newRefreshToken
+                token = new JwtSecurityTokenHandler().WriteToken(tokenResponse.accessToken),
+                refreshToken = tokenResponse.refreshToken
             });
+
         }
         /// <summary>
         /// Resets user's current refresh token
@@ -211,8 +146,8 @@ namespace WA.PIzza.Web.Controllers
         [Route("revoke")]
         public async Task<IActionResult> RevokeAsync()
         {
-            var username = User.Identity.Name;
-            var user = await userManager.FindByNameAsync(username);
+            var username = User     .Identity.Name;
+            var user = await _userManager.FindByNameAsync(username);
             if (user == null) return BadRequest();
             user.refreshToken = null;
             return NoContent();

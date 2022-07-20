@@ -60,7 +60,7 @@ namespace WA.PIzza.Web.Controllers
             return new ObjectResult(basket);
         }
         /// <summary>
-        /// Gets specific baket by specific user id
+        /// Gets specific basket by specific basket id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -84,30 +84,7 @@ namespace WA.PIzza.Web.Controllers
             return new ObjectResult(basket);
         }
 
-        /// <summary>
-        /// Gets specific baket by specific user id Anon
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet("byBasketIdAnon")]
-        [AllowAnonymous]
-        public async Task<ActionResult<List<BasketDTO>>> GetBasketByIdAnon(int id)
-        {
-            _log.LogInformation("Retriving basket by  id " + id + "..");
-            BasketDTO basket;
-            try
-            {
-                basket = await _mediator.Send(new GetBasketByIdQuery(id));
-                _log.LogInformation("Item retrieved: " + basket.ToString());
 
-            }
-            catch (EntityNotFoundException ex)
-            {
-                _log.LogError(ex.Message);
-                return NotFound(ex);
-            }
-            return new ObjectResult(basket);
-        }
 
 
         /// <summary>

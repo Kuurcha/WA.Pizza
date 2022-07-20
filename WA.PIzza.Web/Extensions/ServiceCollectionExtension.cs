@@ -28,6 +28,7 @@ namespace WA.PIzza.Web.Extensions
             services.AddScoped<OrderDataService>();
             services.AddScoped<CatalogDataService>();
             services.AddScoped<TokenService>();
+            services.AddScoped<AuthenticationService>();
         }
         /// <summary>
         /// Injects and configures swagger
