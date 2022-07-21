@@ -1,5 +1,6 @@
 ﻿using Hangfire;
 using Hangfire.Dashboard;
+using WA.PIzza.Web.ReccuringJobs;
 
 namespace WA.PIzza.Web.Extensions
 {
@@ -60,6 +61,10 @@ namespace WA.PIzza.Web.Extensions
                 Authorization = new[] { new MyAuthorizationFilter() }
             };
             appBuilder.UseHangfireDashboard("/hangfire", options);
+            RecurringJob.AddOrUpdate<ForgottenBasketJob>(
+                "forgottenBasketJob",
+                job => job.Run(),
+                Cron.MinuteInterval(1));
         }
 
     }
