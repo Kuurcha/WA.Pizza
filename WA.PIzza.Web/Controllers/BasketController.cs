@@ -30,7 +30,7 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="catalogDataService"></param>
         /// <param name="log"></param>
         /// <param name="mediator"></param>
-        public BasketController(CatalogDataService catalogDataService, ILogger<BasketController> log, IMediator mediator)
+        public BasketController(CatalogDataService catalogDataService, ILogger<BasketController> log, IMediator mediator, SMTPService SMTPService)
         {
             _mediator = mediator;
             _log = log;
@@ -65,7 +65,8 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("byBasketId")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin)]
+        [AllowAnonymous]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin)]
         public async Task<ActionResult<List<BasketDTO>>> GetBasketById(int id)
         {
             _log.LogInformation("Retriving basket by  id " + id + "..");

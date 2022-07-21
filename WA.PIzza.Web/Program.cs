@@ -19,7 +19,7 @@ var builder =  WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 
-builder.Services.injectServices();
+builder.Services.injectServices(builder.Configuration["SMTP: SenderEmail"], builder.Configuration["SMTP: SecurityPassword"]);
 
 builder.Services.ConfigureIdentity(builder.Configuration);
 
