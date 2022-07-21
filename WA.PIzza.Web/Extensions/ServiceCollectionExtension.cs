@@ -11,6 +11,7 @@ using Wa.Pizza.Infrasctructure.Data.Services;
 using Wa.Pizza.Infrasctructure.Services;
 using Wa.Pizza.Infrasctructure.Validators;
 using Microsoft.AspNetCore.Builder;
+using Hangfire;
 
 namespace WA.PIzza.Web.Extensions
 {
@@ -19,6 +20,20 @@ namespace WA.PIzza.Web.Extensions
     /// </summary>
     public static class ServiceCollectionExtension
     {
+
+        public static void configureHangfire(this IServiceCollection services, string connectionString)
+        {
+            services.AddHangfire(configuration =>
+            {
+                configuration.UseSqlServerStorage(connectionString)
+                .UseRecommendedSerializerSettings()
+                .UseSimpleAssemblyNameTypeSerializer();
+               
+            });
+            services.AddHangfireServer();
+
+            
+        }
         /// <summary>
         /// Injects user created services into the program
         /// </summary>

@@ -34,8 +34,10 @@ builder.Services.configureSwagger();
 builder.Services.AddMediatR(typeof(GetBasketByIdQuery));
 
 builder.Services.AddMediatR(typeof(GetBasketByUserIdQuery));
-
+                
 builder.Services.AddMediatR(typeof(InsertItemCommand));
+
+builder.Services.configureHangfire(builder.Configuration.GetConnectionString("HangfireDB"));
 
 var app = builder.Build();
 
@@ -43,6 +45,8 @@ var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
+app.useHangfireCustom();
+
 app.useHttp(!app.Environment.IsDevelopment());
 
 app.MapRazorPages();

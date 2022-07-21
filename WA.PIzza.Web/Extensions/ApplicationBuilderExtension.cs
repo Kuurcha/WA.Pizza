@@ -1,4 +1,7 @@
-﻿namespace WA.PIzza.Web.Extensions
+﻿using Hangfire;
+using Hangfire.Dashboard;
+
+namespace WA.PIzza.Web.Extensions
 {
     /// <summary>
     /// Extension to separate IApplicationBuilder usings to specific part of the system
@@ -33,6 +36,7 @@
             appBuilder.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers(); // подключаем маршрутизацию на контроллеры
+                endpoints.MapHangfireDashboard(); 
             });
         }
         /// <summary>
@@ -49,5 +53,20 @@
             });
         }
 
+        public static void useHangfireCustom(this IApplicationBuilder appBuilder)
+        {
+            var options = new DashboardOptions()
+            {
+                Authorization = new[] { new MyAuthorizationFilter() }
+            };
+            appBuilder.UseHangfireDashboard("/hangfire", options);
+        }
+
     }
+    public class MyAuthorizationFilter : IDashboardAuthorizationFilter
+    {
+        public bool Authorize(DashboardContext context) => true;
+    }
+
+
 }
