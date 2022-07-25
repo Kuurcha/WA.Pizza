@@ -56,12 +56,12 @@ namespace WA.PIzza.Web.Services
         /// <param name="description"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Order>> CreateOrder(int basketId, string description)
+        public async Task<ActionResult<Order>> CreateOrder(SetOrderDTO setOrderDTO)
         {
-            _log.LogInformation("Create order request with id:  " + basketId + " and description: " + description + " ...");
+            _log.LogInformation("Create order request with id:  " + setOrderDTO.basketId + " and description: " + setOrderDTO.description + " ...");
             try
             {
-                await _orderDataService.AddOrder(basketId, description);
+                await _orderDataService.AddOrder(setOrderDTO.basketId, setOrderDTO.description);
                 _log.LogInformation("Order added");
             }
             catch( EntityNotFoundException ex)
@@ -78,13 +78,13 @@ namespace WA.PIzza.Web.Services
         /// <param name="orderStatus"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<ActionResult<Order>> UpdateOrderStatus(int orderId, OrderStatus orderStatus)
+        public async Task<ActionResult<Order>> UpdateOrderStatus(UpdateOrderItemDTO updateOrderItemDTO)
         {
-            _log.LogInformation("Updating order with id: " + orderId + " to status:" + orderStatus.ToString() + "...");  
+            _log.LogInformation("Updating order with id: " + updateOrderItemDTO.orderId + " to status:" + updateOrderItemDTO.orderStatus.ToString() + "...");  
             try
             {
 
-                await _orderDataService.UpdateStatus(orderId, orderStatus);
+                await _orderDataService.UpdateStatus(updateOrderItemDTO.orderId, updateOrderItemDTO.orderStatus);
                 _log.LogInformation("Order updated");
             }
             catch (EntityNotFoundException ex)

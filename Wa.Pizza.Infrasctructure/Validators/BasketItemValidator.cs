@@ -1,15 +1,18 @@
 ﻿namespace Wa.Pizza.Infrasctructure.Validators
 {
     using FluentValidation;
-    public class BasketItemValidator: AbstractValidator<BasketItem>
+    using Wa.Pizza.Infrasctructure.DTO.Basket;
+
+    public class BasketItemValidator: AbstractValidator<BasketItemDTO>
     {
         public BasketItemValidator()
         {
-            //Заинджектить
-            RuleFor(basketItem => basketItem.UnitPrice).NotNull().GreaterThanOrEqualTo(0).WithMessage("Please specify a valid price");
-            RuleFor(basketItem => basketItem.Quantity).NotNull().GreaterThan(0).WithMessage("Please specify a valid Quantity");
-            RuleFor(basketItem => basketItem.CatalogType).NotNull();
-            RuleFor(basketItem => basketItem.CatalogItemName).Length(2, 250).WithMessage("Not a valid CatalogName");
+            RuleFor(basketItem => basketItem.UnitPrice).NotNull().GreaterThanOrEqualTo(0).WithMessage("Not a valid price");
+            RuleFor(basketItem => basketItem.Quantity).NotNull().GreaterThan(0).WithMessage("Not a valid quantity");
+            RuleFor(basketItem => basketItem.CatalogType).NotNull().WithMessage("Catalog type should not be null");
+            RuleFor(basketItem => basketItem.CatalogItemName).Length(2, 250).WithMessage("Not a valid catalog mame");
         }
     }
+
+
 }

@@ -10,7 +10,7 @@ using static Wa.Pizza.Infrasctructure.Data.CQRS.Basket.BasketCommands;
 
 class GetBasketByIdHandler : BaseBasketHandler, IRequestHandler<GetBasketByIdQuery, BasketDTO>
 {
-    public GetBasketByIdHandler(ApplicationDbContext _ctx, BasketItemValidator _basketItemValidator): base(_ctx, _basketItemValidator)
+    public GetBasketByIdHandler(ApplicationDbContext _ctx): base(_ctx)
     {
         
     }
@@ -30,7 +30,7 @@ class GetBasketByIdHandler : BaseBasketHandler, IRequestHandler<GetBasketByIdQue
 
 class GetBasketByUserIdHandler : BaseBasketHandler, IRequestHandler<GetBasketByUserIdQuery, BasketDTO>
 {
-    public GetBasketByUserIdHandler(ApplicationDbContext _ctx, BasketItemValidator _basketItemValidator) : base(_ctx, _basketItemValidator)
+    public GetBasketByUserIdHandler(ApplicationDbContext _ctx) : base(_ctx)
     {
 
     }
@@ -50,13 +50,12 @@ class GetBasketByUserIdHandler : BaseBasketHandler, IRequestHandler<GetBasketByU
 
 class InsertItemCommandHandler : BaseBasketHandler, IRequestHandler<InsertItemCommand, int>
 {
-    public InsertItemCommandHandler(ApplicationDbContext _ctx, BasketItemValidator _basketItemValidator) : base(_ctx, _basketItemValidator)
+    public InsertItemCommandHandler(ApplicationDbContext _ctx) : base(_ctx)
     {
     }
 
     public async Task<int> Handle(InsertItemCommand request, CancellationToken cancellationToken)
     {
-        await validateDTOAsync(request.BasketItemDTO);
 
         CatalogItem? catalogItem = await context.CatalogItem
                                     .AsNoTracking()
@@ -105,14 +104,13 @@ class InsertItemCommandHandler : BaseBasketHandler, IRequestHandler<InsertItemCo
 
 class UpdateItemCommandHandler : BaseBasketHandler, IRequestHandler<UpdateItemCommand, int>
 {
-    public UpdateItemCommandHandler(ApplicationDbContext _ctx, BasketItemValidator _basketItemValidator) : base(_ctx, _basketItemValidator)
+    public UpdateItemCommandHandler(ApplicationDbContext _ctx) : base(_ctx)
     {
     }
 
 
     public async Task<int> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
     {
-        await validateDTOAsync(request.BasketItemDTO);
 
         BasketItem? originalBasketItem = await context!.BasketItem!.Include(bi => bi!.Basket)!.FirstOrDefaultAsync(x => x!.Id == request!.BasketItemDTO!.Id);
         if (originalBasketItem == null)
@@ -128,7 +126,7 @@ class UpdateItemCommandHandler : BaseBasketHandler, IRequestHandler<UpdateItemCo
 
 class DeleteItemCommandHandler : BaseBasketHandler, IRequestHandler<DeleteItemCommand, int>
 {
-    public DeleteItemCommandHandler(ApplicationDbContext _ctx, BasketItemValidator _basketItemValidator) : base(_ctx, _basketItemValidator)
+    public DeleteItemCommandHandler(ApplicationDbContext _ctx) : base(_ctx)
     {
     }
 
@@ -154,7 +152,7 @@ class DeleteItemCommandHandler : BaseBasketHandler, IRequestHandler<DeleteItemCo
 
 class ClearBasketCommandHandler : BaseBasketHandler, IRequestHandler<ClearBasketCommand, int>
 {
-    public ClearBasketCommandHandler(ApplicationDbContext context, BasketItemValidator _basketItemValidator) : base(context, _basketItemValidator)
+    public ClearBasketCommandHandler(ApplicationDbContext context) : base(context)
     {
     }
 
@@ -172,7 +170,7 @@ class ClearBasketCommandHandler : BaseBasketHandler, IRequestHandler<ClearBasket
 
 class BindBuyerToBasketCommandHandler : BaseBasketHandler, IRequestHandler<BindBuyerToBasketCommand, int>
 {
-    public BindBuyerToBasketCommandHandler(ApplicationDbContext _ctx, BasketItemValidator _basketItemValidator) : base(_ctx, _basketItemValidator)
+    public BindBuyerToBasketCommandHandler(ApplicationDbContext _ctx) : base(_ctx)
     {
     }
 

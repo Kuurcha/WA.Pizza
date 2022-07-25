@@ -30,7 +30,7 @@ namespace WA.PIzza.Web.Controllers
         /// <param name="catalogDataService"></param>
         /// <param name="log"></param>
         /// <param name="mediator"></param>
-        public BasketController(CatalogDataService catalogDataService, ILogger<BasketController> log, IMediator mediator, SMTPService SMTPService)
+        public BasketController(CatalogDataService catalogDataService, ILogger<BasketController> log, IMediator mediator)
         {
             _mediator = mediator;
             _log = log;

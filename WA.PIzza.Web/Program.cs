@@ -31,13 +31,11 @@ builder.Services.configureWeb();
 
 builder.Services.configureSwagger();
 
-builder.Services.AddMediatR(typeof(GetBasketByIdQuery));
-
-builder.Services.AddMediatR(typeof(GetBasketByUserIdQuery));
-                
-builder.Services.AddMediatR(typeof(InsertItemCommand));
+builder.Services.configureMediatR();
 
 builder.Services.configureHangfire(builder.Configuration.GetConnectionString("HangfireDB"));
+
+builder.Services.configureFluentValidation();
 
 var app = builder.Build();
 

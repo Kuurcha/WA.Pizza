@@ -12,6 +12,10 @@ using Wa.Pizza.Infrasctructure.Services;
 using Wa.Pizza.Infrasctructure.Validators;
 using Microsoft.AspNetCore.Builder;
 using Hangfire;
+using MediatR;
+using static Wa.Pizza.Infrasctructure.Data.CQRS.Basket.BasketCommands;
+using static BasketQueries;
+using Wa.Pizza.Infrasctructure.Data.CQRS.Basket;
 
 namespace WA.PIzza.Web.Extensions
 {
@@ -20,7 +24,23 @@ namespace WA.PIzza.Web.Extensions
     /// </summary>
     public static class ServiceCollectionExtension
     {
-
+        public static void configureFluentValidation(this IServiceCollection services)
+        {
+            services.AddFluentValidation(options =>
+             {
+                 options.AutomaticValidationEnabled = true;
+                 options.RegisterValidatorsFromAssemblyContaining<BasketItemValidator>();
+                 options.RegisterValidatorsFromAssemblyContaining<CatalogItemValidator>();
+                 options.RegisterValidatorsFromAssemblyContaining<UpdateOrderValidator>();
+                 options.RegisterValidatorsFromAssemblyContaining<AddOrderValidator>();
+                 options.RegisterValidatorsFromAssemblyContaining<BasketValidator>();
+             });
+        }
+        public static void configureMediatR(this IServiceCollection services)
+        {
+            services.AddMediatR(typeof(BasketCommands));
+            services.AddMediatR(typeof(BasketQueries));
+        }
         public static void configureHangfire(this IServiceCollection services, string connectionString)
         {
             services.AddHangfire(configuration =>
@@ -129,11 +149,7 @@ namespace WA.PIzza.Web.Extensions
         public static void configureWeb(this IServiceCollection services)
         {
             services.AddControllers();
-            services.AddControllers().AddFluentValidation(options =>
-            {
-                options.AutomaticValidationEnabled = true;
-                options.RegisterValidatorsFromAssemblyContaining<BasketItemValidator>();
-            });
+            services.AddControllers();
         }
         /// <summary>
         /// Injects applicationDbContext
