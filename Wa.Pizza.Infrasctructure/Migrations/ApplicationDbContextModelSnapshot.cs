@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Wa.Pizza.Core.Migrations
+namespace Wa.Pizza.Infrasctructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -16,7 +16,7 @@ namespace Wa.Pizza.Core.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -48,36 +48,37 @@ namespace Wa.Pizza.Core.Migrations
                         {
                             Id = 1,
                             AdressString = "Corusan 19",
-                            ApplicationUserId = "aa1df5e9-59d4-402b-8694-1a022a9e4df7"
+                            ApplicationUserId = "0267a896-5faf-48e4-b6f3-b274234b85fe"
                         },
                         new
                         {
                             Id = 2,
                             AdressString = "Omega-4",
-                            ApplicationUserId = "c5f7f70d-d516-493b-947c-eb4e81935b8c"
+                            ApplicationUserId = "adb3223a-f95c-4093-ba06-14d9abb3820d"
                         },
                         new
                         {
                             Id = 3,
                             AdressString = "Terra-4",
-                            ApplicationUserId = "0cfd6406-58b5-47c9-9727-60c8e8c4a946"
+                            ApplicationUserId = "0c87641b-ad7b-41c8-9a59-aa545825b7fc"
                         });
                 });
 
             modelBuilder.Entity("ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -89,10 +90,12 @@ namespace Wa.Pizza.Core.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -110,46 +113,55 @@ namespace Wa.Pizza.Core.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApplicationUser");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = "aa1df5e9-59d4-402b-8694-1a022a9e4df7",
+                            Id = "0267a896-5faf-48e4-b6f3-b274234b85fe",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4a2f4449-c3d1-4d68-b09b-de5f1f08aa6c",
+                            ConcurrencyStamp = "2c425113-f2a9-4681-80ba-813b2cd2c03a",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "69571162-2f70-41b0-b80f-b20a6e19e858",
+                            SecurityStamp = "719742ab-78c8-4951-866c-a31acc190478",
                             TwoFactorEnabled = false,
                             UserName = "Test"
                         },
                         new
                         {
-                            Id = "c5f7f70d-d516-493b-947c-eb4e81935b8c",
+                            Id = "adb3223a-f95c-4093-ba06-14d9abb3820d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1733ecef-d214-409d-9461-84df7002bccb",
+                            ConcurrencyStamp = "58d35f01-d3b1-47d3-bc98-0a22de84cc21",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "be399f7a-be62-4fc6-9dc4-2ed85f7d1d90",
+                            SecurityStamp = "81e1d6f9-53b0-4ae0-8dbd-e8d30234eddd",
                             TwoFactorEnabled = false,
                             UserName = "Test1"
                         },
                         new
                         {
-                            Id = "0cfd6406-58b5-47c9-9727-60c8e8c4a946",
+                            Id = "0c87641b-ad7b-41c8-9a59-aa545825b7fc",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "946a3ccf-4c9a-45ec-a12d-5a891c2e939b",
+                            ConcurrencyStamp = "81ff32ca-fadc-40b2-85d7-a7cc03733cf4",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "152cfbc2-8a38-49e7-890d-90121478f7e5",
+                            SecurityStamp = "fb6f90b7-eb6b-4a93-9fe6-4061a7e313c1",
                             TwoFactorEnabled = false,
                             UserName = "Test2"
                         });
@@ -164,7 +176,6 @@ namespace Wa.Pizza.Core.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ApplicationUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("LastModified")
@@ -173,7 +184,8 @@ namespace Wa.Pizza.Core.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[ApplicationUserId] IS NOT NULL");
 
                     b.ToTable("Basket");
 
@@ -181,19 +193,19 @@ namespace Wa.Pizza.Core.Migrations
                         new
                         {
                             Id = 1,
-                            ApplicationUserId = "aa1df5e9-59d4-402b-8694-1a022a9e4df7",
+                            ApplicationUserId = "0267a896-5faf-48e4-b6f3-b274234b85fe",
                             LastModified = new DateTime(2050, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
-                            ApplicationUserId = "c5f7f70d-d516-493b-947c-eb4e81935b8c",
+                            ApplicationUserId = "adb3223a-f95c-4093-ba06-14d9abb3820d",
                             LastModified = new DateTime(2186, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
-                            ApplicationUserId = "0cfd6406-58b5-47c9-9727-60c8e8c4a946",
+                            ApplicationUserId = "0c87641b-ad7b-41c8-9a59-aa545825b7fc",
                             LastModified = new DateTime(4000, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -366,6 +378,139 @@ namespace Wa.Pizza.Core.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
             modelBuilder.Entity("Order", b =>
                 {
                     b.Property<int>("Id")
@@ -399,7 +544,7 @@ namespace Wa.Pizza.Core.Migrations
                         new
                         {
                             Id = 66,
-                            ApplicationUserId = "aa1df5e9-59d4-402b-8694-1a022a9e4df7",
+                            ApplicationUserId = "0267a896-5faf-48e4-b6f3-b274234b85fe",
                             CreationDate = new DateTime(2019, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "The republic will be reogranised into a first galactic empire",
                             Status = 3
@@ -407,7 +552,7 @@ namespace Wa.Pizza.Core.Migrations
                         new
                         {
                             Id = 1,
-                            ApplicationUserId = "c5f7f70d-d516-493b-947c-eb4e81935b8c",
+                            ApplicationUserId = "adb3223a-f95c-4093-ba06-14d9abb3820d",
                             CreationDate = new DateTime(2186, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Bring extra tomato sauce, don't be late, don't make Aria mad",
                             Status = 2
@@ -415,7 +560,7 @@ namespace Wa.Pizza.Core.Migrations
                         new
                         {
                             Id = 2,
-                            ApplicationUserId = "0cfd6406-58b5-47c9-9727-60c8e8c4a946",
+                            ApplicationUserId = "0c87641b-ad7b-41c8-9a59-aa545825b7fc",
                             CreationDate = new DateTime(4000, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Someone order pepperoni pizza into the Emperor's palace",
                             Status = 4
@@ -542,17 +687,14 @@ namespace Wa.Pizza.Core.Migrations
                                 .HasForeignKey("ApplicationUserId");
                         });
 
-                    b.Navigation("refreshToken")
-                        .IsRequired();
+                    b.Navigation("refreshToken");
                 });
 
             modelBuilder.Entity("Basket", b =>
                 {
                     b.HasOne("ApplicationUser", "ApplicationUser")
                         .WithOne("Basket")
-                        .HasForeignKey("Basket", "ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Basket", "ApplicationUserId");
 
                     b.Navigation("ApplicationUser");
                 });
@@ -574,6 +716,57 @@ namespace Wa.Pizza.Core.Migrations
                     b.Navigation("Basket");
 
                     b.Navigation("CatalogItem");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Order", b =>

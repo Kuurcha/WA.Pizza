@@ -63,7 +63,7 @@ class InsertItemCommandHandler : BaseBasketHandler, IRequestHandler<InsertItemCo
                                     .FirstOrDefaultAsync(ci => ci.Id == request.BasketItemDTO.CatalogItemId);
 
         if (catalogItem == null)
-            throw new EntityNotFoundException("Catalog item by id: " + request.BasketItemDTO.CatalogItemId + " does not exist");
+            throw new EntityNotFoundException("Catalog item by id: " + request.BasketItemDTO.CatalogItemId.ToString() + " does not exist");
         BasketItem? basketItem = await context.BasketItem
                                 .FirstOrDefaultAsync(bi => bi.Id == request.BasketItemDTO.Id);
 

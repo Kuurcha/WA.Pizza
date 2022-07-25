@@ -11,6 +11,7 @@ using Wa.Pizza.Infrasctructure.Data.Services;
 using Wa.Pizza.Infrasctructure.Services;
 using Wa.Pizza.Infrasctructure.Validators;
 using Microsoft.AspNetCore.Builder;
+using Hangfire;
 
 namespace WA.PIzza.Web.Extensions
 {
@@ -19,16 +20,31 @@ namespace WA.PIzza.Web.Extensions
     /// </summary>
     public static class ServiceCollectionExtension
     {
+
+        public static void configureHangfire(this IServiceCollection services, string connectionString)
+        {
+            services.AddHangfire(configuration =>
+            {
+                configuration.UseSqlServerStorage(connectionString)
+                .UseRecommendedSerializerSettings()
+                .UseSimpleAssemblyNameTypeSerializer();
+               
+            });
+            services.AddHangfireServer();
+
+            
+        }
         /// <summary>
         /// Injects user created services into the program
         /// </summary>
         /// <param name="services"></param>
-       public static void injectServices (this IServiceCollection services)
+       public static void injectServices (this IServiceCollection services, string appMail, string password)
         {
             services.AddScoped<OrderDataService>();
             services.AddScoped<CatalogDataService>();
             services.AddScoped<TokenService>();
             services.AddScoped<AuthenticationService>();
+            services.AddSingleton<SMTPService>(x => new SMTPService(appMail, password));
         }
         /// <summary>
         /// Injects and configures swagger

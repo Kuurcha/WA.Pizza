@@ -11,7 +11,7 @@ public class Basket
 	[Required]
     public DateTime LastModified { get; set; }
 
-	public string ApplicationUserId { get; set; }
+	public string? ApplicationUserId { get; set; }
 
 	public ApplicationUser? ApplicationUser { get; set; }
 
