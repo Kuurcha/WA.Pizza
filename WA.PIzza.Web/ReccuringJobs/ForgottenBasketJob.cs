@@ -26,9 +26,9 @@ namespace WA.PIzza.Web.ReccuringJobs
             {
                 foreach (Basket basket in BasketsWithUsers)
                 {
-                    var userEmailToSendTo = basket.ApplicationUser.Email;
+                    var userEmailToSendTo = basket.ApplicationUser!.Email;
                     string message = "Hello, " + basket.ApplicationUser.UserName + " you didn't finish making your order.";         
-                    foreach (BasketItem basketItem in basket.BasketItems)
+                    foreach (BasketItem basketItem in basket.BasketItems!)
                     {
                         message += Environment.NewLine;
                         message += basketItem.CatalogItemName + " x" + basketItem.Quantity + " " + basketItem.UnitPrice + "$"; 
