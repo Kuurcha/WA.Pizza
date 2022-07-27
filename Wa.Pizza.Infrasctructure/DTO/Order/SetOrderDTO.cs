@@ -4,8 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     public class SetOrderDTO
     {
-        public string Description { get; set; }
-        public DateTime CreationDate { get; set; }
-        public OrderStatus Status { get; set; }
+        public int basketId { get; set; }
+        public string description {get; set;}
     }
 }

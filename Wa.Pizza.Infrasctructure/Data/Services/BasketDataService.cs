@@ -57,23 +57,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             return basket;
         }
 
-        //Получение Basket => получение списка 
-        private async Task<bool> validateDTOAsync(BasketItemDTO basketItemDTO)
-        {
-
-            ValidationResult results = await _basketItemValidator.ValidateAsync(basketItemDTO.Adapt<BasketItem>());
-            List<ValidationFailure> failures = results.Errors;
-            if (failures.Count > 0)
-            {
-                string errorString = "";
-                foreach (ValidationFailure failure in failures)
-                {
-                    errorString += System.Environment.NewLine + failure.ErrorMessage;
-                }
-                throw new WrongDataFormatException(errorString);
-            }
-            return results.IsValid;
-        }
+      
         /// <summary>
         /// Использовать в контроллере для уменьшения количества обновлений.
         /// </summary>
@@ -81,8 +65,6 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         /// <returns></returns>
         public async Task<int> AddItem(BasketItemDTO basketItemDTO)
         {
-
-                await validateDTOAsync(basketItemDTO);   
 
                 CatalogItem catalogItem = await _context.CatalogItem
                                             .AsNoTracking()
@@ -134,7 +116,6 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         public async Task<int> UpdateItem(BasketItemDTO basketItemDTO)
         {
 
-            await validateDTOAsync(basketItemDTO);
 
             BasketItem originalBasketItem = await _context.BasketItem.Include(bi => bi.Basket)
                                                                        .FirstOrDefaultAsync(x => x.Id == basketItemDTO.Id);
@@ -150,8 +131,6 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         }
         public async Task<int> DeleteItem(BasketItemDTO basketItemDTO)
         {
-
-            await validateDTOAsync(basketItemDTO);
 
             Basket basket = await _context.Basket.Include(b => b.BasketItems).FirstOrDefaultAsync(b => b.Id == basketItemDTO.BasketId);
             if (basket == null)

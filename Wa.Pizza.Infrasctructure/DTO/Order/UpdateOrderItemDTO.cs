@@ -2,10 +2,7 @@
 {
     public class UpdateOrderItemDTO
     {
-        public int Id { get; set; }
-        public decimal UnitPrice { get; set; }
-        public decimal Discount { get; set; }
-        public int Quantity { get; set; }
-        public int CatalogItemId { get; set; }
+        public int orderId { get; set; }
+        public OrderStatus orderStatus { get; set; }
     }
 }
