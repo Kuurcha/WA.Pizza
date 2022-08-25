@@ -42,7 +42,7 @@ class GetBasketByUserIdHandler : BaseBasketHandler, IRequestHandler<GetBasketByU
                                   .ProjectToType<BasketDTO>()
                                   .Where(x => x.ApplicationUserId == request.Id)
                                   .FirstOrDefaultAsync();
-        if (basket == null)
+        if (basket == null || basket.Result == null)
             throw new EntityNotFoundException("basket with user id: " + request.Id + " does not exist");
         return basket!;
     }

@@ -47,6 +47,7 @@ namespace WA.PIzza.Web.Controllers
         {
             BasketDTO basket;
             _log.LogInformation("Retriving basket by user id " + userId + "..");
+
             try
             {
                 basket = await _mediator.Send(new GetBasketByUserIdQuery(userId));
@@ -55,7 +56,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return NotFound(ex);
+                return NotFound(ex.Message);
             }
             return new ObjectResult(basket);
         }

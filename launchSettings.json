@@ -35,14 +35,11 @@
     },
     "Test": {
       "commandName": "DockerCompose",
-      "composeLaunchAction": "LaunchBrowser",
-      "composeLaunchServiceName": "wa.pizza.web",
-      "composeLaunchUrl": "{Scheme}://{ServiceIPAddress}{ServicePort}",
       "commandVersion": "1.0",
       "serviceActions": {
         "mssql": "StartWithoutDebugging",
         "seq": "StartWithoutDebugging",
-        "wa.pizza.web": "StartDebugging"
+        "wa.pizza.web": "DoNotStart"
       }
     }
   }

@@ -13,13 +13,6 @@ namespace WA.Pizza.Tests
 	{
 		public ApplicationDbContext applicationDbContext;
 	
-		/*		public Checkpoint checkpoint = new Checkpoint()
-				{
-					SchemasToInclude = new[]
-					{
-						"Test"
-					}
-				};*/
 		protected BaseDatabaseTestClass()
 		{
 			var config = new ConfigurationBuilder()
@@ -29,13 +22,15 @@ namespace WA.Pizza.Tests
 			   .UseSqlServer(config.GetConnectionString("Test"));
 			applicationDbContext = new ApplicationDbContext(optionsBuilder.Options);
 
-
 		}
 
         public void Dispose()
         {
 			//await checkpoint.Reset(applicationDbContext.Database.GetDbConnection()); - causes deadlock?
 			applicationDbContext.Dispose();
+			
+
+	
 
 
 		}

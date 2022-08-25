@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Wa.Pizza.Core.Model.Advertisement;
 using Wa.Pizza.Core.Model.AuthenticateController;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -20,6 +21,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<CatalogItem> CatalogItem { get; set; }
 
     public DbSet<RefreshToken> RefreshToken { get; set; }
+
+    public DbSet<Advertisement> Advertisements { get; set; }
+
+    public DbSet<AdvertisementClient> AdvertisementClients { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.EnableSensitiveDataLogging();

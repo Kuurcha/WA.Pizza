@@ -58,7 +58,9 @@ namespace WA.PIzza.Web.Extensions
         /// Injects user created services into the program
         /// </summary>
         /// <param name="services"></param>
-       public static void injectServices (this IServiceCollection services, string appMail, string password)
+        /// <param name="appMail"></param>
+        /// <param name="password"></param>
+        public static void injectServices (this IServiceCollection services, string appMail, string password)
         {
             services.AddScoped<OrderDataService>();
             services.AddScoped<CatalogDataService>();

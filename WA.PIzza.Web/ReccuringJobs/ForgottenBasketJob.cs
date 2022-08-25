@@ -21,7 +21,7 @@ namespace WA.PIzza.Web.ReccuringJobs
 
         public async Task Run()
         {
-            var BasketsWithUsers = _context.Basket.Include(b => b.ApplicationUser).Include(b => b.BasketItems).Where(b => b.ApplicationUser != null && b.ApplicationUser.Email != null && b.BasketItems != null & b.BasketItems.Count > 0);
+            var BasketsWithUsers = _context.Basket.Include(b => b.ApplicationUser).Include(b => b.BasketItems).Where(b => b.ApplicationUser != null && b.ApplicationUser.Email != null && b.BasketItems != null & b.BasketItems!.Count > 0);
             if (BasketsWithUsers != null)
             {
                 foreach (Basket basket in BasketsWithUsers)
