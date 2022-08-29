@@ -34,6 +34,8 @@ namespace WA.PIzza.Web.Extensions
                  options.RegisterValidatorsFromAssemblyContaining<UpdateOrderValidator>();
                  options.RegisterValidatorsFromAssemblyContaining<AddOrderValidator>();
                  options.RegisterValidatorsFromAssemblyContaining<BasketValidator>();
+                 options.RegisterValidatorsFromAssemblyContaining<AdvertisementClientValidator>();
+                 options.RegisterValidatorsFromAssemblyContaining<AdvertisementValidator>();
              });
         }
         public static void configureMediatR(this IServiceCollection services)
@@ -66,6 +68,9 @@ namespace WA.PIzza.Web.Extensions
             services.AddScoped<CatalogDataService>();
             services.AddScoped<TokenService>();
             services.AddScoped<AuthenticationService>();
+            services.AddScoped<ApiKeyService>();
+            services.AddScoped<AdvertisementClientService>();
+            services.AddScoped<AdvertisementService>();
             services.AddSingleton<SMTPService>(x => new SMTPService(appMail, password));
         }
         /// <summary>
