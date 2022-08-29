@@ -27,8 +27,8 @@ namespace WA.Pizza.Tests.API
         {
             Advertisement testAdvertisement = _testAdvertisementDTO.Adapt<Advertisement>();
             _testAdvertisement =   applicationDbContext.Advertisements.Add(testAdvertisement).Entity;
-            applicationDbContext.Entry(_testAdvertisement).State = EntityState.Detached;
-            return await applicationDbContext.SaveChangesAsync();
+            await applicationDbContext.SaveChangesAsync();
+            return 0;
         }
 
         public AdvertisementTDDTests(): base()
@@ -45,7 +45,7 @@ namespace WA.Pizza.Tests.API
             int currentItemCount = applicationDbContext.Advertisements.Count();
             //act
             await _advertisementService.CreateAdvertisement(_testAdvertisementDTO, _testApiKey);
-            //assert
+            //assert 
             applicationDbContext.Advertisements.Count().Should().Be(currentItemCount+1);
         }
 
@@ -73,7 +73,8 @@ namespace WA.Pizza.Tests.API
             //act
             await _advertisementService.UpdateAdvertisement(_testAdvertisementDTO, _testApiKey);
 
-            var updatedTestAdvertisement = applicationDbContext.Advertisements.FirstOrDefault(a => a.Id == _testAdvertisementClient.Id);
+            var updatedTestAdvertisement = applicationDbContext.Advertisements.FirstOrDefault(a => a.Id == _testAdvertisement.Id);
+
             updatedTestAdvertisement.Description.Should().BeEquivalentTo(newDescription);
         }
 
@@ -109,24 +110,78 @@ namespace WA.Pizza.Tests.API
 
 
 
-        /*        [Fact]
+
+        [Fact]
+        public async void advertisement_is_retrieved()
+        {
+            await _addAdvertisement();
+
+            //act
+            var retrievedAdvertisement = await _advertisementService.GetAdvertisement(_testApiKey, _testAdvertisement.Id);
+
+            //assert
+            retrievedAdvertisement.Should().NotBeNull();
+            retrievedAdvertisement.Should().BeEquivalentTo(_testAdvertisement.Adapt<AdvertisementDTO>());
+        }
+
+        [Fact]
+        public async void advertisement_is_not_retrieved_invalid_api_key()
+        {
+            await _addAdvertisement();
+
+            Func<Task> act = async () => await _advertisementService.GetAdvertisement("meow", _testAdvertisement.Id);
+
+            await act.Should().ThrowAsync<WrongDataFormatException>();
+        }
+
+        [Fact]
+        public async void advertisement_is_not_retrieved_advertisement_does_not_exist()
+        {
+            await _addAdvertisement();
+
+            Func<Task> act = async () => await _advertisementService.GetAdvertisement(_testApiKey, -1);
+
+            await act.Should().ThrowAsync<EntityNotFoundException>();
+        }
+
+        [Fact]
         public async void advertisement_is_removed()
         {
             //arrange
-            var testAdvertisement = _addAdvertisement().Adapt<AdvertisementDTO>();
+            await _addAdvertisement();
 
             //act
-            await _advertisementService.RemoveAdvertisement(testAdvertisement, _testApiKey);
+            await _advertisementService.RemoveAdvertisement(_testAdvertisement.Adapt<AdvertisementDTO>(), _testApiKey);
             //assert
+            applicationDbContext.Advertisements.Any(a => a.Id == _testAdvertisement.Id).Should().BeFalse();
 
+        }
 
-        }*/
+        [Fact]
+        public async void advertisement_failed_to_remove_incorrect_or_illegal_api_key()
+        {
+            //arrange
+            await _addAdvertisement();
+            
+            //act
+            Func<Task> act = async () => await _advertisementService.RemoveAdvertisement(_testAdvertisement.Adapt<AdvertisementDTO>(), "Meow");
+            //assert
+            await act.Should().ThrowAsync<WrongDataFormatException>();
 
-        /*        [Fact]
-                public async void advertisement_is_retrieved()
-                {
-                    var testAdvertisement = _addAdvertisement().Adapt<AdvertisementDTO>();
-                }*/
+        }
+
+        [Fact]
+        public async void advertisement_failed_to_remove_advertisement_does_not_exist()
+        {
+
+            //arrange
+            await _addAdvertisement();
+            _testAdvertisement.Id = -1;
+            //act
+            Func<Task> act = async () => await _advertisementService.RemoveAdvertisement(_testAdvertisement.Adapt<AdvertisementDTO>(), _testApiKey);
+            //assert
+            await act.Should().ThrowAsync<EntityNotFoundException>();
+        }
 
     }
 }
