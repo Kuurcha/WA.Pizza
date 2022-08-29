@@ -85,7 +85,7 @@ namespace WA.Pizza.Tests.API
 
             const string newDescription = "New test description";
             _testAdvertisementDTO.Description = newDescription;
-
+            _testAdvertisement.Id = -1;
             //act
             Func<Task> act  =  async () => await _advertisementService.UpdateAdvertisement(_testAdvertisementDTO, _testApiKey);
 

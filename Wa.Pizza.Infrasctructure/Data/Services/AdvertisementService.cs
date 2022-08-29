@@ -41,6 +41,11 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
        
         public async Task<int> UpdateAdvertisement(AdvertisementDTO advertisementDTO, string apiKey)
         {
+            var originalAdvertisement = _context.Advertisements.Include(a=> a.AdvertisementClient).FirstOrDefault(a => a.Id == advertisementDTO.Id);
+            if (originalAdvertisement == null)
+                throw new EntityNotFoundException("Can't update advertisement with id: " + advertisementDTO.Id + " id does not exists");
+            if (originalAdvertisement.AdvertisementClient.ApiKey != apiKey)
+                throw new WrongDataFormatException("Can't update advertisement with id: " + advertisementDTO.Id + " api key is invalid");
             var advertisementToUpdate = advertisementDTO.Adapt<Advertisement>();
             _context.Advertisements.Update(advertisementToUpdate);
             return await _context.SaveChangesAsync();
