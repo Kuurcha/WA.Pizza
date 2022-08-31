@@ -16,6 +16,7 @@ using MediatR;
 using static Wa.Pizza.Infrasctructure.Data.CQRS.Basket.BasketCommands;
 using static BasketQueries;
 using Wa.Pizza.Infrasctructure.Data.CQRS.Basket;
+using Wa.Pizza.Infrasctructure.DTO.AdvertisementDTO;
 
 namespace WA.PIzza.Web.Extensions
 {
@@ -34,8 +35,11 @@ namespace WA.PIzza.Web.Extensions
                  options.RegisterValidatorsFromAssemblyContaining<UpdateOrderValidator>();
                  options.RegisterValidatorsFromAssemblyContaining<AddOrderValidator>();
                  options.RegisterValidatorsFromAssemblyContaining<BasketValidator>();
+                 options.RegisterValidatorsFromAssemblyContaining<CreateAdvertisementClientValidator<CreateAdvertisementClientDTO>>();
+                 options.RegisterValidatorsFromAssemblyContaining<UpdateDeleteAdvertisementClientValidator<UpdateDeleteAdvertisementClientDTO>>();
                  options.RegisterValidatorsFromAssemblyContaining<AdvertisementClientValidator>();
                  options.RegisterValidatorsFromAssemblyContaining<AdvertisementValidator>();
+
              });
         }
         public static void configureMediatR(this IServiceCollection services)

@@ -41,7 +41,7 @@ namespace WA.Pizza.Tests
             //arrange
             var testAdvertisementClient = (await AddTestAdvertisementClientAsync()).Adapt<AdvertisementClientDTO>();
             //act
-            string regerenatedApiKey = await _advertisementClientService.RegenerateApiKey(testAdvertisementClient.ApiKey);
+            string regerenatedApiKey = await _advertisementClientService.RegenerateApiKey(testAdvertisementClient.Id, testAdvertisementClient.ApiKey);
             testAdvertisementClient.ApiKey = regerenatedApiKey;
             //assert
             var updatedAdvertisementClient = await isAdvertisementClientNotNull(testAdvertisementClient);
@@ -51,21 +51,43 @@ namespace WA.Pizza.Tests
         [Fact]
         public async Task advertisement_throws_exception_on_null()
         {
-          //arrange
-          AdvertisementClientDTO advertisementClientDTO = null;
+            //arrange
+          CreateAdvertisementClientDTO advertisementClientDTO = null;
           Func<Task> act = async () => await _advertisementClientService.CreateAdvertisementClientAsync(advertisementClientDTO);
           //act && assert
           await act.Should().ThrowAsync<WrongDataFormatException>();
         }
+        [Fact]
+        public async Task advertisement_created()
+        {
+            //arrange
+            CreateAdvertisementClientDTO advertsiementClientDTO = new CreateAdvertisementClientDTO { Name = "test", Website = "google.com" };
+            int itemCount = applicationDbContext.AdvertisementClients.Count();
+            //act
+            await _advertisementClientService.CreateAdvertisementClientAsync(advertsiementClientDTO);
+            //assert
+            applicationDbContext.AdvertisementClients.Count().Should().Be(itemCount+1);
+        }
 
 
+        [Fact]
+        public async void advertisement_is_retrieved_admin()
+        {
+            var addedAdvertisementClient = await AddTestAdvertisementClientAsync();
+            //act
+            
+            AdvertisementClientDTO advertisementClientDTO = await _advertisementClientService.GetAdvertisementClientById(addedAdvertisementClient.Id, _testApiKey);
+            //assert
+            advertisementClientDTO.Should().NotBeNull();
+            advertisementClientDTO.ApiKey.Should().BeEquivalentTo(_testApiKey);
+        }
 
         [Fact]
         public async void advertisement_is_retrieved()
         {
             await AddTestAdvertisementClientAsync();
             //act
-            AdvertisementClientDTO advertisementClientDTO = await _advertisementClientService.GetAdvertisementClientAsync(_testApiKey);
+            AdvertisementClientDTO advertisementClientDTO = await _advertisementClientService.GetAdvertisementClient(_testApiKey);
             //assert
             advertisementClientDTO.Should().NotBeNull();
             advertisementClientDTO.ApiKey.Should().BeEquivalentTo(_testApiKey);
@@ -75,7 +97,7 @@ namespace WA.Pizza.Tests
         {
             //arrange
             await AddTestAdvertisementClientAsync();
-            Func<Task> act =  async () => await _advertisementClientService.GetAdvertisementClientAsync("meow");
+            Func<Task> act =  async () => await _advertisementClientService.GetAdvertisementClient("meow");
             //act && assert
             await act.Should().ThrowAsync<EntityNotFoundException>();
         }
@@ -87,7 +109,7 @@ namespace WA.Pizza.Tests
             //arrange
             var testAdvertisementClient = (await AddTestAdvertisementClientAsync()).Adapt<AdvertisementClientDTO>();
             testAdvertisementClient.ApiKey = "meow";
-            Func<Task> act = async () => await _advertisementClientService.UpdateAdvertisementClient(testAdvertisementClient);
+            Func<Task> act = async () => await _advertisementClientService.UpdateAdvertisementClient(testAdvertisementClient.Id, testAdvertisementClient);
             //act && assert
             await act.Should().ThrowAsync<EntityNotFoundException>();
         }
@@ -96,7 +118,7 @@ namespace WA.Pizza.Tests
         {
             //arrange
             AdvertisementClientDTO testAdvertisementClient = null;
-            Func<Task> act = async () => await _advertisementClientService.UpdateAdvertisementClient(testAdvertisementClient);
+            Func<Task> act = async () => await _advertisementClientService.UpdateAdvertisementClient(-1, testAdvertisementClient);
            
             await act.Should().ThrowAsync<WrongDataFormatException>();
         }
@@ -107,7 +129,7 @@ namespace WA.Pizza.Tests
             var testAdvertisementClient = (await AddTestAdvertisementClientAsync()).Adapt<AdvertisementClientDTO>();
             testAdvertisementClient.Website = "www.myspace.com";
             //act
-            await _advertisementClientService.UpdateAdvertisementClient(testAdvertisementClient);
+            await _advertisementClientService.UpdateAdvertisementClient(testAdvertisementClient.Id, testAdvertisementClient);
             //asert
             var updatedTestAdvertisementClient = await isAdvertisementClientNotNull(testAdvertisementClient);
             updatedTestAdvertisementClient.Adapt<AdvertisementClientDTO>().Should().BeEquivalentTo(testAdvertisementClient);
@@ -119,7 +141,7 @@ namespace WA.Pizza.Tests
             //arrange
             var testAdvertisementClient = (await AddTestAdvertisementClientAsync()).Adapt<AdvertisementClientDTO>();
             testAdvertisementClient.ApiKey = "meow";
-            Func<Task> act = async () => await _advertisementClientService.DeleteAdvertisementClient(testAdvertisementClient);
+            Func<Task> act = async () => await _advertisementClientService.DeleteAdvertisementClient(testAdvertisementClient.Id, testAdvertisementClient);
             //act && assert
             await act.Should().ThrowAsync<EntityNotFoundException>();
 
@@ -129,7 +151,7 @@ namespace WA.Pizza.Tests
         {
             //arrange
             AdvertisementClientDTO testAdvertisementClient = null;
-            Func<Task> act = async () => await _advertisementClientService.DeleteAdvertisementClient(testAdvertisementClient);
+            Func<Task> act = async () => await _advertisementClientService.DeleteAdvertisementClient(-1, testAdvertisementClient);
             //act && assert
             await act.Should().ThrowAsync<WrongDataFormatException>();
         }
@@ -141,7 +163,7 @@ namespace WA.Pizza.Tests
             var testAdvertisementClient = (await AddTestAdvertisementClientAsync()).Adapt<AdvertisementClientDTO>();
             var items = applicationDbContext.AdvertisementClients.Count();
             //act
-            await _advertisementClientService.DeleteAdvertisementClient(testAdvertisementClient);
+            await _advertisementClientService.DeleteAdvertisementClient(testAdvertisementClient.Id, testAdvertisementClient);
             //assert
             applicationDbContext.AdvertisementClients.Count().Should().Be(items-1);
         }

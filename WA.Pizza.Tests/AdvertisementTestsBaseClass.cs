@@ -25,6 +25,8 @@ namespace WA.Pizza.Tests
         }
         internal async Task<AdvertisementClient> AddTestAdvertisementClientAsync()
         {
+            foreach (var entity in applicationDbContext.AdvertisementClients)
+               applicationDbContext.AdvertisementClients.Remove(entity);
             var testAdvertisementClientAdded = _addTestAdvertisementClient();
             await applicationDbContext.SaveChangesAsync();
             return testAdvertisementClientAdded;
