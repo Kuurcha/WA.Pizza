@@ -28,11 +28,11 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         private void _checkForApiAndNullability(Advertisement? advertisement, string apiKey, int id, string message)
         {
             if (advertisement == null)
-                throw new EntityNotFoundException(message + id + " id does not exists");
+                throw new EntityNotFoundException(message + id + " no such id found");
             if (advertisement.AdvertisementClient.ApiKey != apiKey)
                 throw new WrongDataFormatException(message + id + " api key is invalid");
         }
-        public async Task<int> CreateAdvertisement(AdvertisementDTO advertisementDTO, string apiKey)
+        public async Task<int> CreateAdvertisement(CUDAdvertisementDTO advertisementDTO, string apiKey)
         {
 
             if (advertisementDTO == null)
@@ -49,24 +49,22 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> RemoveAdvertisement(AdvertisementDTO advertisementDTO, string apiKey)
+        public async Task<int> RemoveAdvertisement(int id, string apiKey)
         {
-            if (advertisementDTO == null)
-                throw new WrongDataFormatException("Advertisement should not be null");
-            var originalAdvertisement = _context.Advertisements.FirstOrDefault(a => a.Id == advertisementDTO.Id);
-            _checkForApiAndNullability(originalAdvertisement, apiKey, advertisementDTO.Id, "Can't remove advertisement with id: ");
+            var originalAdvertisement = _context.Advertisements.Include(a => a.AdvertisementClient).FirstOrDefault(a => a.Id == id);
+            _checkForApiAndNullability(originalAdvertisement, apiKey, id, "Can't remove advertisement with id: ");
             _context.Advertisements.Remove(originalAdvertisement);
 
             return await _context.SaveChangesAsync();
         }
        
-        public async Task<int> UpdateAdvertisement(AdvertisementDTO advertisementDTO, string apiKey)
+        public async Task<int> UpdateAdvertisement(CUDAdvertisementDTO advertisementDTO, int id, string apiKey)
         {
             if (advertisementDTO == null)
                 throw new WrongDataFormatException("Advertisement should not be null");
 
-            var originalAdvertisement = _context.Advertisements.Include(a=> a.AdvertisementClient).FirstOrDefault(a => a.Id == advertisementDTO.Id);
-            _checkForApiAndNullability(originalAdvertisement, apiKey, advertisementDTO.Id, "Can't update advertisement with id: ");
+            var originalAdvertisement = _context.Advertisements.Include(a=> a.AdvertisementClient).FirstOrDefault(a => a.Id == id);
+            _checkForApiAndNullability(originalAdvertisement, apiKey, id, "Can't update advertisement with id: ");
             originalAdvertisement.Description = advertisementDTO.Description;
             originalAdvertisement.ImageURL = advertisementDTO.ImageURL;
             originalAdvertisement.RedicrectURL = advertisementDTO.RedicrectURL;
@@ -74,7 +72,14 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<AdvertisementDTO> GetAdvertisement(string apiKey, int id)
+        public async Task<CUDAdvertisementDTO> GetAdvertisementAnonymous(int id)
+        {
+            var originalAdvertisement = _context.Advertisements.AsNoTracking().FirstOrDefault(a => a.Id == id);
+            if (originalAdvertisement == null)
+                throw new EntityNotFoundException("Can't retrieve advertisement with id: " + id + " no such id found");
+            return originalAdvertisement!.Adapt<CUDAdvertisementDTO>();
+        }
+        public async Task<AdvertisementDTO> GetAdvertisement(string apiKey, int id) 
         {
             var originalAdvertisement = _context.Advertisements.Include(a => a.AdvertisementClient).FirstOrDefault(a => a.Id == id);
             _checkForApiAndNullability(originalAdvertisement, apiKey,id, "Can't retrieve advertisement with id: ");

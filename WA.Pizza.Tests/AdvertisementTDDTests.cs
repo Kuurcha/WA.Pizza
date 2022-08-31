@@ -44,7 +44,7 @@ namespace WA.Pizza.Tests.API
         {
             int currentItemCount = applicationDbContext.Advertisements.Count();
             //act
-            await _advertisementService.CreateAdvertisement(_testAdvertisementDTO, _testApiKey);
+            await _advertisementService.CreateAdvertisement(_testAdvertisementDTO.Adapt<CUDAdvertisementDTO>(), _testApiKey);
             //assert 
             applicationDbContext.Advertisements.Count().Should().Be(currentItemCount+1);
         }
@@ -54,7 +54,7 @@ namespace WA.Pizza.Tests.API
         {
    
             //arrange
-            Func <Task> act = async () => await  _advertisementService.CreateAdvertisement(_testAdvertisementDTO, "meow");
+            Func <Task> act = async () => await  _advertisementService.CreateAdvertisement(_testAdvertisementDTO.Adapt<CUDAdvertisementDTO>(), "meow");
             //Act && Assert
             await act.Should().ThrowAsync<EntityNotFoundException>();
         }
@@ -71,7 +71,7 @@ namespace WA.Pizza.Tests.API
             _testAdvertisementDTO.Description = newDescription;
             _testAdvertisementDTO.Id = _testAdvertisement.Id;
             //act
-            await _advertisementService.UpdateAdvertisement(_testAdvertisementDTO, _testApiKey);
+            await _advertisementService.UpdateAdvertisement(_testAdvertisementDTO.Adapt<CUDAdvertisementDTO>(), _testAdvertisement.Id, _testApiKey);
 
             var updatedTestAdvertisement = applicationDbContext.Advertisements.FirstOrDefault(a => a.Id == _testAdvertisement.Id);
 
@@ -86,9 +86,8 @@ namespace WA.Pizza.Tests.API
 
             const string newDescription = "New test description";
             _testAdvertisementDTO.Description = newDescription;
-            _testAdvertisement.Id = -1;
             //act
-            Func<Task> act  =  async () => await _advertisementService.UpdateAdvertisement(_testAdvertisementDTO, _testApiKey);
+            Func<Task> act  =  async () => await _advertisementService.UpdateAdvertisement(_testAdvertisementDTO.Adapt<CUDAdvertisementDTO>(), -1,  _testApiKey);
 
             await act.Should().ThrowAsync<EntityNotFoundException>();
         }
@@ -103,7 +102,7 @@ namespace WA.Pizza.Tests.API
             _testAdvertisementDTO.Description = newDescription;
             _testAdvertisementDTO.Id = _testAdvertisement.Id;
             //act
-            Func<Task> act  =  async () => await _advertisementService.UpdateAdvertisement(_testAdvertisementDTO, "Meow");
+            Func<Task> act  =  async () => await _advertisementService.UpdateAdvertisement(_testAdvertisementDTO.Adapt<CUDAdvertisementDTO>(), _testAdvertisement.Id, "Meow");
 
             await act.Should().ThrowAsync<WrongDataFormatException>();
         }
@@ -151,7 +150,7 @@ namespace WA.Pizza.Tests.API
             await _addAdvertisement();
 
             //act
-            await _advertisementService.RemoveAdvertisement(_testAdvertisement.Adapt<AdvertisementDTO>(), _testApiKey);
+            await _advertisementService.RemoveAdvertisement(_testAdvertisement.Id, _testApiKey);
             //assert
             applicationDbContext.Advertisements.Any(a => a.Id == _testAdvertisement.Id).Should().BeFalse();
 
@@ -164,7 +163,7 @@ namespace WA.Pizza.Tests.API
             await _addAdvertisement();
             
             //act
-            Func<Task> act = async () => await _advertisementService.RemoveAdvertisement(_testAdvertisement.Adapt<AdvertisementDTO>(), "Meow");
+            Func<Task> act = async () => await _advertisementService.RemoveAdvertisement( _testAdvertisement.Id, "Meow");
             //assert
             await act.Should().ThrowAsync<WrongDataFormatException>();
 
@@ -178,7 +177,7 @@ namespace WA.Pizza.Tests.API
             await _addAdvertisement();
             _testAdvertisement.Id = -1;
             //act
-            Func<Task> act = async () => await _advertisementService.RemoveAdvertisement(_testAdvertisement.Adapt<AdvertisementDTO>(), _testApiKey);
+            Func<Task> act = async () => await _advertisementService.RemoveAdvertisement( -1, _testApiKey);
             //assert
             await act.Should().ThrowAsync<EntityNotFoundException>();
         }
