@@ -10,6 +10,9 @@ using Wa.Pizza.Infrasctructure.DTO.AdvertisementDTO;
 
 namespace WA.PIzza.Web.Controllers
 {
+    /// <summary>
+    /// Controller for adding advertisements for specfic distributor
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AdvertisementController: ControllerBase
@@ -22,7 +25,11 @@ namespace WA.PIzza.Web.Controllers
             _advertisementService = advertisementService;
             _log = log;
         }
-
+        /// <summary>
+        /// Returns advertisement for any user of the website. Intended for showing ads. Does not include ad distributor info.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         [AllowAnonymous]
         public async Task<ActionResult<AdvertisementDTO>> GetById(int id)
@@ -40,7 +47,12 @@ namespace WA.PIzza.Web.Controllers
             return new ObjectResult(advertisementDTO);
         }
 
-
+        /// <summary>
+        /// Returns full advertisement info including ad distributor info, requires appropriate api key and authorisation. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="apiKey"></param>
+        /// <returns></returns>
         [HttpGet("authorised/{id}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin + "," + Roles.RegularUser)]
         public async Task<ActionResult<AdvertisementDTO>> GetByIdAuthorised(int id, string apiKey)
@@ -66,7 +78,12 @@ namespace WA.PIzza.Web.Controllers
             return new ObjectResult(advertisementDTO);
         }
 
-
+        /// <summary>
+        /// Adds advertisement as either admin or user, requires appropriate api key and authorisation. 
+        /// </summary>
+        /// <param name="apiKey"></param>
+        /// <param name="advertisementDTO"></param>
+        /// <returns></returns>
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin + "," + Roles.RegularUser)]
         public async Task<ActionResult> AddAdvertisementClient(string apiKey, CUDAdvertisementDTO advertisementDTO)
@@ -92,6 +109,12 @@ namespace WA.PIzza.Web.Controllers
 
         }
 
+        /// <summary>
+        /// Removes advertisement  either admin or user, requires appropriate api key and authorisation. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="apiKey"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin + "," + Roles.RegularUser)]
         public async Task<ActionResult> RemoveAvertisement(int id, string apiKey)
@@ -115,6 +138,13 @@ namespace WA.PIzza.Web.Controllers
             }
             return Ok();
         }
+
+        /// <summary>
+        /// Updates advertisement  either admin or user, requires appropriate api key and authorisation. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="apiKey"></param>
+        /// <returns></returns>
 
         [HttpPut("{id}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin + "," + Roles.RegularUser)]

@@ -9,8 +9,12 @@ using Wa.Pizza.Infrasctructure.DTO.AdvertisementDTO;
 
 namespace WA.PIzza.Web.Controllers
 {
+    /// <summary>
+    /// Controller for adding advertisement distributors
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    
     public class AdvertisementClientController : ControllerBase
     {
         private readonly ILogger<BasketController> _log;
@@ -23,7 +27,7 @@ namespace WA.PIzza.Web.Controllers
         }
 
         /// <summary>
-        /// Returns advertisement client by api key
+        /// Returns advertisement client by api key for an admin
         /// </summary>
         /// <param name="apiKey"></param>
         /// <returns></returns>
@@ -46,7 +50,7 @@ namespace WA.PIzza.Web.Controllers
 
 
         /// <summary>
-        /// Returns advertisement client by api key
+        /// Returns advertisement client by api key and id for an admin
         /// </summary>
         /// <param name="apiKey"></param>
         /// <returns></returns>
@@ -89,6 +93,12 @@ namespace WA.PIzza.Web.Controllers
             return Accepted(apiKey);
 
         }
+        /// <summary>
+        /// Remove advertisement client by an admin using it's id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="advertisementClientDTO"></param>
+        /// <returns></returns>
 
         [HttpDelete("{id}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin)]
@@ -113,7 +123,12 @@ namespace WA.PIzza.Web.Controllers
             }
             return Ok();
         }
-
+        /// <summary>
+        /// Updates advertisement client by admin, or by user with matching ApiKey
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="advertisementClientDTO"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin + "," + Roles.RegularUser)]
         public async Task<ActionResult> UpdateAvertisementClient(int id, UpdateDeleteAdvertisementClientDTO advertisementClientDTO)
