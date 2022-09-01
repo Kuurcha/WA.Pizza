@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Wa.Pizza.Infrasctructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220721082035_Initial Migration")]
+    [Migration("20220824122143_Initial Migration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,19 +50,19 @@ namespace Wa.Pizza.Infrasctructure.Migrations
                         {
                             Id = 1,
                             AdressString = "Corusan 19",
-                            ApplicationUserId = "0267a896-5faf-48e4-b6f3-b274234b85fe"
+                            ApplicationUserId = "d3a4413d-a088-437c-8fcf-1edc6ea8b875"
                         },
                         new
                         {
                             Id = 2,
                             AdressString = "Omega-4",
-                            ApplicationUserId = "adb3223a-f95c-4093-ba06-14d9abb3820d"
+                            ApplicationUserId = "fb7ec335-f0ab-4735-b5fd-324c7ad4941e"
                         },
                         new
                         {
                             Id = 3,
                             AdressString = "Terra-4",
-                            ApplicationUserId = "0c87641b-ad7b-41c8-9a59-aa545825b7fc"
+                            ApplicationUserId = "c89017c1-3bef-4eb4-8bcd-a01d8bcfeb39"
                         });
                 });
 
@@ -133,37 +133,37 @@ namespace Wa.Pizza.Infrasctructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0267a896-5faf-48e4-b6f3-b274234b85fe",
+                            Id = "d3a4413d-a088-437c-8fcf-1edc6ea8b875",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2c425113-f2a9-4681-80ba-813b2cd2c03a",
+                            ConcurrencyStamp = "326ad1cd-c583-4da0-a529-1d7e41772472",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "719742ab-78c8-4951-866c-a31acc190478",
+                            SecurityStamp = "2b45dc03-bf95-4d32-ad53-4dde9018cba3",
                             TwoFactorEnabled = false,
                             UserName = "Test"
                         },
                         new
                         {
-                            Id = "adb3223a-f95c-4093-ba06-14d9abb3820d",
+                            Id = "fb7ec335-f0ab-4735-b5fd-324c7ad4941e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "58d35f01-d3b1-47d3-bc98-0a22de84cc21",
+                            ConcurrencyStamp = "d484a579-c303-429b-ba32-c85ad435e778",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "81e1d6f9-53b0-4ae0-8dbd-e8d30234eddd",
+                            SecurityStamp = "2706dfec-26da-4c2f-9e9c-d5e1392be2bf",
                             TwoFactorEnabled = false,
                             UserName = "Test1"
                         },
                         new
                         {
-                            Id = "0c87641b-ad7b-41c8-9a59-aa545825b7fc",
+                            Id = "c89017c1-3bef-4eb4-8bcd-a01d8bcfeb39",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "81ff32ca-fadc-40b2-85d7-a7cc03733cf4",
+                            ConcurrencyStamp = "43404cfe-682f-45a3-86a6-90bdc65a824b",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fb6f90b7-eb6b-4a93-9fe6-4061a7e313c1",
+                            SecurityStamp = "d1117836-6ad3-44e2-861f-8a786c8ca1bb",
                             TwoFactorEnabled = false,
                             UserName = "Test2"
                         });
@@ -195,19 +195,19 @@ namespace Wa.Pizza.Infrasctructure.Migrations
                         new
                         {
                             Id = 1,
-                            ApplicationUserId = "0267a896-5faf-48e4-b6f3-b274234b85fe",
+                            ApplicationUserId = "d3a4413d-a088-437c-8fcf-1edc6ea8b875",
                             LastModified = new DateTime(2050, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
-                            ApplicationUserId = "adb3223a-f95c-4093-ba06-14d9abb3820d",
+                            ApplicationUserId = "fb7ec335-f0ab-4735-b5fd-324c7ad4941e",
                             LastModified = new DateTime(2186, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
-                            ApplicationUserId = "0c87641b-ad7b-41c8-9a59-aa545825b7fc",
+                            ApplicationUserId = "c89017c1-3bef-4eb4-8bcd-a01d8bcfeb39",
                             LastModified = new DateTime(4000, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -546,7 +546,7 @@ namespace Wa.Pizza.Infrasctructure.Migrations
                         new
                         {
                             Id = 66,
-                            ApplicationUserId = "0267a896-5faf-48e4-b6f3-b274234b85fe",
+                            ApplicationUserId = "d3a4413d-a088-437c-8fcf-1edc6ea8b875",
                             CreationDate = new DateTime(2019, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "The republic will be reogranised into a first galactic empire",
                             Status = 3
@@ -554,7 +554,7 @@ namespace Wa.Pizza.Infrasctructure.Migrations
                         new
                         {
                             Id = 1,
-                            ApplicationUserId = "adb3223a-f95c-4093-ba06-14d9abb3820d",
+                            ApplicationUserId = "fb7ec335-f0ab-4735-b5fd-324c7ad4941e",
                             CreationDate = new DateTime(2186, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Bring extra tomato sauce, don't be late, don't make Aria mad",
                             Status = 2
@@ -562,7 +562,7 @@ namespace Wa.Pizza.Infrasctructure.Migrations
                         new
                         {
                             Id = 2,
-                            ApplicationUserId = "0c87641b-ad7b-41c8-9a59-aa545825b7fc",
+                            ApplicationUserId = "c89017c1-3bef-4eb4-8bcd-a01d8bcfeb39",
                             CreationDate = new DateTime(4000, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Someone order pepperoni pizza into the Emperor's palace",
                             Status = 4

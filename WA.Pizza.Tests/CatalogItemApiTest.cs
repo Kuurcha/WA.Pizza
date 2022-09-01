@@ -95,9 +95,6 @@ namespace WA.Pizza.Tests
             afterDeletionBasketItemsCount.Should().Be(basketItemsCount - 2);
             afterDeletionCatalogItemCount.Should().Be(catalogItemCount - 1);
         }
-        public new void Dispose()
-        {
-            applicationDbContext.Database.EnsureDeleted();
-        }
+
     }
 }

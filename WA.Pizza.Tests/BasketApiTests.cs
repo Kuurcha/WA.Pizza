@@ -124,5 +124,6 @@ namespace WA.Pizza.Tests
             bindedBasket.ApplicationUser.Should().NotBeNull();
         }
 
+
     }
 }

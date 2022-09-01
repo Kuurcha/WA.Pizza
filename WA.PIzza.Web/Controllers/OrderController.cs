@@ -52,8 +52,7 @@ namespace WA.PIzza.Web.Services
         /// <summary>
         /// Creates new order with specified description
         /// </summary>
-        /// <param name="basketId"></param>
-        /// <param name="description"></param>
+        /// <param name="setOrderDTO"></param>
         /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Order>> CreateOrder(SetOrderDTO setOrderDTO)
@@ -74,8 +73,7 @@ namespace WA.PIzza.Web.Services
         /// <summary>
         /// Updates order status based on orderId and user data
         /// </summary>
-        /// <param name="orderId"></param>
-        /// <param name="orderStatus"></param>
+        /// <param name="updateOrderItemDTO"></param>
         /// <returns></returns>
         [HttpPut]
         public async Task<ActionResult<Order>> UpdateOrderStatus(UpdateOrderItemDTO updateOrderItemDTO)

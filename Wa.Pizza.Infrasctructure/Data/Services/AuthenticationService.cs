@@ -38,6 +38,13 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             var userExists = await userManager.FindByNameAsync(model.Username);
             return userExists != null;
         }
+        private async Task _сreateRolesIfDoesNotExists()
+        {
+            if (!await roleManager.RoleExistsAsync(Roles.Admin))
+                await roleManager.CreateAsync(new IdentityRole(Roles.Admin));
+            if (!await roleManager.RoleExistsAsync(Roles.RegularUser))
+                await roleManager.CreateAsync(new IdentityRole(Roles.RegularUser));
+        }
         public async Task<IdentityResult> Register(RegisterRequest model)
         {
 
@@ -62,6 +69,8 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
                 }
                 throw new Exception("Unable to regiter user. " + errorString);
             }
+            await _сreateRolesIfDoesNotExists();
+            await userManager.AddToRoleAsync(user, Roles.RegularUser);
             return result;
 
         }
@@ -89,14 +98,8 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
                 }
                 throw new Exception("Unable to regiter user. " + errorString);
             }
-            if (!await roleManager.RoleExistsAsync(Roles.Admin))
-                await roleManager.CreateAsync(new IdentityRole(Roles.Admin));
-            if (!await roleManager.RoleExistsAsync(Roles.RegularUser))
-                await roleManager.CreateAsync(new IdentityRole(Roles.RegularUser));
-            if (await roleManager.RoleExistsAsync(Roles.Admin))
-            {
-                await userManager.AddToRoleAsync(user, Roles.Admin);
-            }
+            await _сreateRolesIfDoesNotExists();
+            await userManager.AddToRoleAsync(user, Roles.Admin);
 
             return result;
         }

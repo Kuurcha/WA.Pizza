@@ -53,7 +53,10 @@ namespace WA.PIzza.Web.Extensions
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
             });
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="appBuilder"></param>
         public static void useHangfireCustom(this IApplicationBuilder appBuilder)
         {
             var options = new DashboardOptions()

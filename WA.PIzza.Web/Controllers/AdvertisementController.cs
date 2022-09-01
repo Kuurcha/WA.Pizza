@@ -1,0 +1,145 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using Wa.Pizza.Core.Exceptions;
+using Wa.Pizza.Core.Model.ApplicationUser;
+using Wa.Pizza.Infrasctructure.Data.Services;
+using Wa.Pizza.Infrasctructure.DTO.AdvertisementDTO;
+
+
+namespace WA.PIzza.Web.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AdvertisementController: ControllerBase
+    {
+        private readonly ILogger<BasketController> _log;
+        private readonly AdvertisementService _advertisementService;
+
+        public AdvertisementController(AdvertisementService advertisementService, ILogger<BasketController> log)
+        {
+            _advertisementService = advertisementService;
+            _log = log;
+        }
+
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<AdvertisementDTO>> GetById(int id)
+        {
+            CUDAdvertisementDTO advertisementDTO;
+            try
+            {
+                advertisementDTO = await _advertisementService.GetAdvertisementAnonymous(id);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _log.LogError(ex.Message);
+                return NotFound(ex.Message);
+            }
+            return new ObjectResult(advertisementDTO);
+        }
+
+
+        [HttpGet("authorised/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin + "," + Roles.RegularUser)]
+        public async Task<ActionResult<AdvertisementDTO>> GetByIdAuthorised(int id, string apiKey)
+        {
+            AdvertisementDTO advertisementDTO = new AdvertisementDTO(); //???
+            try
+            {
+                advertisementDTO = await _advertisementService.GetAdvertisement(apiKey, id);
+            }
+            catch (Exception ex) when (ex is WrongDataFormatException || ex is EntityNotFoundException)
+            {
+                _log.LogError(ex.Message);
+                if (ex is EntityNotFoundException)
+                {
+                    return NotFound(ex.Message);
+                }
+                if (ex is WrongDataFormatException)
+                {
+                    return BadRequest(ex.Message);
+                }
+
+            }
+            return new ObjectResult(advertisementDTO);
+        }
+
+
+        [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin + "," + Roles.RegularUser)]
+        public async Task<ActionResult> AddAdvertisementClient(string apiKey, CUDAdvertisementDTO advertisementDTO)
+        {
+            try
+            {
+                await _advertisementService.CreateAdvertisement(advertisementDTO, apiKey);
+            }
+            catch (Exception ex) when (ex is WrongDataFormatException || ex is EntityNotFoundException)
+            {
+                _log.LogError(ex.Message);
+                if (ex is EntityNotFoundException)
+                {
+                    return NotFound(ex.Message);
+                }
+                if (ex is WrongDataFormatException)
+                {
+                    return BadRequest(ex.Message);
+                }
+
+            }
+            return Accepted(apiKey);
+
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin + "," + Roles.RegularUser)]
+        public async Task<ActionResult> RemoveAvertisement(int id, string apiKey)
+        {
+            try
+            {
+                await _advertisementService.RemoveAdvertisement(id, apiKey);
+            }
+            catch (Exception ex) when (ex is WrongDataFormatException || ex is EntityNotFoundException)
+            {
+                _log.LogError(ex.Message);
+                if (ex is EntityNotFoundException)
+                {
+                    return NotFound(ex.Message);
+                }
+                if (ex is WrongDataFormatException)
+                {
+                    return BadRequest(ex.Message);
+                }
+
+            }
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin + "," + Roles.RegularUser)]
+        public async Task<ActionResult> UpdateAvertisement(int id, CUDAdvertisementDTO advertisementClientDTO, string apiKey)
+        {
+            try
+            {
+                await _advertisementService.UpdateAdvertisement(advertisementClientDTO, id, apiKey);
+            }
+            catch (Exception ex) when (ex is WrongDataFormatException || ex is EntityNotFoundException)
+            {
+                _log.LogError(ex.Message);
+                if (ex is EntityNotFoundException)
+                {
+                    return NotFound(ex.Message);
+                }
+                if (ex is WrongDataFormatException)
+                {
+                    return BadRequest(ex.Message);
+                }
+
+            }
+            return Ok();
+        }
+
+
+    }
+}

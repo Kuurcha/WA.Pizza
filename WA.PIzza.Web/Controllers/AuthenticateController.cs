@@ -146,7 +146,7 @@ namespace WA.PIzza.Web.Controllers
         [Route("revoke")]
         public async Task<IActionResult> RevokeAsync()
         {
-            var username = User     .Identity.Name;
+            var username = User.Identity!.Name;
             var user = await _userManager.FindByNameAsync(username);
             if (user == null) return BadRequest();
             user.refreshToken = null;

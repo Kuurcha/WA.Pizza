@@ -16,6 +16,7 @@ using MediatR;
 using static Wa.Pizza.Infrasctructure.Data.CQRS.Basket.BasketCommands;
 using static BasketQueries;
 using Wa.Pizza.Infrasctructure.Data.CQRS.Basket;
+using Wa.Pizza.Infrasctructure.DTO.AdvertisementDTO;
 
 namespace WA.PIzza.Web.Extensions
 {
@@ -34,6 +35,11 @@ namespace WA.PIzza.Web.Extensions
                  options.RegisterValidatorsFromAssemblyContaining<UpdateOrderValidator>();
                  options.RegisterValidatorsFromAssemblyContaining<AddOrderValidator>();
                  options.RegisterValidatorsFromAssemblyContaining<BasketValidator>();
+                 options.RegisterValidatorsFromAssemblyContaining<CreateAdvertisementClientValidator<CreateAdvertisementClientDTO>>();
+                 options.RegisterValidatorsFromAssemblyContaining<UpdateDeleteAdvertisementClientValidator<UpdateDeleteAdvertisementClientDTO>>();
+                 options.RegisterValidatorsFromAssemblyContaining<AdvertisementClientValidator>();
+                 options.RegisterValidatorsFromAssemblyContaining<AdvertisementValidator>();
+
              });
         }
         public static void configureMediatR(this IServiceCollection services)
@@ -58,12 +64,17 @@ namespace WA.PIzza.Web.Extensions
         /// Injects user created services into the program
         /// </summary>
         /// <param name="services"></param>
-       public static void injectServices (this IServiceCollection services, string appMail, string password)
+        /// <param name="appMail"></param>
+        /// <param name="password"></param>
+        public static void injectServices (this IServiceCollection services, string appMail, string password)
         {
             services.AddScoped<OrderDataService>();
             services.AddScoped<CatalogDataService>();
             services.AddScoped<TokenService>();
             services.AddScoped<AuthenticationService>();
+            services.AddScoped<ApiKeyService>();
+            services.AddScoped<AdvertisementClientService>();
+            services.AddScoped<AdvertisementService>();
             services.AddSingleton<SMTPService>(x => new SMTPService(appMail, password));
         }
         /// <summary>
