@@ -40,12 +40,12 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             return _context.CatalogItem.ProjectToType<CatalogItemDTO>().ToListAsync();
         }
 
-        public async Task<int> AddItem(CatalogItemDTO catalogItemDTO)
+        public async Task AddItem(CatalogItemDTO catalogItemDTO)
         {
             _context.CatalogItem.Add(catalogItemDTO.Adapt<CatalogItem>());
-            return await _context.SaveChangesAsync();
+         await _context.SaveChangesAsync();
         }
-        public async Task<int> UpdateItem(CatalogItemDTO catalogItemDTO)
+        public async Task UpdateItem(CatalogItemDTO catalogItemDTO)
         {
             CatalogItem? originalCatalogItem = await _context.CatalogItem
                 .FirstOrDefaultAsync(x => x.Id == catalogItemDTO.Id);
@@ -61,9 +61,9 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             originalCatalogItem.Price = catalogItemDTO.Price;
             originalCatalogItem.Quantity = catalogItemDTO.Quantity;
             
-            return await _context.SaveChangesAsync();
+         await _context.SaveChangesAsync();
         }
-        public async Task<int> DeleteItem(CatalogItemDTO catalogItemDTO)
+        public async Task DeleteItem(CatalogItemDTO catalogItemDTO)
         {
             CatalogItem? catalogItem = await _context.CatalogItem
                 .Include(ci => ci.BasketItems).Include(ci => ci.OrderItems).
@@ -78,7 +78,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
                     //basketItem.Id = -1;
 
             _context.CatalogItem.Remove(catalogItem);
-            return await _context.SaveChangesAsync();
+         await _context.SaveChangesAsync();
         }
 
 

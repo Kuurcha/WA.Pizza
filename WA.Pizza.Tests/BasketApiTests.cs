@@ -31,11 +31,11 @@ namespace WA.Pizza.Tests
             catalogItemTest = applicationDbContext.CatalogItem.Add( new CatalogItem { Quantity = 150, Name = "Cheeze", Description = "Classic", Price = 150, CatalogType = WA.Pizza.Core.CatalogType.CatalogType.Pizza }).Entity;
             applicationDbContext.SaveChanges();
         }
-        private async Task<int> addTestBasketItemAsync()
+        private async Task addTestBasketItemAsync()
         {
             var basketItem = new BasketItem { BasketId = basketTest.Id, Quantity = Faker.RandomNumber.Next(1, 100), CatalogType = Core.CatalogType.CatalogType.Pizza, UnitPrice = 150, CatalogItemName = "Classic", CatalogItemId = catalogItemTest.Id };
             applicationDbContext.BasketItem.Add(basketItem);
-            return await applicationDbContext.SaveChangesAsync();
+            await applicationDbContext.SaveChangesAsync();
         }
         public BasketDataTests(): base()
         {

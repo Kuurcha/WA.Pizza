@@ -12,7 +12,7 @@ namespace WA.PIzza.Web.Controllers
     /// <summary>
     /// Controller for adding advertisement distributors
     /// </summary>
-    [Route("api/[controller]")]
+
     [ApiController]
     
     public class AdvertisementClientController : ControllerBase

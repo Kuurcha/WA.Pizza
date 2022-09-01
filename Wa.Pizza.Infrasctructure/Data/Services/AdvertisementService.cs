@@ -25,14 +25,14 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         /// <param name="message">first part of the message corresponding to operation</param>
         /// <exception cref="EntityNotFoundException"></exception>
         /// <exception cref="WrongDataFormatException"></exception>
-        private void _checkForApiAndNullability(Advertisement? advertisement, string apiKey, int id, string message)
+        private void CheckForApiAndNullability(Advertisement? advertisement, string apiKey, int id, string message)
         {
             if (advertisement == null)
                 throw new EntityNotFoundException(message + id + " no such id found");
             if (advertisement.AdvertisementClient.ApiKey != apiKey)
                 throw new WrongDataFormatException(message + id + " api key is invalid");
         }
-        public async Task<int> CreateAdvertisement(CUDAdvertisementDTO advertisementDTO, string apiKey)
+        public async Task CreateAdvertisement(CUDAdvertisementDTO advertisementDTO, string apiKey)
         {
 
             if (advertisementDTO == null)
@@ -45,31 +45,31 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             var advertisement = advertisementDTO.Adapt<Advertisement>();
             advertisement.AdvertisementClientId = updatedTestAdvertisementClient.Id;
             _context.Advertisements.Add(advertisement);
+            await _context.SaveChangesAsync();
 
-            return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> RemoveAdvertisement(int id, string apiKey)
+        public async Task RemoveAdvertisement(int id, string apiKey)
         {
             var originalAdvertisement = _context.Advertisements.Include(a => a.AdvertisementClient).FirstOrDefault(a => a.Id == id);
-            _checkForApiAndNullability(originalAdvertisement, apiKey, id, "Can't remove advertisement with id: ");
+            CheckForApiAndNullability(originalAdvertisement, apiKey, id, "Can't remove advertisement with id: ");
             _context.Advertisements.Remove(originalAdvertisement);
+            await _context.SaveChangesAsync();
 
-            return await _context.SaveChangesAsync();
         }
        
-        public async Task<int> UpdateAdvertisement(CUDAdvertisementDTO advertisementDTO, int id, string apiKey)
+        public async Task UpdateAdvertisement(CUDAdvertisementDTO advertisementDTO, int id, string apiKey)
         {
             if (advertisementDTO == null)
                 throw new WrongDataFormatException("Advertisement should not be null");
 
             var originalAdvertisement = _context.Advertisements.Include(a=> a.AdvertisementClient).FirstOrDefault(a => a.Id == id);
-            _checkForApiAndNullability(originalAdvertisement, apiKey, id, "Can't update advertisement with id: ");
+            CheckForApiAndNullability(originalAdvertisement, apiKey, id, "Can't update advertisement with id: ");
             originalAdvertisement.Description = advertisementDTO.Description;
             originalAdvertisement.ImageURL = advertisementDTO.ImageURL;
             originalAdvertisement.RedicrectURL = advertisementDTO.RedicrectURL;
             _context.Advertisements.Update(originalAdvertisement);
-            return await _context.SaveChangesAsync();
+         await _context.SaveChangesAsync();
         }
 
         public async Task<CUDAdvertisementDTO> GetAdvertisementAnonymous(int id)
@@ -82,7 +82,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         public async Task<AdvertisementDTO> GetAdvertisement(string apiKey, int id) 
         {
             var originalAdvertisement = _context.Advertisements.Include(a => a.AdvertisementClient).FirstOrDefault(a => a.Id == id);
-            _checkForApiAndNullability(originalAdvertisement, apiKey,id, "Can't retrieve advertisement with id: ");
+            CheckForApiAndNullability(originalAdvertisement, apiKey,id, "Can't retrieve advertisement with id: ");
             return originalAdvertisement!.Adapt<AdvertisementDTO>();
         }
         

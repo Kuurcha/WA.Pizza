@@ -25,7 +25,7 @@ namespace WA.Pizza.Tests
 
 
         // TODO: OrderItems
-        private async Task<int> _addTestBasketAndOrderItems()
+        private async Task AddTestBasketAndOrderItems()
         {
 
            
@@ -40,7 +40,7 @@ namespace WA.Pizza.Tests
              };
             basket.BasketItems = basketItems;
             applicationDbContext.Basket.Add(basket);
-            return await  applicationDbContext.SaveChangesAsync();
+            await  applicationDbContext.SaveChangesAsync();
     
         }
         public CatalogItemApiTest() : base()
@@ -82,7 +82,7 @@ namespace WA.Pizza.Tests
         public async void catalog_item_is_deleted_with_basketItems()
         {
             //Arrange
-            await _addTestBasketAndOrderItems();
+            await AddTestBasketAndOrderItems();
             int basketItemsCount = await  applicationDbContext.BasketItem.AsNoTracking().Where(bi => bi.CatalogItemId == _catalogItemTest.Id).CountAsync();
             int catalogItemCount = await  applicationDbContext.CatalogItem.AsNoTracking().CountAsync();
             var catalogItemToDeleteDTO = _catalogItemTest.Adapt<CatalogItemDTO>();

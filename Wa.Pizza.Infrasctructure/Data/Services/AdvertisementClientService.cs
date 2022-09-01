@@ -19,14 +19,14 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         }
 
 
-        private void _checkIfDTOIsNull(CreateAdvertisementClientDTO advertisementClientDTO)
+        private void CheckIfDTOIsNull(CreateAdvertisementClientDTO advertisementClientDTO)
         {
             if (advertisementClientDTO == null)
                 throw new WrongDataFormatException("Specify data for advertisement client");
         }
         public async Task<string> CreateAdvertisementClientAsync(CreateAdvertisementClientDTO advertisementClientDTO)
         {
-            _checkIfDTOIsNull(advertisementClientDTO);
+            CheckIfDTOIsNull(advertisementClientDTO);
             AdvertisementClient advertisementClient = advertisementClientDTO.Adapt<AdvertisementClient>();
             advertisementClient.ApiKey = _apiKeyService.GenerateApiKey(keyLength);
             _context.AdvertisementClients.Add(advertisementClient);
@@ -46,28 +46,28 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             return originalAdvertisementClient;
         }
 
-        public async Task<int> UpdateAdvertisementClient(int id, UpdateDeleteAdvertisementClientDTO updateDeletAdvertisementClientDTO)
+        public async Task UpdateAdvertisementClient(int id, UpdateDeleteAdvertisementClientDTO updateDeletAdvertisementClientDTO)
         {
-            _checkIfDTOIsNull(updateDeletAdvertisementClientDTO);
+            CheckIfDTOIsNull(updateDeletAdvertisementClientDTO);
             AdvertisementClientDTO advertisementClientDTO = updateDeletAdvertisementClientDTO.Adapt<AdvertisementClientDTO>();
             advertisementClientDTO.Id = id;
             var originalAdvertisementClient =  await getOriginalClient(advertisementClientDTO);
 
             originalAdvertisementClient.Website = updateDeletAdvertisementClientDTO.Website;
             originalAdvertisementClient.Name = updateDeletAdvertisementClientDTO.Name;
+            await _context.SaveChangesAsync();
 
-            return await _context.SaveChangesAsync(); 
         }
         
 
-        public async Task<int> DeleteAdvertisementClient(int id, UpdateDeleteAdvertisementClientDTO updateDeletAdvertisementClientDTO)
+        public async Task DeleteAdvertisementClient(int id, UpdateDeleteAdvertisementClientDTO updateDeletAdvertisementClientDTO)
         {
-            _checkIfDTOIsNull(updateDeletAdvertisementClientDTO);
+            CheckIfDTOIsNull(updateDeletAdvertisementClientDTO);
             AdvertisementClientDTO advertisementClientDTO = updateDeletAdvertisementClientDTO.Adapt<AdvertisementClientDTO>();
             advertisementClientDTO.Id = id;
             var originalAdvertisementClient = await getOriginalClient(advertisementClientDTO);
             _context.AdvertisementClients.Remove(originalAdvertisementClient);
-            return await _context.SaveChangesAsync();
+         await _context.SaveChangesAsync();
         }
         
         public async Task<AdvertisementClientDTO> GetAdvertisementClient(string desiredApiKey)

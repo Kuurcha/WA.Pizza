@@ -63,7 +63,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
         /// </summary>
         /// <param name="basketId"></param> 
         /// <returns></returns>
-        public async Task<int> AddItem(BasketItemDTO basketItemDTO)
+        public async Task AddItem(BasketItemDTO basketItemDTO)
         {
 
                 CatalogItem catalogItem = await _context.CatalogItem
@@ -83,7 +83,7 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
                 {
                     basketItem.Quantity = basketItemDTO.Quantity;
                     basket!.LastModified = DateTime.UtcNow;
-                    return await _context.SaveChangesAsync();
+                 await _context.SaveChangesAsync();
                 }
                 else
                 {
@@ -108,12 +108,12 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
                     basket.BasketItems = new List<BasketItem>();
                 basket.BasketItems.Add(basketItem);
                 basket.LastModified = DateTime.UtcNow;
-                return await _context.SaveChangesAsync();
+             await _context.SaveChangesAsync();
     
 
 
         }
-        public async Task<int> UpdateItem(BasketItemDTO basketItemDTO)
+        public async Task UpdateItem(BasketItemDTO basketItemDTO)
         {
 
 
@@ -126,10 +126,10 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             else
                 originalBasketItem.Quantity = basketItemDTO.Quantity;
             originalBasketItem.Basket.LastModified = DateTime.UtcNow;
-            return await _context.SaveChangesAsync();
+         await _context.SaveChangesAsync();
 
         }
-        public async Task<int> DeleteItem(BasketItemDTO basketItemDTO)
+        public async Task DeleteItem(BasketItemDTO basketItemDTO)
         {
 
             Basket basket = await _context.Basket.Include(b => b.BasketItems).FirstOrDefaultAsync(b => b.Id == basketItemDTO.BasketId);
@@ -144,18 +144,18 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             {
                 basket.BasketItems.Remove(basketItem);
             }
-            return await _context.SaveChangesAsync();
+         await _context.SaveChangesAsync();
         }
-        public async Task<int> ClearBasket(BasketDTO basketDTO)
+        public async Task ClearBasket(BasketDTO basketDTO)
         {
             Basket basket = await _context.Basket.Include(b => b.BasketItems).FirstOrDefaultAsync(b => b.Id == basketDTO.Id);
             if (basket == null)
                 throw new EntityNotFoundException("Basket with id: " + basketDTO.Id + "does not exists. Unable to delete");
             if (basket.BasketItems != null)
                 basket.BasketItems.Clear();
-            return await _context.SaveChangesAsync();
+         await _context.SaveChangesAsync();
         }
-        public async Task<int> BindBuyerToBasket(BasketDTO basketDTO, string applicationUserId)
+        public async Task BindBuyerToBasket(BasketDTO basketDTO, string applicationUserId)
         {
             Basket basket = await _context.Basket.FirstOrDefaultAsync(b => b.Id == basketDTO.Id);
             if (basket != null)
@@ -164,10 +164,9 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
                 if (basket.ApplicationUser == null)
                 {
                     basket.ApplicationUser = applicationUser;
-                    return await _context.SaveChangesAsync();
+                 await _context.SaveChangesAsync();
                 }
             }
-            return 0; //?
         }
 
     }

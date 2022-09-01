@@ -17,10 +17,9 @@ namespace Wa.Pizza.Infrasctructure.Data.Services
             _smtpClient.EnableSsl = true;
         }
 
-        public async Task<int> sendMailAsync(string recipient, string subject, string body)
+        public async Task sendMailAsync(string recipient, string subject, string body)
         {
             await _smtpClient.SendMailAsync(new MailMessage(_appEmail, recipient, subject, body));
-            return 0;
         }
     }
 }

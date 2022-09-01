@@ -23,12 +23,11 @@ namespace WA.Pizza.Tests.API
         private Advertisement _testAdvertisement;
         private readonly AdvertisementClient _testAdvertisementClient;
 
-        private async Task<int> _addAdvertisement()
+        private async Task AddAdvertisement()
         {
             Advertisement testAdvertisement = _testAdvertisementDTO.Adapt<Advertisement>();
             _testAdvertisement =   applicationDbContext.Advertisements.Add(testAdvertisement).Entity;
             await applicationDbContext.SaveChangesAsync();
-            return 0;
         }
 
         public AdvertisementTDDTests(): base()
@@ -65,7 +64,7 @@ namespace WA.Pizza.Tests.API
         public async void advertisement_is_updated()
         {
             //arrange
-            await _addAdvertisement();
+            await AddAdvertisement();
 
             const string newDescription = "New test description";
             _testAdvertisementDTO.Description = newDescription;
@@ -82,7 +81,7 @@ namespace WA.Pizza.Tests.API
         public async void advertisement_failed_to_update_advertisement_does_not_exist()
         {
             //arrange
-            await _addAdvertisement();
+            await AddAdvertisement();
 
             const string newDescription = "New test description";
             _testAdvertisementDTO.Description = newDescription;
@@ -96,7 +95,7 @@ namespace WA.Pizza.Tests.API
         public async void advertisement_failed_to_update_incorrect_or_illegal_api_key()
         {
             //arrange
-            await _addAdvertisement();
+            await AddAdvertisement();
 
             const string newDescription = "New test description";
             _testAdvertisementDTO.Description = newDescription;
@@ -113,7 +112,7 @@ namespace WA.Pizza.Tests.API
         [Fact]
         public async void advertisement_is_retrieved()
         {
-            await _addAdvertisement();
+            await AddAdvertisement();
 
             //act
             var retrievedAdvertisement = await _advertisementService.GetAdvertisement(_testApiKey, _testAdvertisement.Id);
@@ -126,7 +125,7 @@ namespace WA.Pizza.Tests.API
         [Fact]
         public async void advertisement_is_not_retrieved_invalid_api_key()
         {
-            await _addAdvertisement();
+            await AddAdvertisement();
 
             Func<Task> act = async () => await _advertisementService.GetAdvertisement("meow", _testAdvertisement.Id);
 
@@ -136,7 +135,7 @@ namespace WA.Pizza.Tests.API
         [Fact]
         public async void advertisement_is_not_retrieved_advertisement_does_not_exist()
         {
-            await _addAdvertisement();
+            await AddAdvertisement();
 
             Func<Task> act = async () => await _advertisementService.GetAdvertisement(_testApiKey, -1);
 
@@ -147,7 +146,7 @@ namespace WA.Pizza.Tests.API
         public async void advertisement_is_removed()
         {
             //arrange
-            await _addAdvertisement();
+            await AddAdvertisement();
 
             //act
             await _advertisementService.RemoveAdvertisement(_testAdvertisement.Id, _testApiKey);
@@ -160,7 +159,7 @@ namespace WA.Pizza.Tests.API
         public async void advertisement_failed_to_remove_incorrect_or_illegal_api_key()
         {
             //arrange
-            await _addAdvertisement();
+            await AddAdvertisement();
             
             //act
             Func<Task> act = async () => await _advertisementService.RemoveAdvertisement( _testAdvertisement.Id, "Meow");
@@ -174,7 +173,7 @@ namespace WA.Pizza.Tests.API
         {
 
             //arrange
-            await _addAdvertisement();
+            await AddAdvertisement();
             _testAdvertisement.Id = -1;
             //act
             Func<Task> act = async () => await _advertisementService.RemoveAdvertisement( -1, _testApiKey);

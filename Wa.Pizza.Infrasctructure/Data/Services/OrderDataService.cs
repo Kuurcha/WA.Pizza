@@ -18,7 +18,7 @@ namespace Wa.Pizza.Infrasctructure.Services
             _context = ctx;
         }
 
-        public async Task<int> AddOrder(int basketId, string description)
+        public async Task AddOrder(int basketId, string description)
         {
             Basket? basket = await _context.Basket.AsNoTracking().Include(b => b.BasketItems).FirstOrDefaultAsync(b => b.Id == basketId);
             if (basket == null)
@@ -37,7 +37,7 @@ namespace Wa.Pizza.Infrasctructure.Services
                 orderItem.OrderId = order.Id;
                 order.OrderItems.Add(orderItem);
             }
-            return await _context.SaveChangesAsync();
+         await _context.SaveChangesAsync();
         }
 
         public Task<GetOrderDTO> GetById(int guid)
@@ -48,13 +48,13 @@ namespace Wa.Pizza.Infrasctructure.Services
             return orderDTO!;
         }
 
-        public async Task<int> UpdateStatus(int orderID, OrderStatus orderStatus)
+        public async Task UpdateStatus(int orderID, OrderStatus orderStatus)
         {
             Order? order = await _context.ShopOrder.FirstOrDefaultAsync(b => b.Id == orderID);
             if (order == null)
                 throw new EntityNotFoundException("Order with id: " + orderID + " does not exists");
             order.Status = orderStatus;
-            return await _context.SaveChangesAsync();
+         await _context.SaveChangesAsync();
                 
         }
 

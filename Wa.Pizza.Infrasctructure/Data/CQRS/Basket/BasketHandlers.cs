@@ -48,13 +48,13 @@ class GetBasketByUserIdHandler : BaseBasketHandler, IRequestHandler<GetBasketByU
     }
 }
 
-class InsertItemCommandHandler : BaseBasketHandler, IRequestHandler<InsertItemCommand, int>
+class InsertItemCommandHandler : BaseBasketHandler, IRequestHandler<InsertItemCommand>
 {
     public InsertItemCommandHandler(ApplicationDbContext _ctx) : base(_ctx)
     {
     }
 
-    public async Task<int> Handle(InsertItemCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(InsertItemCommand request, CancellationToken cancellationToken)
     {
 
         CatalogItem? catalogItem = await context.CatalogItem
@@ -74,7 +74,7 @@ class InsertItemCommandHandler : BaseBasketHandler, IRequestHandler<InsertItemCo
         {
             basketItem.Quantity = request.BasketItemDTO.Quantity;
             basket!.LastModified = DateTime.UtcNow;
-            return await context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
         else
         {
@@ -98,18 +98,19 @@ class InsertItemCommandHandler : BaseBasketHandler, IRequestHandler<InsertItemCo
             basket.BasketItems = new List<BasketItem>();
         basket.BasketItems.Add(basketItem);
         basket.LastModified = DateTime.UtcNow;
-        return await context.SaveChangesAsync();
+        await context.SaveChangesAsync();
+        return Unit.Value;
     }
 }
 
-class UpdateItemCommandHandler : BaseBasketHandler, IRequestHandler<UpdateItemCommand, int>
+class UpdateItemCommandHandler : BaseBasketHandler, IRequestHandler<UpdateItemCommand>
 {
     public UpdateItemCommandHandler(ApplicationDbContext _ctx) : base(_ctx)
     {
     }
 
 
-    public async Task<int> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
     {
 
         BasketItem? originalBasketItem = await context!.BasketItem!.Include(bi => bi!.Basket)!.FirstOrDefaultAsync(x => x!.Id == request!.BasketItemDTO!.Id);
@@ -120,18 +121,19 @@ class UpdateItemCommandHandler : BaseBasketHandler, IRequestHandler<UpdateItemCo
         else
             originalBasketItem.Quantity = request.BasketItemDTO.Quantity;
         originalBasketItem.Basket.LastModified = DateTime.UtcNow;
-        return await context.SaveChangesAsync();
+        await context.SaveChangesAsync();
+        return Unit.Value;
     }
 }
 
-class DeleteItemCommandHandler : BaseBasketHandler, IRequestHandler<DeleteItemCommand, int>
+class DeleteItemCommandHandler : BaseBasketHandler, IRequestHandler<DeleteItemCommand>
 {
     public DeleteItemCommandHandler(ApplicationDbContext _ctx) : base(_ctx)
     {
     }
 
 
-    public async Task<int> Handle(DeleteItemCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteItemCommand request, CancellationToken cancellationToken)
     {
 
         Basket? basket = await context.Basket.Include(b => b.BasketItems).FirstOrDefaultAsync(b => b.Id == request.BasketItemDTO.BasketId);
@@ -146,36 +148,42 @@ class DeleteItemCommandHandler : BaseBasketHandler, IRequestHandler<DeleteItemCo
         {
             basket.BasketItems.Remove(basketItem);
         }
-        return await context.SaveChangesAsync();
+        await context.SaveChangesAsync();
+        return Unit.Value;
     }
 }
 
-class ClearBasketCommandHandler : BaseBasketHandler, IRequestHandler<ClearBasketCommand, int>
+class ClearBasketCommandHandler : BaseBasketHandler, IRequestHandler<ClearBasketCommand>
 {
     public ClearBasketCommandHandler(ApplicationDbContext context) : base(context)
     {
     }
 
 
-    public async Task<int> Handle(ClearBasketCommand request, CancellationToken cancellationToken)
+    public async Task Handle(ClearBasketCommand request, CancellationToken cancellationToken)
     {
         Basket? basket = await context.Basket.Include(b => b.BasketItems).FirstOrDefaultAsync(b => b.Id == request.BasketDTO.Id);
         if (basket == null)
             throw new EntityNotFoundException("Basket with id: " + request.BasketDTO.Id + "does not exists. Unable to delete");
         if (basket.BasketItems!= null)
             basket.BasketItems.Clear();
-        return await context.SaveChangesAsync();
+        await context.SaveChangesAsync();
+    }
+
+    Task<Unit> IRequestHandler<ClearBasketCommand, Unit>.Handle(ClearBasketCommand request, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 }
 
-class BindBuyerToBasketCommandHandler : BaseBasketHandler, IRequestHandler<BindBuyerToBasketCommand, int>
+class BindBuyerToBasketCommandHandler : BaseBasketHandler, IRequestHandler<BindBuyerToBasketCommand>
 {
     public BindBuyerToBasketCommandHandler(ApplicationDbContext _ctx) : base(_ctx)
     {
     }
 
 
-    public async Task<int> Handle(BindBuyerToBasketCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(BindBuyerToBasketCommand request, CancellationToken cancellationToken)
     {
         Basket? basket = await context.Basket.FirstOrDefaultAsync(b => b.Id == request.BasketDTO.Id);
         if (basket == null)
@@ -184,6 +192,8 @@ class BindBuyerToBasketCommandHandler : BaseBasketHandler, IRequestHandler<BindB
             throw new UserAlreadyBindedException("Basket with id: " + request.BasketDTO.Id + " already has a binded user. Unable to bind");
         ApplicationUser? applicationUser = await context.ApplicationUser.FirstOrDefaultAsync(a => a.Id == request.ApplicationUserId);
         basket.ApplicationUser = applicationUser;
-        return await context.SaveChangesAsync();
+        await context.SaveChangesAsync();
+        return Unit.Value; 
     }
+
 }
