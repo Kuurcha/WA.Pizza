@@ -1,7 +1,5 @@
-﻿using Mapster;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Wa.Pizza.Core.Exceptions;
-using Wa.Pizza.Infrasctructure.Data.Services;
 using Wa.Pizza.Infrasctructure.DTO.Order;
 using Wa.Pizza.Infrasctructure.Services;
 
@@ -40,7 +38,7 @@ namespace WA.PIzza.Web.Services
             try
             {
                 order = await _orderDataService.GetById(id);
-                _log.LogInformation("Item recieved: " + order.ToString());
+                _log.LogInformation("Item recieved: " + order?.ToString());
             }
             catch (EntityNotFoundException ex)
             {
@@ -64,7 +62,7 @@ namespace WA.PIzza.Web.Services
                 await _orderDataService.AddOrder(setOrderDTO.basketId, setOrderDTO.description);
                 _log.LogInformation("Order added");
             }
-            catch( EntityNotFoundException ex)
+            catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
                 BadRequest(ex.Message);
@@ -80,7 +78,7 @@ namespace WA.PIzza.Web.Services
         [HttpPut]
         public async Task<ActionResult<Order>> UpdateOrderStatus(UpdateOrderItemDTO updateOrderItemDTO)
         {
-            _log.LogInformation("Updating order with id: " + updateOrderItemDTO.orderId + " to status:" + updateOrderItemDTO.orderStatus.ToString() + "...");  
+            _log.LogInformation("Updating order with id: " + updateOrderItemDTO.orderId + " to status:" + updateOrderItemDTO.orderStatus.ToString() + "...");
             try
             {
 

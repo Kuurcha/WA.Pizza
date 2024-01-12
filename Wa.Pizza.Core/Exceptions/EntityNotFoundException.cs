@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Wa.Pizza.Core.Exceptions
+﻿namespace Wa.Pizza.Core.Exceptions
 {
-    public class EntityNotFoundException: Exception
+    public class EntityNotFoundException : Exception
     {
-        
+
         public EntityNotFoundException()
         {
 
@@ -16,8 +10,8 @@ namespace Wa.Pizza.Core.Exceptions
 
         public EntityNotFoundException(string message) : base(message)
         {
-           
+
         }
-        
+
     }
 }
