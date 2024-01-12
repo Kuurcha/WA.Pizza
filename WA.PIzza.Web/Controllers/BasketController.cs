@@ -55,7 +55,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return NotFound(ex);
+                return NotFound(ex.message);
             }
             return new ObjectResult(basket);
         }
@@ -80,7 +80,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return NotFound(ex);
+                return NotFound(ex.message);
             }
             return new ObjectResult(basket);
         }
@@ -105,7 +105,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return NotFound(ex);
+                return NotFound(ex.message);
             }
             return Accepted();
         }
@@ -128,7 +128,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return BadRequest(ex);
+                return BadRequest(ex.message);
             }
             return Ok();
         }
@@ -150,7 +150,7 @@ namespace WA.PIzza.Web.Controllers
             catch(EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return BadRequest(ex);
+                return BadRequest(ex.message);
             }
             return Ok();
         }
@@ -171,7 +171,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return BadRequest(ex);
+                return BadRequest(ex.message);
             }
             return Ok();
         }
@@ -194,7 +194,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return BadRequest(ex);
+                return BadRequest(ex.message);
             }
             finally { }
             return Ok();

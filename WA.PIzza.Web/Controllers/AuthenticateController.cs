@@ -57,7 +57,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return NotFound(ex);
+                return NotFound(ex.message);
             }
             return Ok(new AuthResponse { Status = "Success", Message = "User created successfully!" });
         }
@@ -77,7 +77,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return NotFound(ex);
+                return NotFound(ex.message);
             }
             return Ok(new AuthResponse { Status = "Success", Message = "User created successfully!" });
         }
@@ -98,7 +98,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return NotFound(ex);
+                return NotFound(ex.message);
             }
 
             return Ok(new
@@ -128,7 +128,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return NotFound(ex);
+                return NotFound(ex.message);
             }
 
             return Ok(new 

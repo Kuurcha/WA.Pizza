@@ -1,10 +1,7 @@
-﻿using Mapster;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using Wa.Pizza.Core.Exceptions;
 using Wa.Pizza.Infrasctructure.Data.Services;
 using Wa.Pizza.Infrasctructure.DTO.CatalogItem;
-using Wa.Pizza.Infrasctructure.Services;
 
 namespace WA.PIzza.Web.Controllers
 {
@@ -13,7 +10,7 @@ namespace WA.PIzza.Web.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class CatalogItemController: ControllerBase
+    public class CatalogItemController : ControllerBase
     {
         private readonly CatalogDataService _catalogItemDataService;
         readonly ILogger<CatalogItemController> _log;
@@ -36,7 +33,7 @@ namespace WA.PIzza.Web.Controllers
         public async Task<ActionResult<IEnumerable<CatalogItemDTO>>> Get()
         {
             _log.LogInformation("Catalog items requested...");
-            IEnumerable <CatalogItemDTO> catalogItems = await  _catalogItemDataService.getCatalogAsync();
+            IEnumerable<CatalogItemDTO> catalogItems = await _catalogItemDataService.getCatalogAsync();
             _log.LogInformation("Catalog items sent: " + catalogItems.ToString());
             return new ObjectResult(catalogItems);
         }
@@ -57,7 +54,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return NotFound(ex);
+                return NotFound(ex.message);
             }
             return new ObjectResult(catalogItem);
         }
@@ -78,7 +75,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
             return Accepted();
         }
@@ -99,7 +96,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
 
             }
             return Accepted();
