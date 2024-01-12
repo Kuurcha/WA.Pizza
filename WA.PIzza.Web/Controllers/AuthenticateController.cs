@@ -1,19 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Wa.Pizza.Core.Model.AuthenticateController;
-using Mapster;
-using System.Net;
-using Wa.Pizza.Core.Exceptions;
-using Wa.Pizza.Infrasctructure.Data.Services;
-using Wa.Pizza.Infrasctructure.DTO.Basket;
-using Wa.Pizza.Infrasctructure.DTO.CatalogItem;
-using Wa.Pizza.Infrasctructure.Services;
-using Wa.Pizza.Core.Model.ApplicationUser;
-using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.Authorization;
+using Wa.Pizza.Core.Exceptions;
+using Wa.Pizza.Core.Model.AuthenticateController;
+using Wa.Pizza.Infrasctructure.Data.Services;
 using Wa.Pizza.Infrasctructure.DTO.Auth;
 
 namespace WA.PIzza.Web.Controllers
@@ -57,7 +48,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return NotFound(ex.message);
+                return NotFound(ex.Message);
             }
             return Ok(new AuthResponse { Status = "Success", Message = "User created successfully!" });
         }
@@ -77,7 +68,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return NotFound(ex.message);
+                return NotFound(ex.Message);
             }
             return Ok(new AuthResponse { Status = "Success", Message = "User created successfully!" });
         }
@@ -93,21 +84,21 @@ namespace WA.PIzza.Web.Controllers
             TokenResponse tokenResponse;
             try
             {
-               tokenResponse = await _authenticationService.LoginUser(model);
+                tokenResponse = await _authenticationService.LoginUser(model);
             }
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return NotFound(ex.message);
+                return NotFound(ex.Message);
             }
 
             return Ok(new
-                {
+            {
                 token = new JwtSecurityTokenHandler().WriteToken(tokenResponse.accessToken),
                 expiration = tokenResponse.accessToken.ValidTo,
                 refreshToken = tokenResponse.refreshToken
             });
-            
+
         }
         /// <summary>
         /// Refreshes access token based on refresh token
@@ -128,10 +119,10 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return NotFound(ex.message);
+                return NotFound(ex.Message);
             }
 
-            return Ok(new 
+            return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(tokenResponse.accessToken),
                 refreshToken = tokenResponse.refreshToken
@@ -146,7 +137,7 @@ namespace WA.PIzza.Web.Controllers
         [Route("revoke")]
         public async Task<IActionResult> RevokeAsync()
         {
-            var username = User     .Identity.Name;
+            var username = User.Identity.Name;
             var user = await _userManager.FindByNameAsync(username);
             if (user == null) return BadRequest();
             user.refreshToken = null;

@@ -54,7 +54,7 @@ namespace WA.PIzza.Web.Controllers
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return NotFound(ex.message);
+                return NotFound(ex.Message);
             }
             return new ObjectResult(catalogItem);
         }

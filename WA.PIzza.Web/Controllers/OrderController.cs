@@ -45,7 +45,7 @@ namespace WA.PIzza.Web.Services
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                return NotFound(ex.message);
+                return NotFound(ex.Message);
             }
             return new ObjectResult(order);
         }
@@ -67,7 +67,7 @@ namespace WA.PIzza.Web.Services
             catch( EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                BadRequest(ex.message);
+                BadRequest(ex.Message);
             }
             return Accepted();
         }
@@ -90,7 +90,7 @@ namespace WA.PIzza.Web.Services
             catch (EntityNotFoundException ex)
             {
                 _log.LogError(ex.Message);
-                BadRequest(ex.message);
+                BadRequest(ex.Message);
             }
             return Accepted();
         }
