@@ -1,21 +1,19 @@
 ﻿using FluentValidation.AspNetCore;
+using Hangfire;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Reflection;
 using System.Text;
+using Wa.Pizza.Infrasctructure.Data.CQRS.Basket;
 using Wa.Pizza.Infrasctructure.Data.Services;
 using Wa.Pizza.Infrasctructure.Services;
 using Wa.Pizza.Infrasctructure.Validators;
-using Microsoft.AspNetCore.Builder;
-using Hangfire;
-using MediatR;
-using static Wa.Pizza.Infrasctructure.Data.CQRS.Basket.BasketCommands;
-using static BasketQueries;
-using Wa.Pizza.Infrasctructure.Data.CQRS.Basket;
 
 namespace WA.PIzza.Web.Extensions
 {
@@ -41,24 +39,54 @@ namespace WA.PIzza.Web.Extensions
             services.AddMediatR(typeof(BasketCommands));
             services.AddMediatR(typeof(BasketQueries));
         }
+        private static string GetHangfireConnectionString(string baseConnectionString)
+        {
+            string dbName = "Hangfire";
+
+            using (var connection = new SqlConnection(string.Format(baseConnectionString, "master")))
+            {
+                connection.Open();
+
+
+                using (var command = new SqlCommand($"SELECT COUNT(*) FROM sys.databases WHERE name = N'{dbName}'", connection))
+                {
+                    int databaseCount = (int)command.ExecuteScalar();
+                    if (databaseCount > 0)
+                    {
+                        return string.Format(baseConnectionString, dbName);
+                    }
+                }
+
+
+                using (var command = new SqlCommand(string.Format(
+                    @"CREATE DATABASE [{0}];", dbName), connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            return string.Format(baseConnectionString, dbName);
+        }
         public static void configureHangfire(this IServiceCollection services, string connectionString)
         {
+            var modifiedConnectionString = GetHangfireConnectionString(connectionString);
+
             services.AddHangfire(configuration =>
             {
-                configuration.UseSqlServerStorage(connectionString)
+                configuration.UseSqlServerStorage(modifiedConnectionString)
                 .UseRecommendedSerializerSettings()
                 .UseSimpleAssemblyNameTypeSerializer();
-               
+
             });
             services.AddHangfireServer();
 
-            
+
         }
         /// <summary>
         /// Injects user created services into the program
         /// </summary>
         /// <param name="services"></param>
-       public static void injectServices (this IServiceCollection services, string appMail, string password)
+        public static void injectServices(this IServiceCollection services, string appMail, string password)
         {
             services.AddScoped<OrderDataService>();
             services.AddScoped<CatalogDataService>();
@@ -119,7 +147,7 @@ namespace WA.PIzza.Web.Extensions
 
                     }
                 });
-                
+
 
             });
         }
@@ -183,7 +211,7 @@ namespace WA.PIzza.Web.Extensions
             {
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
-               
+
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = false,
