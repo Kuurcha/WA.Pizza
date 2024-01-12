@@ -9,9 +9,9 @@ services:
       - SA_PASSWORD=Test_Password1
     mem_limit: 4GB
     volumes:
-        - D:\test:/var/opt/mssql/data
+        - D:\test\db:/var/opt/mssql/data
   seq: 
-    image: datalust/seq 
+    image: datalust/seq:latest
     container_name: seqWebApi
     volumes:
       - D:\logs:/data

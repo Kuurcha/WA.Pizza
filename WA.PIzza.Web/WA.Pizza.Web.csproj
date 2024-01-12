@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <DocumentationFile>E:\Work\WA.Pizza\WA.PIzza.Web\bin\Debug\net6.0\WA.PIzza.Web.xml</DocumentationFile>
     <UserSecretsId>9bc51ec9-b050-469f-b180-7979684c6066</UserSecretsId>
-    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
