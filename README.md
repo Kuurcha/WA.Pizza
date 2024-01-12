@@ -1,4 +1,3 @@
 # StudyPIzza
 
-Issues:
-  Hangfire database isn't being created automatically on launch, so you would need to create it manually using some tool (for example SSMS)
+A Web-api for managing the pizza web-site. Has no front-end counterpart, was tested using postman and swagger. 
